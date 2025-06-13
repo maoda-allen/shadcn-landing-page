@@ -11,27 +11,27 @@ interface BenefitsProps {
 const benefitList: BenefitsProps[] = [
   {
     icon: "Blocks",
-    title: "Build Brand Trust",
+    title: "个性化定制",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam. Natus consectetur dolores.",
+      "根据生日主角的年龄、喜好和需求，量身定制专属的派对方案，确保每个细节都完美契合。",
   },
   {
     icon: "LineChart",
-    title: "More Leads",
+    title: "专业策划团队",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam, natus consectetur.",
+      "拥有丰富经验的派对策划师，从创意构思到执行落地，全程提供专业指导和建议。",
   },
   {
     icon: "Wallet",
-    title: "Higher Conversions",
+    title: "预算灵活控制",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Natus consectetur. A odio velit cum aliquam",
+      "提供多种预算方案选择，从经济实惠到豪华定制，满足不同家庭的消费需求。",
   },
   {
     icon: "Sparkle",
-    title: "Test Marketing Ideas",
+    title: "创意无限",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam. Natus consectetur dolores.",
+      "丰富的主题库和创意点子，从经典传统到时尚前卫，总有一款适合您的派对风格。",
   },
 ];
 
@@ -40,15 +40,12 @@ export const BenefitsSection = () => {
     <section id="benefits" className="container py-24 sm:py-32">
       <div className="grid lg:grid-cols-2 place-items-center lg:gap-24">
         <div>
-          <h2 className="text-lg text-primary mb-2 tracking-wider">Benefits</h2>
-
+          <h2 className="text-lg text-primary mb-2 tracking-wider">优势特色</h2>
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Your Shortcut to Success
+            为什么选择我们的生日派对策划服务
           </h2>
           <p className="text-xl text-muted-foreground mb-8">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Non
-            ducimus reprehenderit architecto rerum similique facere odit
-            deleniti necessitatibus quo quae.
+            我们致力于为每一位客户打造独一无二的生日庆典，让美好回忆永远珍藏。
           </p>
         </div>
 

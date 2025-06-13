@@ -10,40 +10,40 @@ interface FeaturesProps {
 
 const featureList: FeaturesProps[] = [
   {
-    icon: "TabletSmartphone",
-    title: "Mobile Friendly",
+    icon: "Users",
+    title: "派对类型选择",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam, consectetur.",
+      "支持成人生日、儿童生日、长辈生日等多种类型，为不同年龄段提供专属的派对创意方案。",
   },
   {
-    icon: "BadgeCheck",
-    title: "Social Proof",
+    icon: "Calendar",
+    title: "智能活动安排",
     description:
-      "Lorem ipsum dolor sit amet consectetur. Natus consectetur, odio ea accusamus aperiam.",
+      "根据派对规模和时长，自动生成合理的活动时间安排，确保派对节奏紧凑有趣。",
   },
   {
-    icon: "Goal",
-    title: "Targeted Content",
+    icon: "MapPin",
+    title: "场地布置建议",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. odio ea accusamus aperiam.",
+      "提供室内外场地的专业布置方案，包括装饰摆放、空间规划等详细指导。",
   },
   {
-    icon: "PictureInPicture",
-    title: "Strong Visuals",
+    icon: "Palette",
+    title: "丰富主题选择",
     description:
-      "Lorem elit. A odio velit cum aliquam. Natus consectetur dolores, odio ea accusamus aperiam.",
+      "从经典主题到创意主题，支持自定义主题设计，满足个性化派对需求。",
   },
   {
-    icon: "MousePointerClick",
-    title: "Clear CTA",
+    icon: "Music",
+    title: "氛围营造",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing. odio ea accusamus consectetur.",
+      "根据派对类型推荐合适的音乐、灯光和装饰，营造完美的生日庆祝氛围。",
   },
   {
-    icon: "Newspaper",
-    title: "Clear Headline",
+    icon: "Utensils",
+    title: "餐饮搭配",
     description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. A odio velit cum aliquam. Natus consectetur.",
+      "提供生日蛋糕、小食、饮品等餐饮建议，根据人数和预算制定最佳方案。",
   },
 ];
 
@@ -51,17 +51,15 @@ export const FeaturesSection = () => {
   return (
     <section id="features" className="container py-24 sm:py-32">
       <h2 className="text-lg text-primary text-center mb-2 tracking-wider">
-        Features
+        功能特色
       </h2>
 
       <h2 className="text-3xl md:text-4xl text-center font-bold mb-4">
-        What Makes Us Different
+        丰富的生日派对创意功能
       </h2>
 
       <h3 className="md:w-1/2 mx-auto text-xl text-center text-muted-foreground mb-8">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptatem
-        fugiat, odit similique quasi sint reiciendis quidem iure veritatis optio
-        facere tenetur.
+        从派对策划到执行，我们提供全方位的生日派对解决方案，让每个生日都成为美好回忆。
       </h3>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">

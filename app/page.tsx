@@ -1,6 +1,5 @@
 import { BenefitsSection } from "@/components/layout/sections/benefits";
 import { CommunitySection } from "@/components/layout/sections/community";
-import { ContactSection } from "@/components/layout/sections/contact";
 import { FAQSection } from "@/components/layout/sections/faq";
 import { FeaturesSection } from "@/components/layout/sections/features";
 import { FooterSection } from "@/components/layout/sections/footer";
@@ -12,27 +11,26 @@ import { TeamSection } from "@/components/layout/sections/team";
 import { TestimonialSection } from "@/components/layout/sections/testimonial";
 
 export const metadata = {
-  title: "Shadcn - Landing template",
-  description: "Free Shadcn landing page for developers",
+  title: "创意生日派对策划 - Birthday Party Ideas | 专业派对策划工具",
+  description: "专业的生日派对创意策划平台，提供儿童生日、成人生日、长辈生日等个性化派对方案。从主题选择到活动安排，让每个生日都独一无二。",
+  keywords: "birthday party ideas,生日派对创意,生日派对策划,儿童生日派对,成人生日聚会,派对主题,生日庆祝活动",
   openGraph: {
     type: "website",
-    url: "https://github.com/nobruf/shadcn-landing-page.git",
-    title: "Shadcn - Landing template",
-    description: "Free Shadcn landing page for developers",
+    title: "创意生日派对策划 - 让每个生日都独一无二",
+    description: "专业的生日派对创意工具，帮您轻松策划完美的生日庆典",
     images: [
       {
         url: "https://res.cloudinary.com/dbzv9xfjp/image/upload/v1723499276/og-images/shadcn-vue.jpg",
         width: 1200,
         height: 630,
-        alt: "Shadcn - Landing template",
+        alt: "生日派对策划工具",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    site: "https://github.com/nobruf/shadcn-landing-page.git",
-    title: "Shadcn - Landing template",
-    description: "Free Shadcn landing page for developers",
+    title: "创意生日派对策划 - Birthday Party Ideas",
+    description: "专业的生日派对创意工具，帮您轻松策划完美的生日庆典",
     images: [
       "https://res.cloudinary.com/dbzv9xfjp/image/upload/v1723499276/og-images/shadcn-vue.jpg",
     ],
@@ -51,7 +49,6 @@ export default function Home() {
       <TeamSection />
       <CommunitySection />
       <PricingSection />
-      <ContactSection />
       <FAQSection />
       <FooterSection />
     </>
