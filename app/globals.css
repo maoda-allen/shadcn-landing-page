@@ -73,51 +73,51 @@ html {
   }
 } */
 
-/* *=========== Birthday Party Theme =========== */
+/* *=========== Birthday Party Theme - Blue =========== */
 @layer base {
-
-  :root  {
-    --background: 255.1 77% 95%;
-    --foreground: 255.1 5% 10%;
-    --card: 255.1 50% 90%;
-    --card-foreground: 255.1 5% 15%;
-    --popover: 255.1 77% 95%;
-    --popover-foreground: 255.1 95% 10%;
-    --primary: 255.1 91.7% 76.3%;
-    --primary-foreground: 0 0% 0%;
-    --secondary: 255.1 30% 70%;
+  :root {
+    --background: 217.2 77% 95%;
+    --foreground: 217.2 5% 10%;
+    --card: 217.2 50% 90%;
+    --card-foreground: 217.2 5% 15%;
+    --popover: 217.2 77% 95%;
+    --popover-foreground: 217.2 95% 10%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217.2 30% 70%;
     --secondary-foreground: 0 0% 0%;
-    --muted: 217.1 30% 85%;
-    --muted-foreground: 255.1 5% 35%;
-    --accent: 217.1 30% 80%;
-    --accent-foreground: 255.1 5% 15%;
+    --muted: 179.2 30% 85%;
+    --muted-foreground: 217.2 5% 35%;
+    --accent: 179.2 30% 80%;
+    --accent-foreground: 217.2 5% 15%;
     --destructive: 0 77% 30%;
-    --destructive-foreground: 255.1 5% 90%;
-    --border: 255.1 30% 50%;
-    --input: 255.1 30% 18%;
-    --ring: 255.1 91.7% 76.3%;
+    --destructive-foreground: 217.2 5% 90%;
+    --border: 217.2 30% 50%;
+    --input: 217.2 30% 18%;
+    --ring: 217.2 91.2% 59.8%;
     --radius: 0.3rem;
   }
-  .dark  {
-    --background: 255.1 50% 10%;
-    --foreground: 255.1 5% 90%;
-    --card: 255.1 50% 10%;
-    --card-foreground: 255.1 5% 90%;
-    --popover: 255.1 50% 5%;
-    --popover-foreground: 255.1 5% 90%;
-    --primary: 255.1 91.7% 76.3%;
-    --primary-foreground: 0 0% 0%;
-    --secondary: 255.1 30% 18%;
+  
+  .dark {
+    --background: 217.2 50% 10%;
+    --foreground: 217.2 5% 90%;
+    --card: 217.2 50% 10%;
+    --card-foreground: 217.2 5% 90%;
+    --popover: 217.2 50% 5%;
+    --popover-foreground: 217.2 5% 90%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217.2 30% 18%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 217.1 30% 18%;
-    --muted-foreground: 255.1 5% 60%;
-    --accent: 217.1 30% 18%;
-    --accent-foreground: 255.1 5% 90%;
+    --muted: 179.2 30% 18%;
+    --muted-foreground: 217.2 5% 60%;
+    --accent: 179.2 30% 18%;
+    --accent-foreground: 217.2 5% 90%;
     --destructive: 0 77% 30%;
-    --destructive-foreground: 255.1 5% 90%;
-    --border: 255.1 30% 18%;
-    --input: 255.1 30% 18%;
-    --ring: 255.1 91.7% 76.3%;
+    --destructive-foreground: 217.2 5% 90%;
+    --border: 217.2 30% 18%;
+    --input: 217.2 30% 18%;
+    --ring: 217.2 91.2% 59.8%;
     --radius: 0.3rem;
   }
 }
