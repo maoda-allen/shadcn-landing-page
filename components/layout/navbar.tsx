@@ -18,38 +18,37 @@ import {
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ToggleTheme } from "./toogle-theme";
-
-interface RouteProps {
-  href: string;
-  label: string;
-}
-
-const routeList: RouteProps[] = [
-  {
-    href: "#features",
-    label: "功能特色",
-  },
-  {
-    href: "#party-ideas",
-    label: "创意案例",
-  },
-  {
-    href: "#pricing",
-    label: "定价方案",
-  },
-  {
-    href: "#faq",
-    label: "常见问题",
-  },
-];
+import { useLanguage } from "@/lib/contexts/language-context";
+import { LanguageSelector } from "../ui/language-selector";
 
 export const Navbar = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const { t } = useLanguage();
+
+  const routeList = [
+    {
+      href: "#features",
+      label: t('nav.features'),
+    },
+    {
+      href: "#party-ideas",
+      label: t('nav.partyIdeas'),
+    },
+    {
+      href: "#pricing",
+      label: t('nav.pricing'),
+    },
+    {
+      href: "#faq",
+      label: t('nav.faq'),
+    },
+  ];
+
   return (
     <header className="shadow-inner bg-opacity-15 w-[90%] md:w-[70%] lg:w-[75%] lg:max-w-screen-xl top-5 mx-auto sticky border border-secondary z-40 rounded-2xl flex justify-between items-center p-2 bg-card">
       <Link href="/" className="font-bold text-lg flex items-center">
         <ChevronsDown className="bg-gradient-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border text-white" />
-        生日派对策划
+        {t('nav.brand')}
       </Link>
       
       {/* <!-- Mobile --> */}
@@ -71,7 +70,7 @@ export const Navbar = () => {
                 <SheetTitle className="flex items-center">
                   <Link href="/" className="flex items-center">
                     <ChevronsDown className="bg-gradient-to-tr border-secondary from-primary via-primary/70 to-primary rounded-lg w-9 h-9 mr-2 border text-white" />
-                    生日派对策划
+                    {t('nav.brand')}
                   </Link>
                 </SheetTitle>
               </SheetHeader>
@@ -93,7 +92,10 @@ export const Navbar = () => {
 
             <SheetFooter className="flex-col sm:flex-col justify-start items-start">
               <Separator className="mb-2" />
-              <ToggleTheme />
+              <div className="flex items-center gap-2">
+                <ToggleTheme />
+                <LanguageSelector />
+              </div>
             </SheetFooter>
           </SheetContent>
         </Sheet>
@@ -115,11 +117,12 @@ export const Navbar = () => {
       <div className="hidden lg:flex items-center space-x-2">
         <Button asChild size="sm">
           <Link href="/birthday-party-planner">
-            开始策划
+            {t('nav.startPlanning')}
           </Link>
         </Button>
         
         <ToggleTheme />
+        <LanguageSelector />
       </div>
     </header>
   );

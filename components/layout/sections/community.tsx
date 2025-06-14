@@ -8,8 +8,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/lib/contexts/language-context";
 
 export const CommunitySection = () => {
+  const { t } = useLanguage();
+
   return (
     <section id="community" className="py-8">
       <hr className="border-secondary" />
@@ -20,20 +23,20 @@ export const CommunitySection = () => {
               <CardTitle className="text-3xl md:text-4xl font-bold flex flex-col items-center gap-4">
                 <DiscordIcon />
                 <div>
-                  加入我们的
+                  {t('community.title')}
                   <span className="text-transparent bg-gradient-to-r from-[#E879F9] to-primary bg-clip-text">
-                    创意社区
+                    {t('community.titleHighlight')}
                   </span>
                 </div>
               </CardTitle>
             </CardHeader>
             
             <CardContent className="lg:w-[90%] text-lg text-muted-foreground pb-4">
-              与千万家庭一起分享生日派对创意，获取专业策划建议
+              {t('community.description')}
               <div className="mt-4 space-y-1 text-base">
-                <div>• 分享派对成功案例</div>
-                <div>• 获取创意灵感</div>
-                <div>• 咨询专业建议</div>
+                <div>• {t('community.features.shareSuccess')}</div>
+                <div>• {t('community.features.getInspiration')}</div>
+                <div>• {t('community.features.consultAdvice')}</div>
               </div>
             </CardContent>
             
@@ -41,10 +44,10 @@ export const CommunitySection = () => {
               <Button 
                 className="px-8"
                 onClick={() => {
-                  alert('社区功能正在开发中，敬请期待！\n\n您可以通过邮箱 community@birthday-party.com 与我们交流派对创意。');
+                  alert(t('community.comingSoon'));
                 }}
               >
-                立即加入社区
+                {t('community.joinButton')}
               </Button>
             </CardFooter>
           </Card>

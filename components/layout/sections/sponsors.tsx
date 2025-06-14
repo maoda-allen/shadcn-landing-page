@@ -1,51 +1,54 @@
 "use client";
 
 import { Icon } from "@/components/ui/icon";
+import { icons } from "lucide-react";
 import { Marquee } from "@devnomic/marquee";
 import "@devnomic/marquee/dist/index.css";
-import { icons } from "lucide-react";
+import { useLanguage } from "@/lib/contexts/language-context";
 
 interface sponsorsProps {
   icon: string;
-  name: string;
+  nameKey: string;
 }
 
 const sponsors: sponsorsProps[] = [
   {
     icon: "Crown",
-    name: "皇冠气球",
+    nameKey: "sponsors.partners.crown",
   },
   {
     icon: "Gift",
-    name: "礼品之家",
+    nameKey: "sponsors.partners.gift",
   },
   {
     icon: "Cake",
-    name: "甜蜜蛋糕",
+    nameKey: "sponsors.partners.cake",
   },
   {
     icon: "Music",
-    name: "音响设备",
+    nameKey: "sponsors.partners.music",
   },
   {
     icon: "Camera",
-    name: "摄影工作室",
+    nameKey: "sponsors.partners.camera",
   },
   {
     icon: "Sparkles",
-    name: "装饰专家",
+    nameKey: "sponsors.partners.sparkles",
   },
   {
     icon: "Utensils",
-    name: "餐饮服务",
+    nameKey: "sponsors.partners.utensils",
   },
 ];
 
 export const SponsorsSection = () => {
+  const { t } = useLanguage();
+
   return (
     <section id="sponsors" className="max-w-[75%] mx-auto pb-24 sm:pb-32">
       <h2 className="text-lg md:text-xl text-center mb-6">
-        我们的合作伙伴
+        {t('sponsors.title')}
       </h2>
 
       <div className="mx-auto">
@@ -55,9 +58,9 @@ export const SponsorsSection = () => {
           innerClassName="gap-[3rem]"
           pauseOnHover
         >
-          {sponsors.map(({ icon, name }) => (
+          {sponsors.map(({ icon, nameKey }) => (
             <div
-              key={name}
+              key={nameKey}
               className="flex items-center text-xl md:text-2xl font-medium"
             >
               <Icon
@@ -66,7 +69,7 @@ export const SponsorsSection = () => {
                 color="currentColor"
                 className="mr-2"
               />
-              {name}
+              {t(nameKey)}
             </div>
           ))}
         </Marquee>

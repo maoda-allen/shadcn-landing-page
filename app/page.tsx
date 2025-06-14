@@ -11,26 +11,26 @@ import { TeamSection } from "@/components/layout/sections/team";
 import { TestimonialSection } from "@/components/layout/sections/testimonial";
 
 export const metadata = {
-  title: "创意生日派对策划 - Birthday Party Ideas | 专业派对策划工具",
-  description: "专业的生日派对创意策划平台，提供儿童生日、成人生日、长辈生日等个性化派对方案。从主题选择到活动安排，让每个生日都独一无二。",
-  keywords: "birthday party ideas,生日派对创意,生日派对策划,儿童生日派对,成人生日聚会,派对主题,生日庆祝活动",
+  title: "Birthday Party Planner | 生日派对策划 - Professional Party Planning Tool",
+  description: "Professional birthday party creative tool to help you easily plan the perfect birthday celebration. 专业的生日派对创意策划平台，提供儿童生日、成人生日、长辈生日等个性化派对方案。",
+  keywords: "birthday party ideas,生日派对创意,生日派对策划,儿童生日派对,成人生日聚会,派对主题,生日庆祝活动,party planning,birthday celebration",
   openGraph: {
     type: "website",
-    title: "生日派对策划 - 让每个生日都独一无二",
-    description: "专业的生日派对创意工具，帮您轻松策划完美的生日庆典",
+    title: "Birthday Party Planner | 生日派对策划 - Make Every Birthday Unique",
+    description: "Professional birthday party creative tool to help you easily plan the perfect birthday celebration. 专业的生日派对创意工具，帮您轻松策划完美的生日庆典。",
     images: [
       {
         url: "https://res.cloudinary.com/dbzv9xfjp/image/upload/v1723499276/og-images/shadcn-vue.jpg",
         width: 1200,
         height: 630,
-        alt: "生日派对策划工具",
+        alt: "Birthday Party Planning Tool | 生日派对策划工具",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "创意生日派对策划 - Birthday Party Ideas",
-    description: "专业的生日派对创意工具，帮您轻松策划完美的生日庆典",
+    title: "Birthday Party Planner | 生日派对策划",
+    description: "Professional birthday party creative tool to help you easily plan the perfect birthday celebration. 专业的生日派对创意工具，帮您轻松策划完美的生日庆典。",
     images: [
       "https://res.cloudinary.com/dbzv9xfjp/image/upload/v1723499276/og-images/shadcn-vue.jpg",
     ],

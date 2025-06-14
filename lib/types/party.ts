@@ -47,11 +47,25 @@ export interface PartyTheme {
 
 export const PARTY_THEMES: PartyTheme[] = [
   {
+    id: 'modern',
+    name: '简约现代',
+    description: '极简风格，高端大气',
+    suitable: ['成人'],
+    icon: 'Square'
+  },
+  {
     id: 'retro',
     name: '复古派对',
     description: '80年代怀旧风格，经典音乐和装饰',
     suitable: ['成人'],
     icon: 'Music'
+  },
+  {
+    id: 'garden',
+    name: '花园聚会',
+    description: '自然清新，鲜花装饰',
+    suitable: ['成人', '长辈'],
+    icon: 'Flower'
   },
   {
     id: 'superhero',
@@ -73,20 +87,6 @@ export const PARTY_THEMES: PartyTheme[] = [
     description: '海洋生物，蓝色主题',
     suitable: ['儿童'],
     icon: 'Waves'
-  },
-  {
-    id: 'garden',
-    name: '花园聚会',
-    description: '自然清新，鲜花装饰',
-    suitable: ['成人', '长辈'],
-    icon: 'Flower'
-  },
-  {
-    id: 'modern',
-    name: '简约现代',
-    description: '极简风格，高端大气',
-    suitable: ['成人'],
-    icon: 'Square'
   }
 ];
 

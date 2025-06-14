@@ -1,7 +1,6 @@
 "use client";
 
 import { useParty } from '@/lib/contexts/party-context';
-import { PARTY_THEMES, ATMOSPHERE_OPTIONS } from '@/lib/types/party';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -10,11 +9,46 @@ import { Label } from '@/components/ui/label';
 import { Icon } from '@/components/ui/icon';
 import { icons } from 'lucide-react';
 import { useState } from 'react';
+import { useLanguage } from '@/lib/contexts/language-context';
+import { Loader2, Sparkles } from 'lucide-react';
 
 export function PartyPlannerForm() {
   const { state, updateFormData, generatePartyPlan } = useParty();
+  const { t, language } = useLanguage();
   const [customTheme, setCustomTheme] = useState('');
   const [showCustomTheme, setShowCustomTheme] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false);
+
+  // 包装的生成函数
+  const handleGeneratePartyPlan = async () => {
+    setLocalLoading(true);
+    
+    try {
+      await generatePartyPlan();
+    } finally {
+      setTimeout(() => {
+        setLocalLoading(false);
+      }, 100);
+    }
+  };
+
+  // 使用Context状态优先，本地状态作为备用
+  const isCurrentlyLoading = state.isLoading || localLoading;
+
+  // 定义主题选项
+  const themeOptions = [
+    { id: 'modern', icon: 'Square', suitable: ['adult'] },
+    { id: 'retro', icon: 'Music', suitable: ['adult'] },
+    { id: 'garden', icon: 'Flower', suitable: ['adult', 'elderly'] },
+    { id: 'superhero', icon: 'Zap', suitable: ['child', 'teen'] },
+    { id: 'princess', icon: 'Crown', suitable: ['child'] },
+    { id: 'ocean', icon: 'Waves', suitable: ['child'] }
+  ];
+
+  // 定义氛围选项
+  const atmosphereOptions = [
+    'lively', 'elegant', 'casual', 'formal', 'creative', 'intimate'
+  ];
 
   const handlePartyTypeSelect = (type: 'adult' | 'child' | 'elderly') => {
     updateFormData({ partyType: type });
@@ -33,8 +67,8 @@ export function PartyPlannerForm() {
   };
 
   const handleThemeSelect = (themeId: string) => {
-    const theme = PARTY_THEMES.find(t => t.id === themeId);
-    updateFormData({ theme: theme?.name || themeId });
+    const themeName = t(`planner.form.theme.${themeId}`);
+    updateFormData({ theme: themeName });
     setShowCustomTheme(false);
   };
 
@@ -61,15 +95,15 @@ export function PartyPlannerForm() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">1</span>
-            选择生日派对类型
+            {t('planner.form.partyType.title')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
             {[
-              { value: 'child', label: '儿童生日', desc: '适合3-12岁儿童', icon: 'Baby' },
-              { value: 'adult', label: '成人生日', desc: '适合18-50岁成人', icon: 'User' },
-              { value: 'elderly', label: '长辈生日', desc: '适合50岁以上长辈', icon: 'Users' }
+              { value: 'child', label: t('planner.form.partyType.child'), desc: t('planner.form.partyType.descriptions.child'), icon: 'Baby' },
+              { value: 'adult', label: t('planner.form.partyType.adult'), desc: t('planner.form.partyType.descriptions.adult'), icon: 'User' },
+              { value: 'elderly', label: t('planner.form.partyType.elderly'), desc: t('planner.form.partyType.descriptions.elderly'), icon: 'Users' }
             ].map((option) => (
               <Button
                 key={option.value}
@@ -93,15 +127,15 @@ export function PartyPlannerForm() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">2</span>
-            确定派对规模
+            {t('planner.form.guestCount.title')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
             {[
-              { value: 'small', label: '小型聚会', desc: '10人以内', icon: 'Users' },
-              { value: 'medium', label: '中型聚会', desc: '10-30人', icon: 'Users' },
-              { value: 'large', label: '大型聚会', desc: '30人以上', icon: 'Users' }
+              { value: 'small', label: t('planner.form.guestCount.small'), desc: t('planner.form.guestCount.descriptions.small'), icon: 'Users' },
+              { value: 'medium', label: t('planner.form.guestCount.medium'), desc: t('planner.form.guestCount.descriptions.medium'), icon: 'Users' },
+              { value: 'large', label: t('planner.form.guestCount.large'), desc: t('planner.form.guestCount.descriptions.large'), icon: 'Users' }
             ].map((option) => (
               <Button
                 key={option.value}
@@ -125,14 +159,14 @@ export function PartyPlannerForm() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">3</span>
-            选择派对场地
+            {t('planner.form.venue.title')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
             {[
-              { value: 'indoor', label: '室内场地', desc: '家中、餐厅、会所等', icon: 'Home' },
-              { value: 'outdoor', label: '户外场地', desc: '公园、花园、海滩等', icon: 'Trees' }
+              { value: 'indoor', label: t('planner.form.venue.indoor'), desc: t('planner.form.venue.descriptions.indoor'), icon: 'Home' },
+              { value: 'outdoor', label: t('planner.form.venue.outdoor'), desc: t('planner.form.venue.descriptions.outdoor'), icon: 'Trees' }
             ].map((option) => (
               <Button
                 key={option.value}
@@ -156,15 +190,15 @@ export function PartyPlannerForm() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">4</span>
-            设置预算范围
+            {t('planner.form.budget.title')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
             {[
-              { value: 'low', label: '经济型', desc: '500-1500元', icon: 'DollarSign' },
-              { value: 'medium', label: '中档型', desc: '1500-5000元', icon: 'DollarSign' },
-              { value: 'high', label: '豪华型', desc: '5000元以上', icon: 'DollarSign' }
+              { value: 'low', label: t('planner.form.budget.low'), desc: t('planner.form.budget.descriptions.low'), icon: 'DollarSign' },
+              { value: 'medium', label: t('planner.form.budget.medium'), desc: t('planner.form.budget.descriptions.medium'), icon: 'DollarSign' },
+              { value: 'high', label: t('planner.form.budget.high'), desc: t('planner.form.budget.descriptions.high'), icon: 'DollarSign' }
             ].map((option) => (
               <Button
                 key={option.value}
@@ -188,26 +222,28 @@ export function PartyPlannerForm() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">5</span>
-            选择创意主题
+            {t('planner.form.theme.title')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-              {PARTY_THEMES.map((theme) => (
+              {themeOptions.map((theme) => (
                 <Button
                   key={theme.id}
-                  variant={state.formData.theme === theme.name ? "default" : "outline"}
+                  variant={state.formData.theme === t(`planner.form.theme.${theme.id}`) ? "default" : "outline"}
                   className="h-auto p-3 md:p-4 flex items-start gap-3 text-left justify-start"
                   onClick={() => handleThemeSelect(theme.id)}
                 >
                   <Icon name={theme.icon as keyof typeof icons} size={18} color="currentColor" className="mt-0.5 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-sm">{theme.name}</div>
-                    <div className="text-xs text-muted-foreground line-clamp-2">{theme.description}</div>
+                    <div className="font-semibold text-sm">{t(`planner.form.theme.${theme.id}`)}</div>
+                    <div className="text-xs text-muted-foreground line-clamp-2">{t(`planner.form.theme.descriptions.${theme.id}`)}</div>
                     <div className="flex flex-wrap gap-1 mt-2">
                       {theme.suitable.map((suit) => (
-                        <Badge key={suit} variant="secondary" className="text-xs px-1.5 py-0.5">{suit}</Badge>
+                        <Badge key={suit} variant="secondary" className="text-xs px-1.5 py-0.5">
+                          {t(`planner.form.partyType.${suit === 'adult' ? 'adult' : suit === 'child' ? 'child' : suit === 'elderly' ? 'elderly' : suit === 'teen' ? 'teen' : suit}`)}
+                        </Badge>
                       ))}
                     </div>
                   </div>
@@ -223,22 +259,22 @@ export function PartyPlannerForm() {
                   className="w-full"
                   size="sm"
                 >
-                  自定义主题
+                  {t('planner.form.theme.customTheme')}
                 </Button>
               ) : (
                 <div className="space-y-3">
-                  <Label htmlFor="custom-theme" className="text-sm font-medium">自定义主题名称</Label>
+                  <Label htmlFor="custom-theme" className="text-sm font-medium">{t('planner.form.theme.customThemeName')}</Label>
                   <div className="flex flex-col sm:flex-row gap-2">
                     <Input
                       id="custom-theme"
-                      placeholder="输入您的创意主题..."
+                      placeholder={t('planner.form.theme.placeholder')}
                       value={customTheme}
                       onChange={(e) => setCustomTheme(e.target.value)}
                       className="flex-1"
                     />
                     <div className="flex gap-2">
-                      <Button onClick={handleCustomThemeSubmit} size="sm" className="flex-1 sm:flex-none">确定</Button>
-                      <Button variant="outline" onClick={() => setShowCustomTheme(false)} size="sm" className="flex-1 sm:flex-none">取消</Button>
+                      <Button onClick={handleCustomThemeSubmit} size="sm" className="flex-1 sm:flex-none">{t('planner.form.theme.confirm')}</Button>
+                      <Button variant="outline" onClick={() => setShowCustomTheme(false)} size="sm" className="flex-1 sm:flex-none">{t('planner.form.theme.cancel')}</Button>
                     </div>
                   </div>
                 </div>
@@ -253,21 +289,21 @@ export function PartyPlannerForm() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">6</span>
-            确定派对氛围
+            {t('planner.form.atmosphere.title')}
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-            {ATMOSPHERE_OPTIONS.map((option) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+            {atmosphereOptions.map((option) => (
               <Button
-                key={option.value}
-                variant={state.formData.atmosphere === option.value ? "default" : "outline"}
+                key={option}
+                variant={state.formData.atmosphere === option ? "default" : "outline"}
                 className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
-                onClick={() => handleAtmosphereSelect(option.value)}
+                onClick={() => handleAtmosphereSelect(option)}
               >
                 <div className="space-y-1">
-                  <div className="font-semibold text-sm">{option.label}</div>
-                  <div className="text-xs text-muted-foreground">{option.description}</div>
+                  <div className="font-semibold text-sm">{t(`planner.form.atmosphere.${option}`)}</div>
+                  <div className="text-xs text-muted-foreground">{t(`planner.form.atmosphere.descriptions.${option}`)}</div>
                 </div>
               </Button>
             ))}
@@ -279,12 +315,22 @@ export function PartyPlannerForm() {
       <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
         <CardContent className="pt-4 pb-4">
           <Button
-            onClick={generatePartyPlan}
-            disabled={!isFormComplete() || state.isLoading}
-            className="w-full h-11 md:h-12 text-base font-medium"
+            onClick={handleGeneratePartyPlan}
+            disabled={!isFormComplete() || isCurrentlyLoading}
+            className="w-full h-11 md:h-12 text-base font-medium relative"
             size="lg"
           >
-            {state.isLoading ? '正在生成方案...' : '生成专属派对方案'}
+            {isCurrentlyLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                {t('planner.form.generating')}
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-4 h-4 mr-2" />
+                {t('planner.form.generateButton')}
+              </>
+            )}
           </Button>
           {state.error && (
             <p className="text-destructive text-sm mt-3 text-center">{state.error}</p>

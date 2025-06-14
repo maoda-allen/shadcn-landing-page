@@ -1,0 +1,502 @@
+{
+  "nav": {
+    "brand": "生日派对策划",
+    "features": "功能特色",
+    "partyIdeas": "创意案例",
+    "pricing": "定价方案",
+    "faq": "常见问题",
+    "startPlanning": "开始策划",
+    "language": "语言"
+  },
+  "hero": {
+    "badge": "生日派对策划工具上线了!",
+    "title": "生日派对策划",
+    "titleHighlight": "让每个生日",
+    "titleEnd": "都独一无二",
+    "description": "专业的生日派对创意工具，帮您轻松策划完美的生日庆典。从主题选择到活动安排，让每一个生日都成为难忘的回忆。",
+    "startPlanning": "开始策划派对",
+    "learnMore": "了解更多功能",
+    "imageAlt": "高端优雅的庆祝场景 - 暗色调氛围灯光、精致装饰营造奢华品味的派对环境"
+  },
+  "features": {
+    "subtitle": "功能特色",
+    "title": "丰富的生日派对创意功能",
+    "description": "从派对策划到执行，我们提供全方位的生日派对解决方案，让每个生日都成为美好回忆。",
+    "partyTypes": {
+      "title": "派对类型选择",
+      "description": "支持成人生日、儿童生日、长辈生日等多种类型，为不同年龄段提供专属的派对创意方案。"
+    },
+    "smartPlanning": {
+      "title": "智能活动安排",
+      "description": "根据派对规模和时长，自动生成合理的活动时间安排，确保派对节奏紧凑有趣。"
+    },
+    "venueSetup": {
+      "title": "场地布置建议",
+      "description": "提供室内外场地的专业布置方案，包括装饰摆放、空间规划等详细指导。"
+    },
+    "themes": {
+      "title": "丰富主题选择",
+      "description": "从经典主题到创意主题，支持自定义主题设计，满足个性化派对需求。"
+    },
+    "atmosphere": {
+      "title": "氛围营造",
+      "description": "根据派对类型推荐合适的音乐、灯光和装饰，营造完美的生日庆祝氛围。"
+    },
+    "catering": {
+      "title": "餐饮搭配",
+      "description": "提供生日蛋糕、小食、饮品等餐饮建议，根据人数和预算制定最佳方案。"
+    }
+  },
+  "services": {
+    "subtitle": "服务项目",
+    "title": "多样化生日派对解决方案",
+    "description": "我们为不同年龄段提供专业的生日派对策划服务，让每个生日都成为特别的回忆。",
+    "children": {
+      "title": "儿童生日派对",
+      "description": "专为3-12岁儿童设计的生日派对方案，包含卡通主题、游戏活动、安全考虑等专业建议。"
+    },
+    "adult": {
+      "title": "成人生日聚会",
+      "description": "适合18-50岁成人的生日庆祝方案，提供优雅、时尚、个性化的派对创意和活动安排。"
+    },
+    "elderly": {
+      "title": "长辈生日庆典",
+      "description": "为50岁以上长辈精心策划的生日庆祝活动，注重温馨、舒适、有意义的庆祝方式。"
+    },
+    "theme": {
+      "title": "主题派对策划",
+      "description": "提供多种创意主题选择，从复古怀旧到现代时尚，满足不同年龄段和喜好的需求。"
+    },
+    "recommended": "推荐"
+  },
+  "pricing": {
+    "subtitle": "定价方案",
+    "title": "选择适合您的派对策划方案",
+    "description": "从免费体验到专业定制，让每一个生日派对都充满创意和惊喜",
+    "free": {
+      "title": "免费版",
+      "description": "体验基础派对策划功能，适合偶尔举办生日派对的用户。",
+      "buttonText": "免费开始",
+      "benefits": {
+        "dailyLimit": "每天生成3次派对方案",
+        "dataRetention": "数据保存最多7天",
+        "noExport": "不支持导出功能",
+        "basicPlan": "生成简单策划方案"
+      }
+    },
+    "premium": {
+      "title": "高级版",
+      "description": "解锁全部功能，享受无限制的个性化派对策划体验。",
+      "buttonText": "立即升级",
+      "benefits": {
+        "unlimited": "无限生成派对方案",
+        "permanentStorage": "数据永久保存",
+        "exportSupport": "支持导出功能",
+        "detailedPlan": "详细定制化方案"
+      }
+    },
+    "recommended": "推荐选择",
+    "perMonth": "/月"
+  },
+  "faq": {
+    "subtitle": "常见问题",
+    "title": "生日派对策划常见问题",
+    "questions": {
+      "isFree": {
+        "question": "生日派对策划工具是免费的吗？",
+        "answer": "是的！我们提供免费版本供您体验。免费版每天可以生成3次派对方案，数据保存7天，让您充分了解我们的策划功能。如需更多功能，可升级到高级版。"
+      },
+      "allAges": {
+        "question": "生成的派对方案适合所有年龄段吗？",
+        "answer": "当然！我们专门为儿童（3-12岁）、成人（18-50岁）、长辈（50岁以上）设计了不同的派对方案，确保每个年龄段都能获得最合适的庆祝建议。"
+      },
+      "customTheme": {
+        "question": "可以自定义派对主题吗？",
+        "answer": "可以的！除了我们提供的6个预设主题外，您还可以输入自定义主题。我们的系统会根据您的创意想法生成相应的派对策划方案。"
+      },
+      "saveExport": {
+        "question": "生成的方案可以保存或导出吗？",
+        "answer": "免费版的方案数据保存7天，高级版支持数据永久保存和导出功能。您可以将完整的派对策划方案导出为PDF或其他格式，方便执行和分享。"
+      },
+      "planDifference": {
+        "question": "免费版和高级版有什么区别？",
+        "answer": "免费版每天可生成3次方案，数据保存7天，提供简单策划方案。高级版支持无限生成、数据永久保存、导出功能，并提供更详细的定制化方案，仅需$9.9/月。"
+      }
+    }
+  },
+  "planner": {
+    "pageTitle": "生日派对创意策划工具",
+    "pageDescription": "几分钟内获得专属的生日派对创意方案，让每个生日都成为难忘的回忆",
+    "aiPlanning": "AI智能策划",
+    "quickComplete": "3分钟完成",
+    "personalized": "个性化定制",
+    "stepGuide": "左侧完成6步选择 → 右侧查看专属方案",
+    "form": {
+      "title": "创建您的专属派对方案",
+      "subtitle": "告诉我们您的需求，我们将为您定制完美的生日派对策划",
+      "partyType": {
+        "title": "选择派对类型",
+        "adult": "成人生日",
+        "child": "儿童生日",
+        "elderly": "长辈生日",
+        "teen": "青少年",
+        "descriptions": {
+          "child": "3-12岁",
+          "adult": "18-50岁",
+          "elderly": "50岁以上"
+        }
+      },
+      "guestCount": {
+        "title": "确定派对规模",
+        "small": "小型聚会",
+        "medium": "中型聚会",
+        "large": "大型聚会",
+        "descriptions": {
+          "small": "10人以内",
+          "medium": "10-30人",
+          "large": "30人以上"
+        }
+      },
+      "venue": {
+        "title": "选择派对场地",
+        "indoor": "室内场地",
+        "outdoor": "户外场地",
+        "descriptions": {
+          "indoor": "家中、餐厅、会所等",
+          "outdoor": "公园、花园、海滩等"
+        }
+      },
+      "budget": {
+        "title": "设置预算范围",
+        "low": "经济型",
+        "medium": "中档型",
+        "high": "豪华型",
+        "descriptions": {
+          "low": "500-1500元",
+          "medium": "1500-5000元",
+          "high": "5000元以上"
+        }
+      },
+      "theme": {
+        "title": "选择创意主题",
+        "placeholder": "输入您的创意主题...",
+        "modern": "简约现代",
+        "retro": "复古派对",
+        "garden": "花园聚会",
+        "superhero": "超级英雄",
+        "princess": "公主主题",
+        "ocean": "海洋探险",
+        "customTheme": "自定义主题",
+        "customThemeName": "自定义主题名称",
+        "confirm": "确定",
+        "cancel": "取消",
+        "descriptions": {
+          "modern": "极简风格，高端大气",
+          "retro": "80年代怀旧风格，经典音乐和装饰",
+          "garden": "自然清新，鲜花装饰",
+          "superhero": "漫威、DC英雄主题，动作游戏",
+          "princess": "梦幻城堡，粉色装饰",
+          "ocean": "海洋生物，蓝色主题"
+        }
+      },
+      "atmosphere": {
+        "title": "确定派对氛围",
+        "lively": "热闹欢快",
+        "elegant": "优雅温馨",
+        "casual": "轻松随意",
+        "formal": "正式庄重",
+        "creative": "创意互动",
+        "intimate": "温馨私密",
+        "descriptions": {
+          "lively": "音乐、游戏、互动",
+          "elegant": "轻音乐、聊天、品茶",
+          "casual": "自由活动、简单聚餐",
+          "formal": "仪式感、致辞、合影",
+          "creative": "DIY活动、主题游戏",
+          "intimate": "小范围、深度交流"
+        }
+      },
+      "generateButton": "生成专属派对方案",
+      "regenerateButton": "重新生成方案",
+      "generating": "正在生成方案...",
+      "completeAllSteps": "完成所有选择后点击"
+    },
+    "result": {
+      "title": "您的专属派对方案",
+      "subtitle": "个性化定制完成",
+      "professionalScore": "专业评分",
+      "venue": "场地布置",
+      "activities": "活动安排",
+      "decorations": "装饰方案",
+      "catering": "餐饮建议",
+      "music": "音乐氛围",
+      "schedule": "时间安排",
+      "budgetTip": "策划师贴心提醒",
+      "executionTip": "执行要点",
+      "professionalEvaluation": "专业评估",
+      "creativity": "创意与主题契合度",
+      "planning": "流程安排合理性",
+      "budget": "预算控制与性价比",
+      "details": "细节打磨与氛围营造",
+      "feasibility": "执行可行性",
+      "totalScore": "总体评分",
+      "replan": "重新策划",
+      "export": "导出方案",
+      "currentSelection": "当前选择",
+      "badges": {
+        "budgetReference": "含预算参考",
+        "climaxMoment": "含高潮引爆",
+        "emotionalTouch": "情绪触达",
+        "shoppingList": "含采购清单",
+        "immersiveExperience": "沉浸体验",
+        "priceReference": "含价格参考",
+        "ceremonialSense": "仪式感",
+        "timeSegmented": "按时间段",
+        "emotionalRhythm": "情绪节奏",
+        "climaxMarked": "含高潮标注",
+        "touchMoment": "触达时刻"
+      },
+      "tips": {
+        "budgetReminder": "方案中已包含预算参考，可根据实际情况调整",
+        "preparationAdvice": "建议提前2-3周开始准备，确保效果最佳"
+      },
+      "executionDetails": {
+        "oneWeekBefore": "提前1周：",
+        "dayOfParty": "当天准备：",
+        "professionalTip": "💡 专业提醒：",
+        "oneWeekTasks": {
+          "confirmVenue": "确认场地和人数",
+          "buyDecorations": "采购装饰用品",
+          "prepareProps": "准备情绪触达道具"
+        },
+        "dayOfTasks": {
+          "setupEarly": "提前2小时布置",
+          "testEquipment": "调试音响设备",
+          "rehearseHighlights": "预演高潮环节"
+        },
+        "tipText": "高潮引爆时刻需要主持人引导，情绪触达环节要控制好节奏，避免过于煽情。"
+      },
+      "evaluationLevels": {
+        "excellent": "🎉 恭喜！您的方案达到了专业策划师标准，具备完整的执行可行性和出色的用户体验设计。",
+        "good": "👍 很好！您的方案整体质量良好，在细节方面还有提升空间。",
+        "fair": "✅ 合格！基本满足派对需求，建议在创意和执行细节上进一步优化。",
+        "needsImprovement": "⚠️ 建议优化！方案还需要在多个维度进行改进，以达到更好的效果。"
+      },
+      "emptyState": {
+        "title": "您的专属派对方案",
+        "description": "完成左侧选择后，我们将为您生成个性化的生日派对策划方案",
+        "feature1": "场地布置与装饰建议",
+        "feature2": "活动流程与时间安排",
+        "feature3": "餐饮与音乐推荐"
+      },
+      "loading": {
+        "title": "正在生成您的专属方案",
+        "description": "AI正在根据您的选择定制完美的生日派对策划..."
+      },
+      "error": {
+        "title": "生成失败",
+        "retry": "重新尝试"
+      },
+      "export": {
+        "subtitle": "由生日派对策划平台为您定制 | 专业策划师出品",
+        "generatedTime": "生成时间：",
+        "planNumber": "方案编号：",
+        "brandFooter": "🎂 生日派对策划平台 - 让每个生日都独一无二",
+        "tagline": "专业策划 • 贴心服务 • 完美体验"
+      }
+    }
+  },
+  "language": {
+    "chinese": "Chinese（简体中文）",
+    "english": "English"
+  },
+  "sponsors": {
+    "title": "我们的合作伙伴",
+    "partners": {
+      "crown": "皇冠气球",
+      "gift": "礼品之家", 
+      "cake": "甜蜜蛋糕",
+      "music": "音响设备",
+      "camera": "摄影工作室",
+      "sparkles": "装饰专家",
+      "utensils": "餐饮服务"
+    }
+  },
+  "testimonials": {
+    "subtitle": "用户评价",
+    "title": "听听我们的用户怎么说",
+    "description": "已有超过1000+家庭使用我们的工具成功策划了难忘的生日派对",
+    "reviews": {
+      "zhang": {
+        "name": "张小雨",
+        "role": "宝妈",
+        "comment": "太棒了！用这个工具为我女儿策划了6岁生日派对，公主主题的建议非常详细，孩子们玩得特别开心。活动安排很合理，时间把控得很好。"
+      },
+      "li": {
+        "name": "李先生", 
+        "role": "上班族",
+        "comment": "为老婆策划30岁生日用的这个工具，复古主题的方案很有创意。餐饮和音乐的建议都很棒，朋友们都说这是他们参加过最棒的生日聚会！"
+      },
+      "wang": {
+        "name": "王阿姨",
+        "role": "退休教师", 
+        "comment": "用来给老伴办70大寿，花园主题的方案特别温馨。茶话会的形式很适合我们这个年纪，装饰建议也很实用，花费不多但效果很好。"
+      },
+      "chen": {
+        "name": "陈妈妈",
+        "role": "家庭主妇",
+        "comment": "连续两年用这个工具策划孩子生日派对了，从超级英雄到海洋探险主题，每次都有惊喜。预算控制得很好，孩子特别喜欢。"
+      },
+      "liu": {
+        "name": "刘经理",
+        "role": "企业管理者",
+        "comment": "公司年会用了简约现代主题，虽然不是传统意义的生日派对，但这个工具的创意让我们的活动与众不同，同事们反响很好。"
+      },
+      "mei": {
+        "name": "小美",
+        "role": "大学生",
+        "comment": "给室友策划21岁生日，音乐派对主题超级棒！DJ音乐和霓虹灯光的建议让我们的宿舍变成了小型夜店，太有意思了！"
+      }
+    }
+  },
+  "benefits": {
+    "subtitle": "优势特色",
+    "title": "为什么选择我们的生日派对策划服务",
+    "description": "我们致力于为每一位客户打造独一无二的生日庆典，让美好回忆永远珍藏。",
+    "personalized": {
+      "title": "个性化定制",
+      "description": "根据生日主角的年龄、喜好和需求，量身定制专属的派对方案，确保每个细节都完美契合。"
+    },
+    "professional": {
+      "title": "专业策划团队",
+      "description": "拥有丰富经验的派对策划师，从创意构思到执行落地，全程提供专业指导和建议。"
+    },
+    "budget": {
+      "title": "预算灵活控制",
+      "description": "提供多种预算方案选择，从经济实惠到豪华定制，满足不同家庭的消费需求。"
+    },
+    "creative": {
+      "title": "创意无限",
+      "description": "丰富的主题库和创意点子，从经典传统到时尚前卫，总有一款适合您的派对风格。"
+    }
+  },
+  "partyIdeas": {
+    "subtitle": "创意灵感",
+    "title": "精选生日派对创意案例",
+    "description": "从梦幻公主到超级英雄，从优雅花园到音乐派对，为您提供丰富的主题创意灵感。",
+    "themes": {
+      "princess": {
+        "title": "梦幻公主主题",
+        "subtitle": "儿童生日派对",
+        "tags": ["粉色装饰", "城堡布景"],
+        "features": {
+          "age": "适合3-8岁",
+          "venue": "室内派对"
+        }
+      },
+      "retro": {
+        "title": "复古怀旧主题",
+        "subtitle": "成人生日聚会",
+        "tags": ["80年代风格", "怀旧音乐"],
+        "features": {
+          "age": "适合25-45岁",
+          "venue": "室内外皆可"
+        }
+      },
+      "superhero": {
+        "title": "超级英雄主题",
+        "subtitle": "儿童生日派对",
+        "tags": ["漫威角色", "动作游戏"],
+        "features": {
+          "age": "适合5-12岁",
+          "venue": "户外活动"
+        }
+      },
+      "garden": {
+        "title": "优雅花园主题",
+        "subtitle": "长辈生日庆典",
+        "tags": ["鲜花装饰", "茶话会"],
+        "features": {
+          "age": "适合50岁以上",
+          "venue": "花园聚会"
+        }
+      },
+      "music": {
+        "title": "音乐派对主题",
+        "subtitle": "青年生日聚会",
+        "tags": ["DJ音乐", "霓虹灯光"],
+        "features": {
+          "age": "适合18-30岁",
+          "venue": "夜间派对"
+        }
+      },
+      "ocean": {
+        "title": "海洋探险主题",
+        "subtitle": "儿童生日派对",
+        "tags": ["海洋生物", "探险游戏"],
+        "features": {
+          "age": "适合4-10岁",
+          "venue": "室内布景"
+        }
+      },
+      "modern": {
+        "title": "简约现代主题",
+        "subtitle": "成人生日聚会",
+        "tags": ["极简风格", "精致餐饮"],
+        "features": {
+          "age": "适合30-50岁",
+          "venue": "高端场所"
+        }
+      },
+      "forest": {
+        "title": "童话森林主题",
+        "subtitle": "儿童生日派对",
+        "tags": ["森林动物", "自然装饰"],
+        "features": {
+          "age": "适合3-9岁",
+          "venue": "户外森林"
+        }
+      }
+    }
+  },
+  "community": {
+    "title": "加入我们的",
+    "titleHighlight": "创意社区",
+    "description": "与千万家庭一起分享生日派对创意，获取专业策划建议",
+    "features": {
+      "shareSuccess": "分享派对成功案例",
+      "getInspiration": "获取创意灵感",
+      "consultAdvice": "咨询专业建议"
+    },
+    "joinButton": "立即加入社区",
+    "comingSoon": "社区功能正在开发中，敬请期待！\n\n您可以通过邮箱 community@birthday-party.com 与我们交流派对创意。"
+  },
+  "footer": {
+    "brand": "生日派对策划",
+    "contact": {
+      "title": "联系方式",
+      "emailSupport": "邮箱支持"
+    },
+    "platforms": {
+      "title": "服务平台",
+      "wechatMini": "微信小程序",
+      "mobileApp": "手机APP",
+      "webVersion": "网页版",
+      "comingSoon": "即将上线"
+    },
+    "help": {
+      "title": "帮助中心",
+      "contactUs": "联系我们",
+      "feedback": "使用反馈"
+    },
+    "social": {
+      "title": "社交媒体",
+      "wechatPublic": "微信公众号",
+      "douyin": "抖音号",
+      "xiaohongshu": "小红书",
+      "comingSoon": "即将开通"
+    },
+    "copyright": "© 2024 生日派对策划平台. 专业设计与开发",
+    "team": "生日派对创意团队"
+  }
+} 

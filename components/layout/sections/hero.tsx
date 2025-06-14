@@ -5,9 +5,12 @@ import { ArrowRight } from "lucide-react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
+import { useLanguage } from "@/lib/contexts/language-context";
 
 export const HeroSection = () => {
   const { theme } = useTheme();
+  const { t } = useLanguage();
+  
   return (
     <section className="container w-full">
       <div className="grid place-items-center lg:max-w-screen-xl gap-8 mx-auto py-20 md:py-32">
@@ -16,28 +19,28 @@ export const HeroSection = () => {
             <span className="mr-2 text-primary">
               <Badge>New</Badge>
             </span>
-            <span> 生日派对策划工具上线了! </span>
+            <span> {t('hero.badge')} </span>
           </Badge>
 
           <div className="max-w-screen-md mx-auto text-center text-4xl md:text-6xl font-bold">
             <h1>
-              生日派对策划
+              {t('hero.title')}
               <span className="text-transparent px-2 bg-gradient-to-r from-[#E879F9] to-primary bg-clip-text">
-                让每个生日
+                {t('hero.titleHighlight')}
               </span>
               <br />
-              都独一无二
+              {t('hero.titleEnd')}
             </h1>
           </div>
 
           <p className="max-w-screen-sm mx-auto text-xl text-muted-foreground">
-            专业的生日派对创意工具，帮您轻松策划完美的生日庆典。从主题选择到活动安排，让每一个生日都成为难忘的回忆。
+            {t('hero.description')}
           </p>
 
           <div className="space-y-4 md:space-y-0 md:space-x-4">
             <Button asChild className="w-5/6 md:w-1/4 font-bold group/arrow">
               <Link href="/birthday-party-planner">
-                开始策划派对
+                {t('hero.startPlanning')}
                 <ArrowRight className="size-5 ml-2 group-hover/arrow:translate-x-1 transition-transform" />
               </Link>
             </Button>
@@ -48,7 +51,7 @@ export const HeroSection = () => {
               className="w-5/6 md:w-1/4 font-bold"
             >
               <Link href="#features">
-                了解更多功能
+                {t('hero.learnMore')}
               </Link>
             </Button>
           </div>
@@ -63,7 +66,7 @@ export const HeroSection = () => {
               height={800}
               className="w-full md:w-[1200px] mx-auto rounded-lg relative leading-none flex items-center opacity-95"
               src="/demo2-img.jpg"
-              alt="高端优雅的庆祝场景 - 暗色调氛围灯光、精致装饰营造奢华品味的派对环境"
+              alt={t('hero.imageAlt')}
               priority
               style={{
                 maskImage: `

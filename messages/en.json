@@ -1,0 +1,502 @@
+{
+  "nav": {
+    "brand": "Birthday Party Planner",
+    "features": "Features",
+    "partyIdeas": "Party Ideas",
+    "pricing": "Pricing",
+    "faq": "FAQ",
+    "startPlanning": "Start Planning",
+    "language": "Language"
+  },
+  "hero": {
+    "badge": "Birthday Party Planning Tool is Live!",
+    "title": "Birthday Party Planning",
+    "titleHighlight": "Make Every Birthday",
+    "titleEnd": "Unique & Memorable",
+    "description": "Professional birthday party creative tool to help you easily plan the perfect birthday celebration. From theme selection to activity arrangement, make every birthday an unforgettable memory.",
+    "startPlanning": "Start Planning Party",
+    "learnMore": "Learn More Features",
+    "imageAlt": "Elegant celebration scene - dark ambient lighting and exquisite decorations creating a luxurious party atmosphere"
+  },
+  "features": {
+    "subtitle": "Features",
+    "title": "Rich Birthday Party Creative Features",
+    "description": "From party planning to execution, we provide comprehensive birthday party solutions to make every birthday a beautiful memory.",
+    "partyTypes": {
+      "title": "Party Type Selection",
+      "description": "Support various types including adult birthdays, children's birthdays, and elder birthdays, providing exclusive party creative plans for different age groups."
+    },
+    "smartPlanning": {
+      "title": "Smart Activity Planning",
+      "description": "Automatically generate reasonable activity schedules based on party size and duration, ensuring the party rhythm is compact and interesting."
+    },
+    "venueSetup": {
+      "title": "Venue Setup Suggestions",
+      "description": "Provide professional setup plans for indoor and outdoor venues, including detailed guidance on decoration placement and space planning."
+    },
+    "themes": {
+      "title": "Rich Theme Selection",
+      "description": "From classic themes to creative themes, support custom theme design to meet personalized party needs."
+    },
+    "atmosphere": {
+      "title": "Atmosphere Creation",
+      "description": "Recommend suitable music, lighting and decorations according to party type to create the perfect birthday celebration atmosphere."
+    },
+    "catering": {
+      "title": "Catering Pairing",
+      "description": "Provide birthday cake, snacks, drinks and other catering suggestions, formulate the best plan according to the number of people and budget."
+    }
+  },
+  "services": {
+    "subtitle": "Services",
+    "title": "Diverse Birthday Party Solutions",
+    "description": "We provide professional birthday party planning services for different age groups, making every birthday a special memory.",
+    "children": {
+      "title": "Children's Birthday Party",
+      "description": "Birthday party plans designed specifically for children aged 3-12, including cartoon themes, game activities, safety considerations and other professional suggestions."
+    },
+    "adult": {
+      "title": "Adult Birthday Gathering",
+      "description": "Birthday celebration plans suitable for adults aged 18-50, providing elegant, stylish, and personalized party ideas and activity arrangements."
+    },
+    "elderly": {
+      "title": "Elder's Birthday Celebration",
+      "description": "Carefully planned birthday celebration activities for elders over 50, focusing on warm, comfortable, and meaningful celebration methods."
+    },
+    "theme": {
+      "title": "Theme Party Planning",
+      "description": "Provide a variety of creative theme options, from retro nostalgia to modern fashion, meeting the needs of different age groups and preferences."
+    },
+    "recommended": "Recommended"
+  },
+  "pricing": {
+    "subtitle": "Pricing Plans",
+    "title": "Choose Your Perfect Party Planning Plan",
+    "description": "From free trial to professional customization, make every birthday party creative and memorable",
+    "free": {
+      "title": "Free Plan",
+      "description": "Try basic party planning features, perfect for occasional party hosts.",
+      "buttonText": "Start Free",
+      "benefits": {
+        "dailyLimit": "3 party plans per day",
+        "dataRetention": "7-day data storage",
+        "noExport": "No export feature",
+        "basicPlan": "Simple planning plans"
+      }
+    },
+    "premium": {
+      "title": "Premium Plan",
+      "description": "Unlock all features for unlimited personalized party planning experience.",
+      "buttonText": "Upgrade Now",
+      "benefits": {
+        "unlimited": "Unlimited plan generation",
+        "permanentStorage": "Permanent data storage",
+        "exportSupport": "Export feature included",
+        "detailedPlan": "Detailed custom plans"
+      }
+    },
+    "recommended": "Recommended",
+    "perMonth": "/month"
+  },
+  "faq": {
+    "subtitle": "FAQ",
+    "title": "Birthday Party Planning FAQ",
+    "questions": {
+      "isFree": {
+        "question": "Is the birthday party planning tool free?",
+        "answer": "Yes! We provide a free version for you to experience. The free version can generate 3 party plans per day, data is saved for 7 days, allowing you to fully understand our planning features. For more features, you can upgrade to the premium version."
+      },
+      "allAges": {
+        "question": "Are the generated party plans suitable for all age groups?",
+        "answer": "Absolutely! We have specially designed different party plans for children (3-12 years old), adults (18-50 years old), and elders (over 50 years old), ensuring that each age group gets the most suitable celebration suggestions."
+      },
+      "customTheme": {
+        "question": "Can I customize party themes?",
+        "answer": "Yes! In addition to the 6 preset themes we provide, you can also enter custom themes. Our system will generate corresponding party planning plans based on your creative ideas."
+      },
+      "saveExport": {
+        "question": "Can the generated plans be saved or exported?",
+        "answer": "Free version plan data is saved for 7 days, premium version supports permanent data storage and export functions. You can export complete party planning plans as PDF or other formats for easy execution and sharing."
+      },
+      "planDifference": {
+        "question": "What's the difference between free and premium versions?",
+        "answer": "Free version can generate 3 plans per day, data saved for 7 days, provides simple planning plans. Premium version supports unlimited generation, permanent data storage, export functions, and provides more detailed customized plans, only $9.9/month."
+      }
+    }
+  },
+  "planner": {
+    "pageTitle": "Birthday Party Creative Planning Tool",
+    "pageDescription": "Get your exclusive birthday party creative plan in minutes and make every birthday an unforgettable memory",
+    "aiPlanning": "AI Smart Planning",
+    "quickComplete": "3 Minutes Complete",
+    "personalized": "Personalized Custom",
+    "stepGuide": "Complete 6 steps on the left → View exclusive plan on the right",
+    "form": {
+      "title": "Create Your Exclusive Party Plan",
+      "subtitle": "Tell us your needs, and we'll customize the perfect birthday party plan for you",
+      "partyType": {
+        "title": "Choose Party Type",
+        "adult": "Adult Birthday",
+        "child": "Kids Birthday",
+        "elderly": "Senior Birthday",
+        "teen": "Teen",
+        "descriptions": {
+          "child": "Ages 3-12",
+          "adult": "Ages 18-50",
+          "elderly": "Ages 50+"
+        }
+      },
+      "guestCount": {
+        "title": "Party Size",
+        "small": "Small Party",
+        "medium": "Medium Party",
+        "large": "Large Party",
+        "descriptions": {
+          "small": "Up to 10 people",
+          "medium": "10-30 people",
+          "large": "30+ people"
+        }
+      },
+      "venue": {
+        "title": "Choose Venue",
+        "indoor": "Indoor",
+        "outdoor": "Outdoor",
+        "descriptions": {
+          "indoor": "Home, restaurant, club",
+          "outdoor": "Park, garden, beach"
+        }
+      },
+      "budget": {
+        "title": "Set Budget",
+        "low": "Budget",
+        "medium": "Standard",
+        "high": "Premium",
+        "descriptions": {
+          "low": "$75-225",
+          "medium": "$225-750",
+          "high": "$750+"
+        }
+      },
+      "theme": {
+        "title": "Choose Theme",
+        "placeholder": "Enter your theme...",
+        "modern": "Modern",
+        "retro": "Retro",
+        "garden": "Garden",
+        "superhero": "Superhero",
+        "princess": "Princess",
+        "ocean": "Ocean",
+        "customTheme": "Custom Theme",
+        "customThemeName": "Theme Name",
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "descriptions": {
+          "modern": "Minimalist, elegant style",
+          "retro": "80s nostalgia, classic vibes",
+          "garden": "Natural, floral decorations",
+          "superhero": "Marvel/DC heroes, action fun",
+          "princess": "Fantasy castle, pink decor",
+          "ocean": "Marine life, blue theme"
+        }
+      },
+      "atmosphere": {
+        "title": "Party Atmosphere",
+        "lively": "Lively & Fun",
+        "elegant": "Elegant",
+        "casual": "Casual",
+        "formal": "Formal",
+        "creative": "Creative",
+        "intimate": "Intimate",
+        "descriptions": {
+          "lively": "Music, games, interaction",
+          "elegant": "Light music, conversation",
+          "casual": "Relaxed, simple dining",
+          "formal": "Ceremonial, speeches",
+          "creative": "DIY activities, games",
+          "intimate": "Small group, deep talks"
+        }
+      },
+      "generateButton": "Generate Party Plan",
+      "regenerateButton": "Generate New Plan",
+      "generating": "Generating...",
+      "completeAllSteps": "Complete all steps to generate"
+    },
+    "result": {
+      "title": "Your Exclusive Party Plan",
+      "subtitle": "Personalized customization completed",
+      "professionalScore": "Professional Score",
+      "venue": "Venue Setup",
+      "activities": "Activity Arrangement",
+      "decorations": "Decoration Plan",
+      "catering": "Catering Suggestions",
+      "music": "Music Atmosphere",
+      "schedule": "Time Schedule",
+      "budgetTip": "Planner's Thoughtful Reminder",
+      "executionTip": "Execution Points",
+      "professionalEvaluation": "Professional Evaluation",
+      "creativity": "Creativity & Theme Compatibility",
+      "planning": "Process Planning Rationality",
+      "budget": "Budget Control & Cost-effectiveness",
+      "details": "Detail Polishing & Atmosphere Creation",
+      "feasibility": "Execution Feasibility",
+      "totalScore": "Overall Score",
+      "replan": "Replan",
+      "export": "Export Plan",
+      "currentSelection": "Current Selection",
+      "badges": {
+        "budgetReference": "Budget Included",
+        "climaxMoment": "Climax Moments",
+        "emotionalTouch": "Emotional Touch",
+        "shoppingList": "Shopping List",
+        "immersiveExperience": "Immersive Experience",
+        "priceReference": "Price Reference",
+        "ceremonialSense": "Ceremonial",
+        "timeSegmented": "Time Segmented",
+        "emotionalRhythm": "Emotional Rhythm",
+        "climaxMarked": "Climax Marked",
+        "touchMoment": "Touch Moments"
+      },
+      "tips": {
+        "budgetReminder": "Budget references included in the plan, adjustable based on actual situation",
+        "preparationAdvice": "Recommend starting preparation 2-3 weeks in advance for best results"
+      },
+      "executionDetails": {
+        "oneWeekBefore": "1 Week Before:",
+        "dayOfParty": "Day of Party:",
+        "professionalTip": "💡 Professional Tip:",
+        "oneWeekTasks": {
+          "confirmVenue": "Confirm venue and guest count",
+          "buyDecorations": "Purchase decorative items",
+          "prepareProps": "Prepare emotional engagement props"
+        },
+        "dayOfTasks": {
+          "setupEarly": "Set up 2 hours early",
+          "testEquipment": "Test audio equipment",
+          "rehearseHighlights": "Rehearse highlight moments"
+        },
+        "tipText": "Highlight moments need host guidance, emotional engagement segments should control rhythm and avoid being overly sentimental."
+      },
+      "evaluationLevels": {
+        "excellent": "🎉 Congratulations! Your plan meets professional planner standards with complete execution feasibility and excellent user experience design.",
+        "good": "👍 Great! Your plan has good overall quality with room for improvement in details.",
+        "fair": "✅ Qualified! Basically meets party needs, suggest further optimization in creativity and execution details.",
+        "needsImprovement": "⚠️ Needs optimization! The plan requires improvements in multiple dimensions for better results."
+      },
+      "emptyState": {
+        "title": "Your Exclusive Party Plan",
+        "description": "After completing the selection on the left, we will generate a personalized birthday party planning plan for you",
+        "feature1": "Venue setup and decoration suggestions",
+        "feature2": "Activity flow and time arrangement",
+        "feature3": "Catering and music recommendations"
+      },
+      "loading": {
+        "title": "Generating Your Exclusive Plan",
+        "description": "AI is customizing the perfect birthday party plan based on your selections..."
+      },
+      "error": {
+        "title": "Generation Failed",
+        "retry": "Try Again"
+      },
+      "export": {
+        "subtitle": "Customized by Birthday Party Planning Platform | Professional Planner",
+        "generatedTime": "Generated: ",
+        "planNumber": "Plan ID: ",
+        "brandFooter": "🎂 Birthday Party Planner - Make Every Birthday Unique",
+        "tagline": "Professional Planning • Thoughtful Service • Perfect Experience"
+      }
+    }
+  },
+  "language": {
+    "chinese": "Chinese（简体中文）",
+    "english": "English"
+  },
+  "sponsors": {
+    "title": "Our Partners",
+    "partners": {
+      "crown": "Crown Balloons",
+      "gift": "Gift House", 
+      "cake": "Sweet Cakes",
+      "music": "Audio Equipment",
+      "camera": "Photography Studio",
+      "sparkles": "Decoration Experts",
+      "utensils": "Catering Services"
+    }
+  },
+  "testimonials": {
+    "subtitle": "User Reviews",
+    "title": "What Our Users Say",
+    "description": "Over 1000+ families have successfully planned unforgettable birthday parties using our tool",
+    "reviews": {
+      "zhang": {
+        "name": "Zhang Xiaoyu",
+        "role": "Mother",
+        "comment": "Amazing! Used this tool to plan my daughter's 6th birthday party. The princess theme suggestions were very detailed, and the kids had a great time. The activity arrangement was reasonable and well-timed."
+      },
+      "li": {
+        "name": "Mr. Li", 
+        "role": "Office Worker",
+        "comment": "Used this tool to plan my wife's 30th birthday. The retro theme plan was very creative. The catering and music suggestions were excellent, and friends said it was the best birthday party they've ever attended!"
+      },
+      "wang": {
+        "name": "Mrs. Wang",
+        "role": "Retired Teacher", 
+        "comment": "Used it for my husband's 70th birthday. The garden theme plan was particularly warm. The tea party format was perfect for our age, and the decoration suggestions were practical with great results at low cost."
+      },
+      "chen": {
+        "name": "Mrs. Chen",
+        "role": "Housewife",
+        "comment": "Used this tool for my child's birthday party for two consecutive years, from superhero to ocean adventure themes. Each time was a surprise. Budget control was excellent, and my child loved it."
+      },
+      "liu": {
+        "name": "Manager Liu",
+        "role": "Business Manager",
+        "comment": "Used the modern minimalist theme for our company annual meeting. Although not a traditional birthday party, this tool's creativity made our event stand out, and colleagues responded very well."
+      },
+      "mei": {
+        "name": "Xiao Mei",
+        "role": "College Student",
+        "comment": "Planned my roommate's 21st birthday with the music party theme - it was awesome! The DJ music and neon lighting suggestions turned our dorm into a mini nightclub. So much fun!"
+      }
+    }
+  },
+  "benefits": {
+    "subtitle": "Our Advantages",
+    "title": "Why Choose Our Birthday Party Planning Service",
+    "description": "We are committed to creating unique birthday celebrations for every client, making beautiful memories last forever.",
+    "personalized": {
+      "title": "Personalized Customization",
+      "description": "Tailor-made party plans based on the birthday person's age, preferences, and needs, ensuring every detail perfectly fits."
+    },
+    "professional": {
+      "title": "Professional Planning Team",
+      "description": "Experienced party planners providing professional guidance and advice from creative conception to execution."
+    },
+    "budget": {
+      "title": "Flexible Budget Control",
+      "description": "Multiple budget options from economical to luxury customization, meeting different family consumption needs."
+    },
+    "creative": {
+      "title": "Unlimited Creativity",
+      "description": "Rich theme library and creative ideas, from classic traditional to trendy modern, there's always one that suits your party style."
+    }
+  },
+  "partyIdeas": {
+    "subtitle": "Creative Inspiration",
+    "title": "Featured Birthday Party Creative Cases",
+    "description": "From fantasy princess to superhero, from elegant garden to music party, providing you with rich thematic creative inspiration.",
+    "themes": {
+      "princess": {
+        "title": "Fantasy Princess Theme",
+        "subtitle": "Children's Birthday Party",
+        "tags": ["Pink Decorations", "Castle Setting"],
+        "features": {
+          "age": "Ages 3-8",
+          "venue": "Indoor Party"
+        }
+      },
+      "retro": {
+        "title": "Retro Nostalgia Theme",
+        "subtitle": "Adult Birthday Party",
+        "tags": ["80s Style", "Nostalgic Music"],
+        "features": {
+          "age": "Ages 25-45",
+          "venue": "Indoor/Outdoor"
+        }
+      },
+      "superhero": {
+        "title": "Superhero Theme",
+        "subtitle": "Children's Birthday Party",
+        "tags": ["Marvel Characters", "Action Games"],
+        "features": {
+          "age": "Ages 5-12",
+          "venue": "Outdoor Activities"
+        }
+      },
+      "garden": {
+        "title": "Elegant Garden Theme",
+        "subtitle": "Elder Birthday Celebration",
+        "tags": ["Floral Decorations", "Tea Party"],
+        "features": {
+          "age": "Ages 50+",
+          "venue": "Garden Party"
+        }
+      },
+      "music": {
+        "title": "Music Party Theme",
+        "subtitle": "Youth Birthday Party",
+        "tags": ["DJ Music", "Neon Lights"],
+        "features": {
+          "age": "Ages 18-30",
+          "venue": "Night Party"
+        }
+      },
+      "ocean": {
+        "title": "Ocean Adventure Theme",
+        "subtitle": "Children's Birthday Party",
+        "tags": ["Marine Life", "Adventure Games"],
+        "features": {
+          "age": "Ages 4-10",
+          "venue": "Indoor Setting"
+        }
+      },
+      "modern": {
+        "title": "Modern Minimalist Theme",
+        "subtitle": "Adult Birthday Party",
+        "tags": ["Minimalist Style", "Fine Dining"],
+        "features": {
+          "age": "Ages 30-50",
+          "venue": "High-end Venue"
+        }
+      },
+      "forest": {
+        "title": "Fairy Tale Forest Theme",
+        "subtitle": "Children's Birthday Party",
+        "tags": ["Forest Animals", "Natural Decorations"],
+        "features": {
+          "age": "Ages 3-9",
+          "venue": "Outdoor Forest"
+        }
+      }
+    }
+  },
+  "community": {
+    "title": "Join Our",
+    "titleHighlight": "Creative Community",
+    "description": "Share birthday party ideas with millions of families and get professional planning advice",
+    "features": {
+      "shareSuccess": "Share successful party cases",
+      "getInspiration": "Get creative inspiration",
+      "consultAdvice": "Consult professional advice"
+    },
+    "joinButton": "Join Community Now",
+    "comingSoon": "Community features are under development, stay tuned!\n\nYou can contact us at community@birthday-party.com to share party ideas."
+  },
+  "footer": {
+    "brand": "Birthday Party Planner",
+    "contact": {
+      "title": "Contact",
+      "emailSupport": "Email Support"
+    },
+    "platforms": {
+      "title": "Platforms",
+      "wechatMini": "WeChat Mini Program",
+      "mobileApp": "Mobile App",
+      "webVersion": "Web Version",
+      "comingSoon": "Coming Soon"
+    },
+    "help": {
+      "title": "Help Center",
+      "contactUs": "Contact Us",
+      "feedback": "Feedback"
+    },
+    "social": {
+      "title": "Social Media",
+      "wechatPublic": "WeChat Official",
+      "douyin": "TikTok",
+      "xiaohongshu": "Xiaohongshu",
+      "comingSoon": "Coming Soon"
+    },
+    "copyright": "© 2024 Birthday Party Planning Platform. Professional Design & Development",
+    "team": "Birthday Party Creative Team"
+  }
+} 

@@ -1,10 +1,10 @@
 "use client";
 
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { PartyFormData, PartyPlan } from '../types/party';
 
 interface PartyState {
-  formData: Partial<PartyFormData>;
+  formData: PartyFormData;
   result: PartyPlan | null;
   isLoading: boolean;
   error: string | null;
@@ -12,13 +12,22 @@ interface PartyState {
 
 type PartyAction = 
   | { type: 'UPDATE_FORM_DATA'; payload: Partial<PartyFormData> }
+  | { type: 'SET_FORM_DATA'; payload: PartyFormData }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_RESULT'; payload: PartyPlan }
-  | { type: 'SET_ERROR'; payload: string }
-  | { type: 'RESET_FORM' };
+  | { type: 'SET_ERROR'; payload: string | null }
+  | { type: 'RESET_FORM' }
+  | { type: 'CLEAR_DATA' };
 
 const initialState: PartyState = {
-  formData: {},
+  formData: {
+    partyType: '' as any,
+    guestCount: '' as any,
+    venue: '' as any,
+    budget: '' as any,
+    theme: '',
+    atmosphere: '' as any,
+  },
   result: null,
   isLoading: false,
   error: null,
@@ -30,6 +39,12 @@ function partyReducer(state: PartyState, action: PartyAction): PartyState {
       return {
         ...state,
         formData: { ...state.formData, ...action.payload },
+        error: null,
+      };
+    case 'SET_FORM_DATA':
+      return {
+        ...state,
+        formData: action.payload,
         error: null,
       };
     case 'SET_LOADING':
@@ -53,6 +68,8 @@ function partyReducer(state: PartyState, action: PartyAction): PartyState {
       };
     case 'RESET_FORM':
       return initialState;
+    case 'CLEAR_DATA':
+      return initialState;
     default:
       return state;
   }
@@ -63,6 +80,7 @@ interface PartyContextType {
   updateFormData: (data: Partial<PartyFormData>) => void;
   generatePartyPlan: () => Promise<void>;
   resetForm: () => void;
+  clearData: () => void;
 }
 
 const PartyContext = createContext<PartyContextType | undefined>(undefined);
@@ -75,92 +93,133 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
   };
 
   const generatePartyPlan = async () => {
-    // 检查表单是否完整
+    // Check if form is complete
     const { partyType, guestCount, venue, budget, theme, atmosphere } = state.formData;
     if (!partyType || !guestCount || !venue || !budget || !theme || !atmosphere) {
-      dispatch({ type: 'SET_ERROR', payload: '请完成所有选择后再生成方案' });
+      dispatch({ type: 'SET_ERROR', payload: 'Please complete all selections before generating a plan' });
       return;
     }
 
+    // 防止重复调用
+    if (state.isLoading) {
+      return;
+    }
+
+    console.log('🔄 Setting loading to true in Context');
+    // 立即设置loading状态
     dispatch({ type: 'SET_LOADING', payload: true });
+    dispatch({ type: 'SET_ERROR', payload: null });
+
+    // 滚动到结果区域（在移动设备上特别有用）
+    setTimeout(() => {
+      const resultElement = document.querySelector('[data-result-area]');
+      if (resultElement) {
+        resultElement.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }
+    }, 100);
 
     try {
+      // 获取当前语言设置
+      const currentLanguage = localStorage.getItem('language') || 'zh';
+      
       const response = await fetch('/api/generate-party-plan', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(state.formData),
+        body: JSON.stringify({
+          ...state.formData,
+          language: currentLanguage
+        }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || '生成方案失败');
+        throw new Error(data.error || 'Failed to generate plan');
       }
 
-      if (data.success && data.data) {
-        dispatch({ type: 'SET_RESULT', payload: data.data });
+      if (data.success && data.plan) {
+        console.log('✅ Setting result and loading to false');
+        dispatch({ type: 'SET_RESULT', payload: data.plan });
         
-        // 保存到 localStorage
+        // Save to localStorage
         try {
-          localStorage.setItem('partyPlan', JSON.stringify({
+          const saveData = {
             formData: state.formData,
-            result: data.data,
+            result: data.plan,
             timestamp: Date.now()
-          }));
+          };
+          localStorage.setItem('partyPlanData', JSON.stringify(saveData));
         } catch (error) {
-          console.warn('无法保存到 localStorage:', error);
+          console.warn('Unable to save to localStorage:', error);
         }
       } else {
-        throw new Error('API 返回数据格式错误');
+        throw new Error('API returned invalid data format');
       }
     } catch (error) {
       console.error('生成派对方案失败:', error);
       dispatch({ 
         type: 'SET_ERROR', 
-        payload: error instanceof Error ? error.message : '生成方案时出现未知错误，请稍后重试' 
+        payload: error instanceof Error ? error.message : 'An unknown error occurred while generating the plan, please try again later'
       });
+    } finally {
+      console.log('🏁 Setting loading to false in Context');
+      dispatch({ type: 'SET_LOADING', payload: false });
+    }
+  };
+
+  const clearData = () => {
+    dispatch({ type: 'CLEAR_DATA' });
+    // Clear localStorage
+    try {
+      localStorage.removeItem('partyPlanData');
+    } catch (error) {
+      console.warn('Unable to clear localStorage:', error);
     }
   };
 
   const resetForm = () => {
     dispatch({ type: 'RESET_FORM' });
-    // 清除 localStorage
+    // Clear localStorage
     try {
-      localStorage.removeItem('partyPlan');
+      localStorage.removeItem('partyPlanData');
     } catch (error) {
-      console.warn('无法清除 localStorage:', error);
+      console.warn('Unable to clear localStorage:', error);
     }
   };
 
-  // 组件挂载时尝试从 localStorage 恢复数据
-  React.useEffect(() => {
+  // Try to restore data from localStorage when component mounts
+  useEffect(() => {
     try {
-      const saved = localStorage.getItem('partyPlan');
-      if (saved) {
-        const { formData, result, timestamp } = JSON.parse(saved);
-        // 检查数据是否过期（7天）
-        const isExpired = Date.now() - timestamp > 7 * 24 * 60 * 60 * 1000;
+      const savedData = localStorage.getItem('partyPlanData');
+      if (savedData) {
+        const parsedData = JSON.parse(savedData);
+        // Check if data is expired (7 days)
+        const isExpired = Date.now() - parsedData.timestamp > 7 * 24 * 60 * 60 * 1000;
         
-        if (!isExpired && formData && result) {
-          dispatch({ type: 'UPDATE_FORM_DATA', payload: formData });
-          dispatch({ type: 'SET_RESULT', payload: result });
+        if (!isExpired && parsedData.formData && parsedData.result) {
+          dispatch({ type: 'SET_FORM_DATA', payload: parsedData.formData });
+          dispatch({ type: 'SET_RESULT', payload: parsedData.result });
         } else if (isExpired) {
-          localStorage.removeItem('partyPlan');
+          localStorage.removeItem('partyPlanData');
         }
       }
     } catch (error) {
-      console.warn('无法从 localStorage 恢复数据:', error);
+      console.warn('Unable to restore data from localStorage:', error);
     }
   }, []);
 
   return (
-    <PartyContext.Provider value={{
-      state,
-      updateFormData,
-      generatePartyPlan,
+    <PartyContext.Provider value={{ 
+      state, 
+      updateFormData, 
+      generatePartyPlan, 
       resetForm,
+      clearData
     }}>
       {children}
     </PartyContext.Provider>
