@@ -13,23 +13,22 @@ import { useRef } from 'react';
 // 动态评估函数
 const calculateProfessionalScore = (formData: any, result: any) => {
   let scores = {
-    creativity: 15, // 创意与主题契合度 (基础分15)
-    planning: 15,   // 流程安排合理性 (基础分15)
-    budget: 12,     // 预算控制与性价比 (基础分12)
-    details: 15,    // 细节打磨与氛围营造 (基础分15)
-    feasibility: 15, // 执行可行性 (基础分15)
-    emotion: 10     // 情绪触达与高潮设计 (新增维度，基础分10)
+    creativity: 18, // 创意与主题契合度 (基础分18)
+    planning: 18,   // 流程安排合理性 (基础分18)
+    budget: 18,     // 预算控制与性价比 (基础分18)
+    details: 18,    // 细节打磨与氛围营造 (基础分18)
+    feasibility: 18 // 执行可行性 (基础分18)
   };
 
   // 根据主题创意程度加分
   if (formData.theme && formData.theme.length > 5) {
-    scores.creativity += 3;
+    scores.creativity += 2;
   }
   
-  // 根据方案内容丰富度和情绪设计加分
+  // 根据方案内容丰富度加分
   if (result) {
     const totalItems = Object.values(result).flat().length;
-    if (totalItems > 20) scores.details += 3;
+    if (totalItems > 20) scores.details += 2;
     if (totalItems > 25) scores.planning += 2;
     
     // 检查是否包含情绪触达关键词
@@ -40,45 +39,44 @@ const calculateProfessionalScore = (formData: any, result: any) => {
     const emotionCount = emotionKeywords.filter(keyword => allContent.includes(keyword)).length;
     const climaxCount = climaxKeywords.filter(keyword => allContent.includes(keyword)).length;
     
-    if (emotionCount >= 3) scores.emotion += 5;
-    if (climaxCount >= 2) scores.emotion += 3;
-    if (emotionCount >= 5) scores.creativity += 2;
+    if (emotionCount >= 3) scores.creativity += 2;
+    if (climaxCount >= 2) scores.feasibility += 2;
   }
 
   // 根据预算类型调整预算分数
   if (formData.budget === 'high') {
-    scores.budget += 4;
-  } else if (formData.budget === 'medium') {
     scores.budget += 2;
+  } else if (formData.budget === 'medium') {
+    scores.budget += 1;
   }
 
   // 根据场地类型调整可行性分数
   if (formData.venue === 'indoor') {
-    scores.feasibility += 2; // 室内更容易执行
+    scores.feasibility += 1; // 室内更容易执行
   }
 
   // 根据人数规模调整规划分数
   if (formData.guestCount === 'small') {
-    scores.planning += 2; // 小型聚会更容易规划
+    scores.planning += 1; // 小型聚会更容易规划
     scores.feasibility += 1;
   } else if (formData.guestCount === 'large') {
-    scores.emotion += 2; // 大型聚会更容易营造氛围
+    scores.creativity += 1; // 大型聚会更有创意空间
   }
 
-  // 根据氛围类型调整情绪分数
+  // 根据氛围类型调整分数
   if (formData.atmosphere === 'lively') {
-    scores.emotion += 3; // 热闹氛围更容易引爆
+    scores.creativity += 1; // 热闹氛围更有创意
   } else if (formData.atmosphere === 'intimate') {
-    scores.emotion += 2; // 私密氛围更容易触达情绪
+    scores.details += 1; // 私密氛围更注重细节
   }
 
   const total = Object.values(scores).reduce((sum, score) => sum + score, 0);
   
-  return {
-    scores,
-    total: Math.min(total, 100), // 最高100分
-    level: total >= 85 ? '优秀级别' : total >= 75 ? '良好级别' : total >= 65 ? '合格级别' : '待优化'
-  };
+  const level = total >= 95 ? '优秀级别' : 
+               total >= 90 ? '良好级别' : 
+               total >= 85 ? '合格级别' : '待优化';
+
+  return { scores, total, level };
 };
 
 export function PartyResultDisplay() {
@@ -142,7 +140,7 @@ export function PartyResultDisplay() {
     if (!result) return;
 
     try {
-      const { total, level } = calculateProfessionalScore(formData, result);
+      const { scores, total, level } = calculateProfessionalScore(formData, result);
       
       // 创建一个临时的导出容器
       const exportContainer = document.createElement('div');
@@ -158,7 +156,7 @@ export function PartyResultDisplay() {
       exportContainer.innerHTML = `
         <div style="text-align: center; margin-bottom: 30px;">
           <h1 style="color: #f97316; font-size: 28px; font-weight: bold; margin: 0 0 10px 0;">🎉 专属生日派对方案</h1>
-          <p style="color: #666; font-size: 16px; margin: 0;">由生日派对策划平台为您定制 | 专业策划师李悦出品</p>
+          <p style="color: #666; font-size: 16px; margin: 0;">由生日派对策划平台为您定制 | 专业策划师出品</p>
           <div style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; padding: 8px 20px; border-radius: 20px; display: inline-block; margin-top: 10px; font-size: 14px; font-weight: bold;">
             ⭐ 专业评分：${level} (${total}/100)
           </div>
@@ -191,6 +189,35 @@ export function PartyResultDisplay() {
         ${generateSectionHTML('🍰 餐饮建议', result.catering)}
         ${generateSectionHTML('🎵 音乐氛围', result.music)}
         ${generateSectionHTML('⏰ 时间安排', result.schedule)}
+        
+        <div style="background: #f0fdf4; border: 2px solid #22c55e; border-radius: 12px; padding: 15px; margin-top: 25px;">
+          <h3 style="color: #16a34a; font-size: 16px; margin: 0 0 12px 0;">⭐ 专业评估</h3>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0;">
+              <span style="color: #374151;">创意与主题契合度</span>
+              <span style="color: #16a34a; font-weight: bold;">${scores.creativity}/20</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0;">
+              <span style="color: #374151;">流程安排合理性</span>
+              <span style="color: #16a34a; font-weight: bold;">${scores.planning}/20</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0;">
+              <span style="color: #374151;">预算控制与性价比</span>
+              <span style="color: #16a34a; font-weight: bold;">${scores.budget}/20</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0;">
+              <span style="color: #374151;">细节打磨与氛围营造</span>
+              <span style="color: #16a34a; font-weight: bold;">${scores.details}/20</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0;">
+              <span style="color: #374151;">执行可行性</span>
+              <span style="color: #16a34a; font-weight: bold;">${scores.feasibility}/20</span>
+            </div>
+          </div>
+          <div style="text-align: center; padding: 8px; background: #dcfce7; border-radius: 8px;">
+            <span style="color: #16a34a; font-size: 14px; font-weight: bold;">总体评分：${total}/100 ${level}</span>
+          </div>
+        </div>
         
         <div style="background: linear-gradient(135deg, #fef3e2 0%, #fed7aa 100%); padding: 20px; border-radius: 12px; margin-top: 25px;">
           <h3 style="color: #ea580c; font-size: 16px; margin: 0 0 15px 0;">✅ 执行清单</h3>
@@ -419,7 +446,6 @@ export function PartyResultDisplay() {
               <div className="text-xs text-blue-800 space-y-1">
                 <p>• 方案中已包含预算参考，可根据实际情况调整</p>
                 <p>• 建议提前2-3周开始准备，确保效果最佳</p>
-                <p>• 如需专业执行团队，可联系我们获取报价</p>
               </div>
             </div>
 
@@ -582,108 +608,77 @@ export function PartyResultDisplay() {
           </CardContent>
         </Card>
 
-        {/* 当前选择预览 */}
-        {currentSelections.length > 0 && (
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base">您的选择</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              {currentSelections.map((selection, index) => (
-                <div key={index} className="flex items-center justify-between text-sm">
-                  <div className="flex items-center gap-2">
-                    <selection.icon className="w-4 h-4 text-muted-foreground" />
-                    <span className="text-muted-foreground">{selection.label}</span>
-                  </div>
-                  <Badge variant="secondary" className="text-xs">
-                    {selection.value}
-                  </Badge>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-        )}
-
-        {/* 专业评估卡片 */}
+        {/* 专业评估卡片 - 缩小版本 */}
         <Card className="border-green-200 bg-green-50">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base flex items-center gap-2">
-              <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center">
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm flex items-center gap-2">
+              <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
                 <span className="text-green-600 text-xs">⭐</span>
               </div>
               专业评估
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="space-y-2">
-              <div className="flex items-center justify-between text-sm">
+          <CardContent className="space-y-2">
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-xs">
                 <span className="text-muted-foreground">创意与主题契合度</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div className={`h-full rounded-full ${scores.creativity >= 18 ? 'bg-green-500' : scores.creativity >= 15 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.creativity / 20) * 100}%`}}></div>
+                <div className="flex items-center gap-1">
+                  <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div className={`h-full rounded-full ${scores.creativity >= 19 ? 'bg-green-500' : scores.creativity >= 18 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.creativity / 20) * 100}%`}}></div>
                   </div>
-                  <span className="text-xs font-medium">{scores.creativity}/20</span>
+                  <span className="text-xs font-medium w-8">{scores.creativity}/20</span>
                 </div>
               </div>
-              <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center justify-between text-xs">
                 <span className="text-muted-foreground">流程安排合理性</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div className={`h-full rounded-full ${scores.planning >= 18 ? 'bg-green-500' : scores.planning >= 15 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.planning / 20) * 100}%`}}></div>
+                <div className="flex items-center gap-1">
+                  <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div className={`h-full rounded-full ${scores.planning >= 19 ? 'bg-green-500' : scores.planning >= 18 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.planning / 20) * 100}%`}}></div>
                   </div>
-                  <span className="text-xs font-medium">{scores.planning}/20</span>
+                  <span className="text-xs font-medium w-8">{scores.planning}/20</span>
                 </div>
               </div>
-              <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center justify-between text-xs">
                 <span className="text-muted-foreground">预算控制与性价比</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div className={`h-full rounded-full ${scores.budget >= 18 ? 'bg-green-500' : scores.budget >= 15 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.budget / 20) * 100}%`}}></div>
+                <div className="flex items-center gap-1">
+                  <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div className={`h-full rounded-full ${scores.budget >= 19 ? 'bg-green-500' : scores.budget >= 18 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.budget / 20) * 100}%`}}></div>
                   </div>
-                  <span className="text-xs font-medium">{scores.budget}/20</span>
+                  <span className="text-xs font-medium w-8">{scores.budget}/20</span>
                 </div>
               </div>
-              <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center justify-between text-xs">
                 <span className="text-muted-foreground">细节打磨与氛围营造</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div className={`h-full rounded-full ${scores.details >= 18 ? 'bg-green-500' : scores.details >= 15 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.details / 20) * 100}%`}}></div>
+                <div className="flex items-center gap-1">
+                  <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div className={`h-full rounded-full ${scores.details >= 19 ? 'bg-green-500' : scores.details >= 18 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.details / 20) * 100}%`}}></div>
                   </div>
-                  <span className="text-xs font-medium">{scores.details}/20</span>
+                  <span className="text-xs font-medium w-8">{scores.details}/20</span>
                 </div>
               </div>
-              <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center justify-between text-xs">
                 <span className="text-muted-foreground">执行可行性</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div className={`h-full rounded-full ${scores.feasibility >= 18 ? 'bg-green-500' : scores.feasibility >= 15 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.feasibility / 20) * 100}%`}}></div>
+                <div className="flex items-center gap-1">
+                  <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                    <div className={`h-full rounded-full ${scores.feasibility >= 19 ? 'bg-green-500' : scores.feasibility >= 18 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.feasibility / 20) * 100}%`}}></div>
                   </div>
-                  <span className="text-xs font-medium">{scores.feasibility}/20</span>
-                </div>
-              </div>
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-muted-foreground">情绪触达与高潮设计</span>
-                <div className="flex items-center gap-2">
-                  <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
-                    <div className={`h-full rounded-full ${scores.emotion >= 18 ? 'bg-green-500' : scores.emotion >= 15 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.emotion / 20) * 100}%`}}></div>
-                  </div>
-                  <span className="text-xs font-medium">{scores.emotion}/20</span>
+                  <span className="text-xs font-medium w-8">{scores.feasibility}/20</span>
                 </div>
               </div>
             </div>
-            <Separator className="my-3" />
+            <Separator className="my-2" />
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-green-900">总体评分</span>
-              <div className="flex items-center gap-2">
-                <Badge variant="default" className={`${total >= 85 ? 'bg-green-600' : total >= 75 ? 'bg-blue-600' : total >= 65 ? 'bg-yellow-600' : 'bg-red-600'}`}>
+              <span className="font-semibold text-green-900 text-xs">总体评分</span>
+              <div className="flex items-center gap-1">
+                <Badge variant="default" className={`text-xs ${total >= 95 ? 'bg-green-600' : total >= 90 ? 'bg-blue-600' : total >= 85 ? 'bg-yellow-600' : 'bg-red-600'}`}>
                   {total}/100 {level}
                 </Badge>
               </div>
             </div>
-            <p className={`text-xs p-2 rounded ${total >= 85 ? 'text-green-700 bg-green-100' : total >= 75 ? 'text-blue-700 bg-blue-100' : total >= 65 ? 'text-yellow-700 bg-yellow-100' : 'text-red-700 bg-red-100'}`}>
-              {total >= 85 ? '🎉 恭喜！您的方案达到了专业策划师标准，具备完整的执行可行性和出色的用户体验设计。' :
-               total >= 75 ? '👍 很好！您的方案整体质量良好，在细节方面还有提升空间。' :
-               total >= 65 ? '✅ 合格！基本满足派对需求，建议在创意和执行细节上进一步优化。' :
+            <p className={`text-xs p-2 rounded ${total >= 95 ? 'text-green-700 bg-green-100' : total >= 90 ? 'text-blue-700 bg-blue-100' : total >= 85 ? 'text-yellow-700 bg-yellow-100' : 'text-red-700 bg-red-100'}`}>
+              {total >= 95 ? '🎉 恭喜！您的方案达到了专业策划师标准，具备完整的执行可行性和出色的用户体验设计。' :
+               total >= 90 ? '👍 很好！您的方案整体质量良好，在细节方面还有提升空间。' :
+               total >= 85 ? '✅ 合格！基本满足派对需求，建议在创意和执行细节上进一步优化。' :
                '⚠️ 建议优化！方案还需要在多个维度进行改进，以达到更好的效果。'}
             </p>
           </CardContent>
