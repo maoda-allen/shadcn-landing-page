@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Icon } from '@/components/ui/icon';
 import { icons } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/contexts/language-context';
 import { Loader2, Sparkles } from 'lucide-react';
 
@@ -17,22 +17,16 @@ export function PartyPlannerForm() {
   const { t, language } = useLanguage();
   const [customTheme, setCustomTheme] = useState('');
   const [showCustomTheme, setShowCustomTheme] = useState(false);
+  
+  // 本地状态来强制重新渲染
   const [localLoading, setLocalLoading] = useState(false);
 
-  // 包装的生成函数
-  const handleGeneratePartyPlan = async () => {
-    setLocalLoading(true);
-    
-    try {
-      await generatePartyPlan();
-    } finally {
-      setTimeout(() => {
-        setLocalLoading(false);
-      }, 100);
-    }
-  };
+  // 监控加载状态变化
+  useEffect(() => {
+    setLocalLoading(state.isLoading);
+  }, [state.isLoading]);
 
-  // 使用Context状态优先，本地状态作为备用
+  // 使用组合状态
   const isCurrentlyLoading = state.isLoading || localLoading;
 
   // 定义主题选项
@@ -88,10 +82,53 @@ export function PartyPlannerForm() {
     return partyType && guestCount && venue && budget && theme && atmosphere;
   };
 
+  // 生成按钮点击处理
+  const handleGenerateClick = async () => {
+    if (!isFormComplete()) {
+      return;
+    }
+    
+    if (isCurrentlyLoading) {
+      return;
+    }
+    
+    setLocalLoading(true);
+    
+    try {
+      await generatePartyPlan();
+    } catch (error) {
+      console.error('生成派对方案失败:', error);
+    } finally {
+      setLocalLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-4 md:space-y-6">
+      {/* 全局加载遮罩 */}
+      {isCurrentlyLoading && (
+        <div 
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center"
+          style={{ zIndex: 9999 }}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        >
+          <div className="bg-white rounded-lg p-6 shadow-2xl max-w-sm mx-4 border">
+            <div className="flex items-center space-x-3">
+              <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+              <div>
+                <p className="font-medium text-gray-900">{t('planner.form.generating')}</p>
+                <p className="text-sm text-gray-600 mt-1">{t('planner.form.generatingDesc')}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       {/* Step 1: Party Type */}
-      <Card>
+      <Card className={isCurrentlyLoading ? 'opacity-60 pointer-events-none' : ''}>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">1</span>
@@ -110,6 +147,7 @@ export function PartyPlannerForm() {
                 variant={state.formData.partyType === option.value ? "default" : "outline"}
                 className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
                 onClick={() => handlePartyTypeSelect(option.value as any)}
+                disabled={isCurrentlyLoading}
               >
                 <Icon name={option.icon as keyof typeof icons} size={20} color="currentColor" />
                 <div className="space-y-1">
@@ -123,7 +161,7 @@ export function PartyPlannerForm() {
       </Card>
 
       {/* Step 2: Guest Count */}
-      <Card>
+      <Card className={isCurrentlyLoading ? 'opacity-60 pointer-events-none' : ''}>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">2</span>
@@ -142,6 +180,7 @@ export function PartyPlannerForm() {
                 variant={state.formData.guestCount === option.value ? "default" : "outline"}
                 className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
                 onClick={() => handleGuestCountSelect(option.value as any)}
+                disabled={isCurrentlyLoading}
               >
                 <Icon name={option.icon as keyof typeof icons} size={20} color="currentColor" />
                 <div className="space-y-1">
@@ -155,7 +194,7 @@ export function PartyPlannerForm() {
       </Card>
 
       {/* Step 3: Venue */}
-      <Card>
+      <Card className={isCurrentlyLoading ? 'opacity-60 pointer-events-none' : ''}>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">3</span>
@@ -173,6 +212,7 @@ export function PartyPlannerForm() {
                 variant={state.formData.venue === option.value ? "default" : "outline"}
                 className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
                 onClick={() => handleVenueSelect(option.value as any)}
+                disabled={isCurrentlyLoading}
               >
                 <Icon name={option.icon as keyof typeof icons} size={20} color="currentColor" />
                 <div className="space-y-1">
@@ -186,7 +226,7 @@ export function PartyPlannerForm() {
       </Card>
 
       {/* Step 4: Budget */}
-      <Card>
+      <Card className={isCurrentlyLoading ? 'opacity-60 pointer-events-none' : ''}>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">4</span>
@@ -205,6 +245,7 @@ export function PartyPlannerForm() {
                 variant={state.formData.budget === option.value ? "default" : "outline"}
                 className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
                 onClick={() => handleBudgetSelect(option.value as any)}
+                disabled={isCurrentlyLoading}
               >
                 <Icon name={option.icon as keyof typeof icons} size={20} color="currentColor" />
                 <div className="space-y-1">
@@ -218,7 +259,7 @@ export function PartyPlannerForm() {
       </Card>
 
       {/* Step 5: Theme */}
-      <Card>
+      <Card className={isCurrentlyLoading ? 'opacity-60 pointer-events-none' : ''}>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">5</span>
@@ -234,6 +275,7 @@ export function PartyPlannerForm() {
                   variant={state.formData.theme === t(`planner.form.theme.${theme.id}`) ? "default" : "outline"}
                   className="h-auto p-3 md:p-4 flex items-start gap-3 text-left justify-start"
                   onClick={() => handleThemeSelect(theme.id)}
+                  disabled={isCurrentlyLoading}
                 >
                   <Icon name={theme.icon as keyof typeof icons} size={18} color="currentColor" className="mt-0.5 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
@@ -258,6 +300,7 @@ export function PartyPlannerForm() {
                   onClick={() => setShowCustomTheme(true)}
                   className="w-full"
                   size="sm"
+                  disabled={isCurrentlyLoading}
                 >
                   {t('planner.form.theme.customTheme')}
                 </Button>
@@ -271,10 +314,11 @@ export function PartyPlannerForm() {
                       value={customTheme}
                       onChange={(e) => setCustomTheme(e.target.value)}
                       className="flex-1"
+                      disabled={isCurrentlyLoading}
                     />
                     <div className="flex gap-2">
-                      <Button onClick={handleCustomThemeSubmit} size="sm" className="flex-1 sm:flex-none">{t('planner.form.theme.confirm')}</Button>
-                      <Button variant="outline" onClick={() => setShowCustomTheme(false)} size="sm" className="flex-1 sm:flex-none">{t('planner.form.theme.cancel')}</Button>
+                      <Button onClick={handleCustomThemeSubmit} size="sm" className="flex-1 sm:flex-none" disabled={isCurrentlyLoading}>{t('planner.form.theme.confirm')}</Button>
+                      <Button variant="outline" onClick={() => setShowCustomTheme(false)} size="sm" className="flex-1 sm:flex-none" disabled={isCurrentlyLoading}>{t('planner.form.theme.cancel')}</Button>
                     </div>
                   </div>
                 </div>
@@ -285,7 +329,7 @@ export function PartyPlannerForm() {
       </Card>
 
       {/* Step 6: Atmosphere */}
-      <Card>
+      <Card className={isCurrentlyLoading ? 'opacity-60 pointer-events-none' : ''}>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">6</span>
@@ -300,6 +344,7 @@ export function PartyPlannerForm() {
                 variant={state.formData.atmosphere === option ? "default" : "outline"}
                 className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
                 onClick={() => handleAtmosphereSelect(option)}
+                disabled={isCurrentlyLoading}
               >
                 <div className="space-y-1">
                   <div className="font-semibold text-sm">{t(`planner.form.atmosphere.${option}`)}</div>
@@ -315,9 +360,11 @@ export function PartyPlannerForm() {
       <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
         <CardContent className="pt-4 pb-4">
           <Button
-            onClick={handleGeneratePartyPlan}
+            onClick={handleGenerateClick}
             disabled={!isFormComplete() || isCurrentlyLoading}
-            className="w-full h-11 md:h-12 text-base font-medium relative"
+            className={`w-full h-11 md:h-12 text-base font-medium relative transition-all duration-200 ${
+              isCurrentlyLoading ? 'opacity-75 cursor-not-allowed' : ''
+            }`}
             size="lg"
           >
             {isCurrentlyLoading ? (
@@ -332,8 +379,16 @@ export function PartyPlannerForm() {
               </>
             )}
           </Button>
+          
           {state.error && (
             <p className="text-destructive text-sm mt-3 text-center">{state.error}</p>
+          )}
+          
+          {/* 表单完整性提示 */}
+          {!isFormComplete() && !isCurrentlyLoading && (
+            <p className="text-muted-foreground text-sm mt-3 text-center">
+              {t('planner.form.completeAllSteps')}
+            </p>
           )}
         </CardContent>
       </Card>

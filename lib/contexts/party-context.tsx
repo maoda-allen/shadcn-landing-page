@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { PartyFormData, PartyPlan } from '../types/party';
+import { devLogger } from '../utils/dev-logger';
 
 interface PartyState {
   formData: PartyFormData;
@@ -96,7 +97,16 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
     // Check if form is complete
     const { partyType, guestCount, venue, budget, theme, atmosphere } = state.formData;
     if (!partyType || !guestCount || !venue || !budget || !theme || !atmosphere) {
-      dispatch({ type: 'SET_ERROR', payload: 'Please complete all selections before generating a plan' });
+      // 获取当前语言设置来显示正确的错误消息
+      const currentLanguage = localStorage.getItem('language') || 'zh';
+      
+      // 加载翻译文件
+      const translations = currentLanguage === 'zh' 
+        ? require('../../messages/zh.json')
+        : require('../../messages/en.json');
+      
+      const errorMessage = translations.planner.form.errors.incompleteForm;
+      dispatch({ type: 'SET_ERROR', payload: errorMessage });
       return;
     }
 
@@ -105,7 +115,6 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    console.log('🔄 Setting loading to true in Context');
     // 立即设置loading状态
     dispatch({ type: 'SET_LOADING', payload: true });
     dispatch({ type: 'SET_ERROR', payload: null });
@@ -143,7 +152,6 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
       }
 
       if (data.success && data.plan) {
-        console.log('✅ Setting result and loading to false');
         dispatch({ type: 'SET_RESULT', payload: data.plan });
         
         // Save to localStorage
@@ -155,19 +163,33 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
           };
           localStorage.setItem('partyPlanData', JSON.stringify(saveData));
         } catch (error) {
-          console.warn('Unable to save to localStorage:', error);
+          devLogger.warn('Unable to save to localStorage:', error);
         }
       } else {
         throw new Error('API returned invalid data format');
       }
     } catch (error) {
-      console.error('生成派对方案失败:', error);
+      devLogger.error('生成派对方案失败:', error);
+      // 获取当前语言设置来显示正确的错误消息
+      const currentLanguage = localStorage.getItem('language') || 'zh';
+      
+      // 加载翻译文件
+      const translations = currentLanguage === 'zh' 
+        ? require('../../messages/zh.json')
+        : require('../../messages/en.json');
+      
+      let errorMessage: string;
+      if (error instanceof Error && error.message !== 'API returned invalid data format' && error.message !== 'Failed to generate plan') {
+        errorMessage = error.message;
+      } else {
+        errorMessage = translations.planner.form.errors.unknownError;
+      }
+      
       dispatch({ 
         type: 'SET_ERROR', 
-        payload: error instanceof Error ? error.message : 'An unknown error occurred while generating the plan, please try again later'
+        payload: errorMessage
       });
     } finally {
-      console.log('🏁 Setting loading to false in Context');
       dispatch({ type: 'SET_LOADING', payload: false });
     }
   };
@@ -178,7 +200,7 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
     try {
       localStorage.removeItem('partyPlanData');
     } catch (error) {
-      console.warn('Unable to clear localStorage:', error);
+      devLogger.warn('Unable to clear localStorage:', error);
     }
   };
 
@@ -188,7 +210,7 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
     try {
       localStorage.removeItem('partyPlanData');
     } catch (error) {
-      console.warn('Unable to clear localStorage:', error);
+      devLogger.warn('Unable to clear localStorage:', error);
     }
   };
 
@@ -209,7 +231,7 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
         }
       }
     } catch (error) {
-      console.warn('Unable to restore data from localStorage:', error);
+      devLogger.warn('Unable to restore data from localStorage:', error);
     }
   }, []);
 

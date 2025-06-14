@@ -1,6 +1,8 @@
-# 生日派对创意策划平台
+# 🎉 生日派对策划平台 / Birthday Party Planner
 
-一个专业的生日派对策划工具，帮助用户轻松策划完美的生日庆典。
+一个专业的生日派对策划工具，支持中英文双语，帮助用户轻松策划完美的生日庆典。
+
+A professional birthday party planning tool with bilingual support (Chinese/English) to help users easily plan perfect birthday celebrations.
 
 ## 🎉 项目特色
 
@@ -22,17 +24,26 @@
 
 ## 🚀 快速开始
 
-1. 安装依赖
+### 安装依赖
 ```bash
 npm install
+# 或 / or
+yarn install
 ```
 
-2. 启动开发服务器
+### 启动开发服务器
 ```bash
 npm run dev
+# 或 / or
+yarn dev
 ```
 
-3. 打开浏览器访问 [http://localhost:3000](http://localhost:3000)
+### 构建生产版本
+```bash
+npm run build
+# 或 / or
+yarn build
+```
 
 ## 📱 主要功能
 
@@ -94,29 +105,119 @@ npm run dev
 └── public/                      # 静态资源
 ```
 
-## 🚀 部署
+## 🌐 国际化实现 / Internationalization Implementation
 
-```bash
-# 构建项目
-npm run build
-
-# 启动生产服务器
-npm start
+### 翻译文件结构 / Translation File Structure
+```json
+{
+  "nav": {
+    "brand": "生日派对策划",
+    "features": "功能特色"
+  },
+  "planner": {
+    "form": {
+      "title": "创建您的专属派对方案",
+      "errors": {
+        "incompleteForm": "请完成所有选择后再生成方案"
+      }
+    }
+  }
+}
 ```
 
-## 📝 待实现功能
+### 使用翻译 / Using Translations
+```tsx
+import { useLanguage } from '@/lib/contexts/language-context';
 
-- [ ] 接入真实的AI API
-- [ ] 用户账户系统
-- [ ] 方案保存和分享
-- [ ] 更多主题模板
-- [ ] 供应商推荐
-- [ ] 价格估算功能
+function MyComponent() {
+  const { t, language, setLanguage } = useLanguage();
+  
+  return (
+    <div>
+      <h1>{t('nav.brand')}</h1>
+      <button onClick={() => setLanguage('en')}>
+        Switch to English
+      </button>
+    </div>
+  );
+}
+```
 
-## 🤝 贡献
+## 🔧 开发工具 / Development Tools
 
-欢迎提交Issue和Pull Request来改进这个项目！
+### 开发日志系统 / Development Logger
+```tsx
+import { devLogger } from '@/lib/utils/dev-logger';
 
-## �� 许可证
+// 支持国际化的日志消息
+devLogger.log('context.loading.changed', state.isLoading);
+devLogger.error('export.failed', error);
+```
 
-MIT License
+### Toast通知系统 / Toast Notification System
+```tsx
+import { toast } from '@/lib/utils/toast';
+
+// 不同类型的通知
+toast.success('操作成功');
+toast.error('操作失败');
+toast.warning('警告信息');
+toast.info('提示信息');
+```
+
+## 🎯 核心功能 / Core Features
+
+### 派对策划流程 / Party Planning Process
+1. **选择派对类型**: 成人/儿童/长辈生日
+2. **确定规模**: 小型/中型/大型聚会
+3. **选择场地**: 室内/户外场地
+4. **设置预算**: 经济型/中档型/豪华型
+5. **选择主题**: 预设主题或自定义主题
+6. **确定氛围**: 热闹/优雅/轻松等不同氛围
+
+### AI智能生成 / AI-Powered Generation
+- **个性化方案**: 根据用户选择生成定制化派对方案
+- **专业评分**: 多维度评估方案质量
+- **执行指导**: 详细的准备和执行建议
+- **方案导出**: 支持导出完整的策划方案
+
+## 🔒 类型安全 / Type Safety
+
+项目使用完整的TypeScript类型定义，确保：
+- 翻译键的类型安全
+- 组件props的类型检查
+- API响应的类型验证
+- 状态管理的类型保障
+
+## 📱 响应式设计 / Responsive Design
+
+- **移动优先**: 优先考虑移动设备体验
+- **断点适配**: 支持各种屏幕尺寸
+- **触摸友好**: 优化触摸交互体验
+- **性能优化**: 图片懒加载和代码分割
+
+## 🚀 性能优化 / Performance Optimization
+
+- **代码分割**: 按需加载组件和翻译文件
+- **图片优化**: Next.js Image组件优化
+- **缓存策略**: 翻译文件和API响应缓存
+- **Bundle分析**: 定期分析和优化包大小
+
+## 🤝 贡献指南 / Contributing
+
+欢迎提交Issue和Pull Request来改进项目！
+
+Welcome to submit Issues and Pull Requests to improve the project!
+
+## 📄 许可证 / License
+
+MIT License - 详见 LICENSE 文件
+
+## 📞 联系我们 / Contact
+
+- 邮箱 / Email: support@birthday-party-planner.com
+- 网站 / Website: https://birthday-party-planner.com
+
+---
+
+**让每个生日都独一无二 / Make Every Birthday Unique** 🎂

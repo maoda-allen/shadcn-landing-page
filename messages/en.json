@@ -172,9 +172,9 @@
         "medium": "Standard",
         "high": "Premium",
         "descriptions": {
-          "low": "$75-225",
-          "medium": "$225-750",
-          "high": "$750+"
+          "low": "$500-1500",
+          "medium": "$1500-5000",
+          "high": "$5000+"
         }
       },
       "theme": {
@@ -219,7 +219,12 @@
       "generateButton": "Generate Party Plan",
       "regenerateButton": "Generate New Plan",
       "generating": "Generating...",
-      "completeAllSteps": "Complete all steps to generate"
+      "generatingDesc": "AI is customizing your exclusive plan based on your selections, please wait...",
+      "completeAllSteps": "Complete all steps to generate",
+      "errors": {
+        "incompleteForm": "Please complete all selections before generating a plan",
+        "unknownError": "An unknown error occurred while generating the plan, please try again later"
+      }
     },
     "result": {
       "title": "Your Exclusive Party Plan",
@@ -241,7 +246,7 @@
       "feasibility": "Execution Feasibility",
       "totalScore": "Overall Score",
       "replan": "Replan",
-      "export": "Export Plan",
+      "exportPlan": "Export Plan",
       "currentSelection": "Current Selection",
       "badges": {
         "budgetReference": "Budget Included",
@@ -297,7 +302,7 @@
         "title": "Generation Failed",
         "retry": "Try Again"
       },
-      "export": {
+      "exportDetails": {
         "subtitle": "Customized by Birthday Party Planning Platform | Professional Planner",
         "generatedTime": "Generated: ",
         "planNumber": "Plan ID: ",

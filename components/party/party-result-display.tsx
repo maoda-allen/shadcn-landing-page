@@ -10,6 +10,8 @@ import { Loader2, MapPin, Users, Calendar, Palette, Music, Utensils, Clock, Spar
 import html2canvas from 'html2canvas';
 import { useRef, useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/contexts/language-context';
+import { toast } from '@/lib/utils/toast';
+import { devLogger } from '@/lib/utils/dev-logger';
 
 // 动态评估函数 - 随机打分但保证93分以上
 const calculateProfessionalScore = (formData: any, result: any) => {
@@ -75,6 +77,24 @@ export function PartyResultDisplay() {
   // 检查是否正在加载（使用Context状态）
   const isCurrentlyLoading = isLoading;
 
+  // 临时测试函数
+  const testAPI = async () => {
+    try {
+      console.log('🧪 开始测试API...');
+      const response = await fetch('/api/test-party-plan');
+      const data = await response.json();
+      console.log('🧪 测试API响应:', data);
+      
+      if (data.success && data.plan) {
+        console.log('🧪 设置测试数据到state...');
+        // 直接调用context的dispatch来设置测试数据
+        // 这里我们需要通过useParty来获取dispatch函数
+      }
+    } catch (error) {
+      console.error('🧪 测试API失败:', error);
+    }
+  };
+
   // 获取选项文本的辅助函数
   const getPartyTypeText = (type: string) => {
     return t(`planner.form.partyType.${type}`);
@@ -135,7 +155,7 @@ export function PartyResultDisplay() {
       exportContainer.innerHTML = `
         <div style="text-align: center; margin-bottom: 30px;">
           <h1 style="color: #f97316; font-size: 28px; font-weight: bold; margin: 0 0 10px 0;">🎉 ${t('planner.result.title')}</h1>
-          <p style="color: #666; font-size: 16px; margin: 0;">${t('planner.result.export.subtitle')}</p>
+          <p style="color: #666; font-size: 16px; margin: 0;">${t('planner.result.exportDetails.subtitle')}</p>
           <div style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); color: white; padding: 8px 20px; border-radius: 20px; display: inline-block; margin-top: 10px; font-size: 14px; font-weight: bold;">
             ⭐ ${t('planner.result.professionalScore')}：${level} (${total}/100)
           </div>
@@ -217,9 +237,9 @@ export function PartyResultDisplay() {
         </div>
         
         <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid #fed7aa;">
-          <p style="color: #9ca3af; font-size: 12px; margin: 0;">${t('planner.result.export.generatedTime')}${new Date().toLocaleString('zh-CN')} | ${t('planner.result.export.planNumber')}${Date.now().toString().slice(-6)}</p>
-          <p style="color: #f97316; font-size: 14px; font-weight: bold; margin: 5px 0 0 0;">${t('planner.result.export.brandFooter')}</p>
-          <p style="color: #9ca3af; font-size: 11px; margin: 5px 0 0 0;">${t('planner.result.export.tagline')}</p>
+          <p style="color: #9ca3af; font-size: 12px; margin: 0;">${t('planner.result.exportDetails.generatedTime')}${new Date().toLocaleString('zh-CN')} | ${t('planner.result.exportDetails.planNumber')}${Date.now().toString().slice(-6)}</p>
+          <p style="color: #f97316; font-size: 14px; font-weight: bold; margin: 5px 0 0 0;">${t('planner.result.exportDetails.brandFooter')}</p>
+          <p style="color: #9ca3af; font-size: 11px; margin: 5px 0 0 0;">${t('planner.result.exportDetails.tagline')}</p>
         </div>
       `;
 
@@ -240,14 +260,15 @@ export function PartyResultDisplay() {
 
       // 下载图片
       const link = document.createElement('a');
-      const fileName = `${t('planner.result.export.subtitle').split('|')[0].trim()}_${formData.theme || t('planner.form.theme.customTheme')}_${new Date().toLocaleDateString().replace(/\//g, '-')}.png`;
+      const fileName = `${t('planner.result.exportDetails.subtitle').split('|')[0].trim()}_${formData.theme || t('planner.form.theme.customTheme')}_${new Date().toLocaleDateString().replace(/\//g, '-')}.png`;
       link.download = fileName;
       link.href = canvas.toDataURL('image/png');
       link.click();
 
     } catch (error) {
-      console.error('Export failed:', error);
-      alert(t('planner.result.error.title'));
+      devLogger.error('export.failed', error);
+      const errorMessage = t('planner.result.error.title');
+      toast.error(errorMessage);
     }
   };
 
@@ -663,7 +684,7 @@ export function PartyResultDisplay() {
             className="flex-1"
           >
             <Download className="w-4 h-4 mr-1" />
-            {t('planner.result.export')}
+            {t('planner.result.exportPlan')}
           </Button>
         </div>
       </div>

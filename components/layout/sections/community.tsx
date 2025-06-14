@@ -9,9 +9,14 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/lib/contexts/language-context";
+import { toast } from "@/lib/utils/toast";
 
 export const CommunitySection = () => {
   const { t } = useLanguage();
+
+  const handleJoinCommunity = () => {
+    toast.info(t('community.comingSoon'), { duration: 5000 });
+  };
 
   return (
     <section id="community" className="py-8">
@@ -43,9 +48,7 @@ export const CommunitySection = () => {
             <CardFooter className="pt-0">
               <Button 
                 className="px-8"
-                onClick={() => {
-                  alert(t('community.comingSoon'));
-                }}
+                onClick={handleJoinCommunity}
               >
                 {t('community.joinButton')}
               </Button>
