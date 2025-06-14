@@ -61,7 +61,7 @@ export function PartyPlannerForm() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">1</span>
-            <h2>选择生日派对类型</h2>
+            选择生日派对类型
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -93,7 +93,7 @@ export function PartyPlannerForm() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">2</span>
-            <h2>确定派对规模</h2>
+            确定派对规模
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -125,7 +125,7 @@ export function PartyPlannerForm() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">3</span>
-            <h2>选择派对场地</h2>
+            选择派对场地
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -156,7 +156,7 @@ export function PartyPlannerForm() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">4</span>
-            <h2>设置预算范围</h2>
+            设置预算范围
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -188,7 +188,7 @@ export function PartyPlannerForm() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">5</span>
-            <h2>选择创意主题</h2>
+            选择创意主题
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -253,7 +253,7 @@ export function PartyPlannerForm() {
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base md:text-lg">
             <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">6</span>
-            <h2>确定派对氛围</h2>
+            确定派对氛围
           </CardTitle>
         </CardHeader>
         <CardContent>

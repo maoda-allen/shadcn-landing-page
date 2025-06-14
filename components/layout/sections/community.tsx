@@ -1,3 +1,4 @@
+"use client";
 import DiscordIcon from "@/components/icons/discord-icon";
 import {
   Card,
@@ -37,10 +38,13 @@ export const CommunitySection = () => {
             </CardContent>
             
             <CardFooter className="pt-0">
-              <Button asChild className="px-8">
-                <a href="#" target="_blank">
-                  立即加入社区
-                </a>
+              <Button 
+                className="px-8"
+                onClick={() => {
+                  alert('社区功能正在开发中，敬请期待！\n\n您可以通过邮箱 community@birthday-party.com 与我们交流派对创意。');
+                }}
+              >
+                立即加入社区
               </Button>
             </CardFooter>
           </Card>

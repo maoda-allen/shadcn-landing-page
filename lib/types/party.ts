@@ -7,6 +7,16 @@ export interface PartyPlanRequest {
   atmosphere: 'relaxed' | 'fun' | 'romantic' | 'elegant' | 'energetic' | 'peaceful' | '';
 }
 
+// 新增：表单数据类型
+export interface PartyFormData {
+  partyType: 'adult' | 'child' | 'elderly';
+  guestCount: 'small' | 'medium' | 'large';
+  venue: 'indoor' | 'outdoor';
+  budget: 'low' | 'medium' | 'high';
+  theme: string;
+  atmosphere: string;
+}
+
 export interface PartyPlanResponse {
   id: string;
   venueSetup: string[];
@@ -15,6 +25,16 @@ export interface PartyPlanResponse {
   catering: string[];
   music: string[];
   timeline: string[];
+}
+
+// 新增：API返回的派对方案类型
+export interface PartyPlan {
+  venue: string[];
+  activities: string[];
+  decorations: string[];
+  catering: string[];
+  music: string[];
+  schedule: string[];
 }
 
 export interface PartyTheme {
@@ -71,10 +91,10 @@ export const PARTY_THEMES: PartyTheme[] = [
 ];
 
 export const ATMOSPHERE_OPTIONS = [
-  { value: 'relaxed', label: '轻松休闲', description: '舒适自在的氛围' },
-  { value: 'fun', label: '欢乐搞笑', description: '充满笑声和欢乐' },
-  { value: 'romantic', label: '浪漫温馨', description: '温馨浪漫的感觉' },
-  { value: 'elegant', label: '优雅高贵', description: '精致优雅的格调' },
-  { value: 'energetic', label: '活力动感', description: '充满活力和激情' },
-  { value: 'peaceful', label: '自然宁静', description: '平和宁静的环境' }
+  { value: 'lively', label: '热闹欢快', description: '音乐、游戏、互动' },
+  { value: 'elegant', label: '优雅温馨', description: '轻音乐、聊天、品茶' },
+  { value: 'casual', label: '轻松随意', description: '自由活动、简单聚餐' },
+  { value: 'formal', label: '正式庄重', description: '仪式感、致辞、合影' },
+  { value: 'creative', label: '创意互动', description: 'DIY活动、主题游戏' },
+  { value: 'intimate', label: '温馨私密', description: '小范围、深度交流' }
 ]; 

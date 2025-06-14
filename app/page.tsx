@@ -16,7 +16,7 @@ export const metadata = {
   keywords: "birthday party ideas,生日派对创意,生日派对策划,儿童生日派对,成人生日聚会,派对主题,生日庆祝活动",
   openGraph: {
     type: "website",
-    title: "创意生日派对策划 - 让每个生日都独一无二",
+    title: "生日派对策划 - 让每个生日都独一无二",
     description: "专业的生日派对创意工具，帮您轻松策划完美的生日庆典",
     images: [
       {
