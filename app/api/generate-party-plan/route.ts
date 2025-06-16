@@ -9,10 +9,10 @@ const BASE_URL = process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v
 if (!API_KEY) {
   console.error('❌ 未设置OPENROUTER_API_KEY环境变量');
   console.error('请在.env.local文件中设置您的API密钥');
-} else if (!API_KEY.startsWith('sk-or-')) {
-  console.error('❌ API密钥格式错误，应以sk-or-开头');
+} else if (!API_KEY.startsWith('sk-or-v1-')) {
+  console.error('❌ API密钥格式错误，应以sk-or-v1-开头');
   // 安全修复：不再输出API密钥的任何部分
-  console.error('当前密钥格式不正确，请检查是否以sk-or-开头');
+  console.error('当前密钥格式不正确，请检查是否以sk-or-v1-开头');
 } else {
   console.log('✅ API密钥配置正确');
 }
@@ -84,11 +84,6 @@ export async function POST(request: NextRequest) {
         ],
         temperature: 0.8,
         max_tokens: 2000,
-      }, {
-        headers: {
-          "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL || "https://www.partyplanner.life",
-          "X-Title": "Birthday Party Planner",
-        }
       });
 
       console.log('🎉 AI调用成功，开始处理响应...');
