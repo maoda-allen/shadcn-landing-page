@@ -12,7 +12,6 @@ import { useRef, useState, useEffect, useMemo } from 'react';
 import { useLanguage } from '@/lib/contexts/language-context';
 import { toast } from '@/lib/utils/toast';
 import { devLogger } from '@/lib/utils/dev-logger';
-import { analytics } from '@/lib/utils/analytics';
 
 // 生成稳定的随机种子函数
 const generateSeed = (formData: any, result: any) => {
@@ -134,15 +133,6 @@ export function PartyResultDisplay() {
 
   // 检查是否正在加载（使用Context状态）
   const isCurrentlyLoading = isLoading;
-
-  // 处理replan按钮点击，添加确认弹窗
-  const handleReplanClick = () => {
-    const confirmed = window.confirm(t('planner.form.confirmRegenerate'));
-    
-    if (confirmed) {
-      resetForm();
-    }
-  };
 
   // 临时测试函数
   const testAPI = async () => {
@@ -332,19 +322,8 @@ export function PartyResultDisplay() {
       link.href = canvas.toDataURL('image/png');
       link.click();
 
-      // 追踪导出事件
-      analytics.partyPlanExported('png');
-      
-      // 追踪功能使用
-      analytics.featureUsed('export_plan', `${formData.partyType}_${formData.theme}`);
-
     } catch (error) {
       devLogger.error('export.failed', error);
-      
-      // 追踪导出错误
-      const exportErrorMessage = error instanceof Error ? error.message : 'Unknown export error';
-      analytics.errorOccurred('export_failed', exportErrorMessage);
-      
       const errorMessage = t('planner.result.error.title');
       toast.show({
         type: 'error',
@@ -756,7 +735,7 @@ export function PartyResultDisplay() {
 
         {/* 操作按钮 */}
         <div className="flex gap-2">
-          <Button onClick={handleReplanClick} variant="outline" size="sm" className="flex-1">
+          <Button onClick={resetForm} variant="outline" size="sm" className="flex-1">
             {t('planner.result.replan')}
           </Button>
           <Button 
