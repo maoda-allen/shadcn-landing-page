@@ -30,11 +30,11 @@ const loadClientTranslations = async (language: Language): Promise<Translations>
 
   try {
     // 使用动态 import() 而不是 require()
-    const module = language === 'zh' 
+    const translationModule = language === 'zh' 
       ? await import('../../messages/zh.json')
       : await import('../../messages/en.json');
     
-    const translations = module.default as any; // 暂时绕过类型检查
+    const translations = translationModule.default as any; // 暂时绕过类型检查
     translationsCache[language] = translations;
     return translations;
   } catch (error) {
