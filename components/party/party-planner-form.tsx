@@ -15,19 +15,12 @@ import { Loader2, Sparkles } from 'lucide-react';
 export function PartyPlannerForm() {
   const { state, updateFormData, generatePartyPlan } = useParty();
   const { t, language } = useLanguage();
+  const { formData, result, isLoading, error } = state;
   const [customTheme, setCustomTheme] = useState('');
   const [showCustomTheme, setShowCustomTheme] = useState(false);
 
-  // 本地状态来强制重新渲染
-  const [localLoading, setLocalLoading] = useState(false);
-
-  // 监控加载状态变化
-  useEffect(() => {
-    setLocalLoading(state.isLoading);
-  }, [state.isLoading]);
-
-  // 使用组合状态
-  const isCurrentlyLoading = state.isLoading || localLoading;
+  // 使用Context中的loading状态
+  const isCurrentlyLoading = isLoading;
 
   // 定义主题选项
   const themeOptions = [
@@ -78,49 +71,77 @@ export function PartyPlannerForm() {
   };
 
   const isFormComplete = () => {
-    const { partyType, guestCount, venue, budget, theme, atmosphere } = state.formData;
+    const { partyType, guestCount, venue, budget, theme, atmosphere } = formData;
     return partyType && guestCount && venue && budget && theme && atmosphere;
   };
 
   // 生成按钮点击处理
   const handleGenerateClick = async () => {
-    if (!isFormComplete()) {
-      return;
+    // 如果已有结果，需要用户确认重新生成
+    if (result) {
+      const confirmed = window.confirm(t('planner.form.confirmRegenerate'));
+      
+      if (!confirmed) {
+        return; // 用户取消，不执行生成
+      }
     }
     
-    if (isCurrentlyLoading) {
-      return;
-    }
+    // 执行生成
+    await generatePartyPlan();
+  };
+
+  const renderGenerateButton = () => {
+    const hasResult = !!result;
+    const buttonText = hasResult 
+      ? t('planner.form.regenerateButton')
+      : t('planner.form.generateButton');
     
-    setLocalLoading(true);
-    
-    try {
-      await generatePartyPlan();
-    } catch (error) {
-      console.error('生成派对方案失败:', error);
-    } finally {
-      setLocalLoading(false);
-    }
+    return (
+      <Button
+        onClick={handleGenerateClick}
+        disabled={!isFormComplete() || isCurrentlyLoading}
+        className={`w-full h-11 md:h-12 text-base font-medium relative transition-all duration-200 ${
+          isCurrentlyLoading ? 'opacity-75 cursor-not-allowed' : ''
+        }`}
+        size="lg"
+      >
+        {isCurrentlyLoading ? (
+          <>
+            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            {t('planner.form.generating')}
+          </>
+        ) : (
+          <>
+            <Sparkles className="w-4 h-4 mr-2" />
+            {buttonText}
+          </>
+        )}
+      </Button>
+    );
   };
 
   return (
     <div className="space-y-4 md:space-y-6">
-      {/* 全局加载遮罩 */}
+      {/* 全局加载遮罩 - 优化层级到最高 */}
       {isCurrentlyLoading && (
         <div 
-          className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center"
-          style={{ zIndex: 9999 }}
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center"
+          style={{ zIndex: 10000 }}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
           }}
         >
-          <div className="bg-white rounded-lg p-6 shadow-2xl max-w-sm mx-4 border">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-2xl max-w-sm mx-4 border">
             <div className="flex items-center space-x-3">
               <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
               <div>
-                <p className="font-medium text-gray-900">{t('planner.form.generating')}</p>
-                <p className="text-sm text-gray-600 mt-1">{t('planner.form.generatingDesc')}</p>
+                <p className="font-medium text-gray-900 dark:text-gray-100">
+                  {t('planner.form.generating')}
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  {t('planner.form.generatingDesc')}
+                </p>
               </div>
             </div>
           </div>
@@ -144,7 +165,7 @@ export function PartyPlannerForm() {
             ].map((option) => (
               <Button
                 key={option.value}
-                variant={state.formData.partyType === option.value ? "default" : "outline"}
+                variant={formData.partyType === option.value ? "default" : "outline"}
                 className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
                 onClick={() => handlePartyTypeSelect(option.value as any)}
                 disabled={isCurrentlyLoading}
@@ -177,7 +198,7 @@ export function PartyPlannerForm() {
             ].map((option) => (
               <Button
                 key={option.value}
-                variant={state.formData.guestCount === option.value ? "default" : "outline"}
+                variant={formData.guestCount === option.value ? "default" : "outline"}
                 className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
                 onClick={() => handleGuestCountSelect(option.value as any)}
                 disabled={isCurrentlyLoading}
@@ -209,7 +230,7 @@ export function PartyPlannerForm() {
             ].map((option) => (
               <Button
                 key={option.value}
-                variant={state.formData.venue === option.value ? "default" : "outline"}
+                variant={formData.venue === option.value ? "default" : "outline"}
                 className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
                 onClick={() => handleVenueSelect(option.value as any)}
                 disabled={isCurrentlyLoading}
@@ -242,7 +263,7 @@ export function PartyPlannerForm() {
             ].map((option) => (
               <Button
                 key={option.value}
-                variant={state.formData.budget === option.value ? "default" : "outline"}
+                variant={formData.budget === option.value ? "default" : "outline"}
                 className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
                 onClick={() => handleBudgetSelect(option.value as any)}
                 disabled={isCurrentlyLoading}
@@ -272,7 +293,7 @@ export function PartyPlannerForm() {
               {themeOptions.map((theme) => (
                 <Button
                   key={theme.id}
-                  variant={state.formData.theme === t(`planner.form.theme.${theme.id}`) ? "default" : "outline"}
+                  variant={formData.theme === t(`planner.form.theme.${theme.id}`) ? "default" : "outline"}
                   className="h-auto p-3 md:p-4 flex items-start gap-3 text-left justify-start"
                   onClick={() => handleThemeSelect(theme.id)}
                   disabled={isCurrentlyLoading}
@@ -341,7 +362,7 @@ export function PartyPlannerForm() {
             {atmosphereOptions.map((option) => (
               <Button
                 key={option}
-                variant={state.formData.atmosphere === option ? "default" : "outline"}
+                variant={formData.atmosphere === option ? "default" : "outline"}
                 className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
                 onClick={() => handleAtmosphereSelect(option)}
                 disabled={isCurrentlyLoading}
@@ -359,29 +380,10 @@ export function PartyPlannerForm() {
       {/* Generate Button */}
       <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
         <CardContent className="pt-4 pb-4">
-          <Button
-            onClick={handleGenerateClick}
-            disabled={!isFormComplete() || isCurrentlyLoading}
-            className={`w-full h-11 md:h-12 text-base font-medium relative transition-all duration-200 ${
-              isCurrentlyLoading ? 'opacity-75 cursor-not-allowed' : ''
-            }`}
-            size="lg"
-          >
-            {isCurrentlyLoading ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                {t('planner.form.generating')}
-              </>
-            ) : (
-              <>
-                <Sparkles className="w-4 h-4 mr-2" />
-                {t('planner.form.generateButton')}
-              </>
-            )}
-          </Button>
+          {renderGenerateButton()}
           
-          {state.error && (
-            <p className="text-destructive text-sm mt-3 text-center">{state.error}</p>
+          {error && (
+            <p className="text-destructive text-sm mt-3 text-center">{error}</p>
           )}
           
           {/* 表单完整性提示 */}

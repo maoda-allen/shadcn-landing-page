@@ -220,7 +220,8 @@
       "regenerateButton": "Generate New Plan",
       "generating": "Generating...",
       "generatingDesc": "AI is customizing your exclusive plan based on your selections, please wait...",
-      "completeAllSteps": "Complete all steps to generate",
+      "completeAllSteps": "Please complete all steps to generate plan",
+      "confirmRegenerate": "Are you sure you want to generate a new party plan? The current plan will be replaced.",
       "errors": {
         "incompleteForm": "Please complete all selections before generating a plan",
         "unknownError": "An unknown error occurred while generating the plan, please try again later"

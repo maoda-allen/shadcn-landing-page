@@ -221,6 +221,7 @@
       "generating": "生成中...",
       "generatingDesc": "AI正在根据您的选择定制专属方案，请稍候...",
       "completeAllSteps": "请完成所有步骤后再生成方案",
+      "confirmRegenerate": "确定要重新生成新的派对方案吗？当前方案将被替换。",
       "errors": {
         "incompleteForm": "请完成所有选择后再生成方案",
         "unknownError": "生成方案时发生未知错误，请稍后重试"
