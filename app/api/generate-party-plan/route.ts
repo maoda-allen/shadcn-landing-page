@@ -9,8 +9,10 @@ const BASE_URL = process.env.OPENROUTER_BASE_URL || "https://openrouter.ai/api/v
 if (!API_KEY) {
   console.error('❌ 未设置OPENROUTER_API_KEY环境变量');
   console.error('请在.env.local文件中设置您的API密钥');
-} else if (!API_KEY.startsWith('sk-or-v1-')) {
-  console.error('❌ API密钥格式错误，应以sk-or-v1-开头');
+} else if (!API_KEY.startsWith('sk-or-')) {
+  console.error('❌ API密钥格式错误，应以sk-or-开头');
+  // 安全修复：不再输出API密钥的任何部分
+  console.error('当前密钥格式不正确，请检查是否以sk-or-开头');
 } else {
   console.log('✅ API密钥配置正确');
 }
@@ -22,10 +24,29 @@ const client = API_KEY ? new OpenAI({
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('🚀 API路由开始处理请求...');
+    console.log('🔑 API密钥状态:', API_KEY ? '已配置' : '未配置');
+    console.log('🌐 BASE_URL:', BASE_URL);
+    
     const body = await request.json();
+    console.log('📦 请求体内容:', JSON.stringify(body, null, 2));
+    
     const { partyType, guestCount, venue, budget, theme, atmosphere, language = 'zh' } = body;
 
     console.log('🚀 收到请求参数:', { partyType, guestCount, venue, budget, theme, atmosphere, language });
+    
+    // 验证必需参数
+    if (!partyType || !guestCount || !venue || !budget || !theme || !atmosphere) {
+      console.log('❌ 请求参数不完整:', { partyType, guestCount, venue, budget, theme, atmosphere });
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: language === 'en' ? 'Missing required parameters' : '缺少必需参数',
+          details: '请求参数不完整'
+        },
+        { status: 400 }
+      );
+    }
     
     // 检查API密钥是否配置
     if (!API_KEY || !client) {
