@@ -89,48 +89,15 @@ export function LanguageProvider({
 
   // 组件加载时，用服务器提供的数据填充缓存
   useEffect(() => {
-<<<<<<< HEAD
     if (!translationsCache[initialLanguage]) {
       translationsCache[initialLanguage] = initialTranslations;
     }
   }, [initialLanguage, initialTranslations]);
 
-
   // 设置语言并保存到localStorage（客户端操作）
   const setLanguage = async (lang: Language) => {
     if (lang === language) return;
     
-    // 追踪语言切换事件
-    analytics.languageChanged(lang);
-    
-=======
-    const initializeLanguage = async () => {
-      try {
-        const savedLanguage = localStorage.getItem('language') as Language;
-        const targetLanguage = (savedLanguage && (savedLanguage === 'zh' || savedLanguage === 'en')) 
-          ? savedLanguage 
-          : 'en';
-        
-        setLanguageState(targetLanguage);
-        const loadedTranslations = await loadTranslations(targetLanguage);
-        setTranslations(loadedTranslations);
-      } catch (error) {
-        devLogger.error('language.init.failed', error);
-        // 使用默认英文
-        const fallbackTranslations = await loadTranslations('en');
-        setTranslations(fallbackTranslations);
-        setLanguageState('en');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    initializeLanguage();
-  }, []);
-
-  // 设置语言并保存到localStorage
-  const setLanguage = async (lang: Language) => {
->>>>>>> parent of 2961d35 (修复加载遮罩，添加统计代码)
     setIsLoading(true);
     try {
       const loadedTranslations = await loadClientTranslations(lang);

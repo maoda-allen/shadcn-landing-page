@@ -18,65 +18,6 @@ export function PartyPlannerForm() {
   const { formData, result, isLoading, error } = state;
   const [customTheme, setCustomTheme] = useState('');
   const [showCustomTheme, setShowCustomTheme] = useState(false);
-<<<<<<< HEAD
-=======
-
-  // 使用Context中的loading状态
-  const isCurrentlyLoading = isLoading;
-
-  // 定义主题选项
-  const themeOptions = [
-    { id: 'modern', icon: 'Square', suitable: ['adult'] },
-    { id: 'retro', icon: 'Music', suitable: ['adult'] },
-    { id: 'garden', icon: 'Flower', suitable: ['adult', 'elderly'] },
-    { id: 'superhero', icon: 'Zap', suitable: ['child', 'teen'] },
-    { id: 'princess', icon: 'Crown', suitable: ['child'] },
-    { id: 'ocean', icon: 'Waves', suitable: ['child'] }
-  ];
-
-  // 定义氛围选项
-  const atmosphereOptions = [
-    'lively', 'elegant', 'casual', 'formal', 'creative', 'intimate'
-  ];
-
-  const handlePartyTypeSelect = (type: 'adult' | 'child' | 'elderly') => {
-    updateFormData({ partyType: type });
-  };
-
-  const handleGuestCountSelect = (count: 'small' | 'medium' | 'large') => {
-    updateFormData({ guestCount: count });
-  };
-
-  const handleVenueSelect = (venue: 'indoor' | 'outdoor') => {
-    updateFormData({ venue });
-  };
-
-  const handleBudgetSelect = (budget: 'low' | 'medium' | 'high') => {
-    updateFormData({ budget });
-  };
-
-  const handleThemeSelect = (themeId: string) => {
-    const themeName = t(`planner.form.theme.${themeId}`);
-    updateFormData({ theme: themeName });
-    setShowCustomTheme(false);
-  };
-
-  const handleCustomThemeSubmit = () => {
-    if (customTheme.trim()) {
-      updateFormData({ theme: customTheme.trim() });
-      setShowCustomTheme(false);
-    }
-  };
-
-  const handleAtmosphereSelect = (atmosphere: string) => {
-    updateFormData({ atmosphere: atmosphere as any });
-  };
-
-  const isFormComplete = () => {
-    const { partyType, guestCount, venue, budget, theme, atmosphere } = formData;
-    return partyType && guestCount && venue && budget && theme && atmosphere;
-  };
->>>>>>> parent of 2961d35 (修复加载遮罩，添加统计代码)
 
   // 生成按钮点击处理
   const handleGenerateClick = async () => {
@@ -191,13 +132,8 @@ export function PartyPlannerForm() {
 
   return (
     <div className="space-y-4 md:space-y-6">
-<<<<<<< HEAD
       {/* 全局加载遮罩 */}
       {isLoading && (
-=======
-      {/* 全局加载遮罩 - 优化层级到最高 */}
-      {isCurrentlyLoading && (
->>>>>>> parent of 2961d35 (修复加载遮罩，添加统计代码)
         <div 
           className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center"
           style={{ zIndex: 10000 }}
