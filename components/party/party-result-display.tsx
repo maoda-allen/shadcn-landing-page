@@ -8,20 +8,56 @@ import { Separator } from '@/components/ui/separator';
 import { Icon } from '@/components/ui/icon';
 import { Loader2, MapPin, Users, Calendar, Palette, Music, Utensils, Clock, Sparkles, FileText, Download, Share2, RefreshCw } from 'lucide-react';
 import html2canvas from 'html2canvas';
-import { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect, useMemo } from 'react';
 import { useLanguage } from '@/lib/contexts/language-context';
 import { toast } from '@/lib/utils/toast';
 import { devLogger } from '@/lib/utils/dev-logger';
 
-// 动态评估函数 - 随机打分但保证93分以上
+// 生成稳定的随机种子函数
+const generateSeed = (formData: any, result: any) => {
+  // 基于表单数据和结果内容生成一个稳定的种子
+  const dataString = JSON.stringify({
+    partyType: formData.partyType,
+    guestCount: formData.guestCount,
+    venue: formData.venue,
+    budget: formData.budget,
+    theme: formData.theme,
+    atmosphere: formData.atmosphere,
+    resultLength: result ? Object.keys(result).length : 0
+  });
+  
+  // 简单的字符串哈希函数
+  let hash = 0;
+  for (let i = 0; i < dataString.length; i++) {
+    const char = dataString.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // 转换为32位整数
+  }
+  return Math.abs(hash);
+};
+
+// 基于种子的伪随机数生成器
+const seededRandom = (seed: number) => {
+  let x = Math.sin(seed) * 10000;
+  return x - Math.floor(x);
+};
+
+// 动态评估函数 - 基于数据生成稳定的评分
 const calculateProfessionalScore = (formData: any, result: any, language: string = 'en') => {
-  // 生成随机分数，确保总分在93-100之间
-  const generateRandomScore = (min: number, max: number) => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+  if (!formData || !result) {
+    return { scores: { creativity: 18, planning: 18, budget: 18, details: 18, feasibility: 18 }, total: 90, level: language === 'zh' ? '良好级别' : 'Good Level' };
+  }
+
+  const seed = generateSeed(formData, result);
+  
+  // 生成基于种子的随机分数，确保总分在93-100之间
+  const generateSeededScore = (min: number, max: number, seedOffset: number = 0) => {
+    const random = seededRandom(seed + seedOffset);
+    return Math.floor(random * (max - min + 1)) + min;
   };
 
   // 先生成一个93-100的总分
-  const targetTotal = generateRandomScore(93, 100);
+  const targetTotal = generateSeededScore(93, 100);
   
   // 将总分分配到5个维度，每个维度最少18分，最多20分
   let scores = {
@@ -35,23 +71,28 @@ const calculateProfessionalScore = (formData: any, result: any, language: string
   // 剩余分数需要分配
   let remainingPoints = targetTotal - 90; // 90是基础分数(18*5)
   
-  // 随机分配剩余分数到各个维度
+  // 基于种子分配剩余分数到各个维度
   const dimensions = Object.keys(scores) as (keyof typeof scores)[];
   
+  let seedOffset = 1;
   while (remainingPoints > 0) {
-    const randomDimension = dimensions[Math.floor(Math.random() * dimensions.length)];
+    const randomIndex = generateSeededScore(0, dimensions.length - 1, seedOffset);
+    const randomDimension = dimensions[randomIndex];
     if (scores[randomDimension] < 20) {
       scores[randomDimension]++;
       remainingPoints--;
     }
+    seedOffset++;
   }
 
-  // 根据实际选择微调分数（保持随机性的同时增加一些逻辑性）
-  const adjustments = Math.floor(Math.random() * 3); // 0-2个随机调整
+  // 根据实际选择微调分数（保持确定性）
+  const adjustments = generateSeededScore(0, 2, 100); // 0-2个调整
   
   for (let i = 0; i < adjustments; i++) {
-    const fromDimension = dimensions[Math.floor(Math.random() * dimensions.length)];
-    const toDimension = dimensions[Math.floor(Math.random() * dimensions.length)];
+    const fromIndex = generateSeededScore(0, dimensions.length - 1, 200 + i);
+    const toIndex = generateSeededScore(0, dimensions.length - 1, 300 + i);
+    const fromDimension = dimensions[fromIndex];
+    const toDimension = dimensions[toIndex];
     
     if (scores[fromDimension] > 18 && scores[toDimension] < 20 && fromDimension !== toDimension) {
       scores[fromDimension]--;
@@ -81,6 +122,14 @@ export function PartyResultDisplay() {
   const { t, language } = useLanguage();
   const { formData, result, isLoading, error } = state;
   const exportRef = useRef<HTMLDivElement>(null);
+
+  // 使用useMemo缓存评分结果，确保界面显示和导出使用相同数据
+  const professionalScore = useMemo(() => {
+    if (!result || !formData) {
+      return { scores: { creativity: 18, planning: 18, budget: 18, details: 18, feasibility: 18 }, total: 90, level: language === 'zh' ? '良好级别' : 'Good Level' };
+    }
+    return calculateProfessionalScore(formData, result, language);
+  }, [formData, result, language]);
 
   // 检查是否正在加载（使用Context状态）
   const isCurrentlyLoading = isLoading;
@@ -147,7 +196,7 @@ export function PartyResultDisplay() {
     if (!result) return;
 
     try {
-      const { scores, total, level } = calculateProfessionalScore(formData, result, language);
+      const { scores, total, level } = professionalScore;
       
       // 创建一个临时的导出容器
       const exportContainer = document.createElement('div');
@@ -418,7 +467,7 @@ export function PartyResultDisplay() {
 
   // 结果展示
   if (result) {
-    const { scores, total, level } = calculateProfessionalScore(formData, result, language);
+    const { scores, total, level } = professionalScore;
 
     return (
       <div className="sticky top-8 space-y-4" data-result-area>

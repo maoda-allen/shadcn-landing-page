@@ -490,41 +490,65 @@ Based on the requirements you provided, I will create a detailed birthday party 
 - Theme Style: ${theme}
 - Desired Atmosphere: ${getAtmosphereTextEn(atmosphere)}
 
-I will provide specific and actionable suggestions from the following 6 professional dimensions, each suggestion includes detailed budget references and execution guidance:
+**IMPORTANT REQUIREMENT: Please return STRICTLY in the following JSON format with NO additional text or explanations, return the JSON object directly:**
 
-**Planning Requirements:**
-1. Provide specific actionable suggestions with clear budget references (e.g., decoration materials $30-75)
-2. Design 2-3 exciting interactive sessions to create an active party atmosphere
-3. Incorporate warm emotional elements to create beautiful memorable moments
-4. Consider venue layout and crowd flow to ensure smooth activities
-5. Use friendly and natural language to provide thoughtful suggestions
-6. Music arrangements should be planned by time segments to match different activity rhythms
-
-**The proposal includes the following content:**
-- **Venue Setup**: Functional area division, layout design, decoration budget and setup techniques
-- **Activity Arrangement**: Interactive game design, participation plans for different age groups, activity flow arrangement
-- **Decoration Plan**: Theme color matching, decoration item list, budget allocation suggestions
-- **Catering Suggestions**: Food pairing plans, budget references, purchasing suggestions and presentation methods
-- **Music Atmosphere**: Music type arrangements by time segments, playback equipment suggestions
-- **Time Schedule**: Detailed activity timetable, key session annotations, precautions
-
-**Special Focus:**
-- Design interactive sessions that can mobilize full participation enthusiasm
-- Arrange warm and touching emotional exchange moments
-- Provide specific execution methods and item lists for each important session
-- Consider different personality traits of guests and design diverse participation methods
-
-The goal is to let the birthday person and every guest spend a warm and unforgettable wonderful time, while ensuring reasonable budget, simple execution, and excellent results.
-
-Please return detailed suggestions in JSON format, each suggestion should be specific and practical, including budget references for easy practical operation:
 {
-  "venue": ["Venue suggestion 1 (with budget and layout)", "Venue suggestion 2", "Venue suggestion 3", "Venue suggestion 4"],
-  "activities": ["Activity suggestion 1 (with interactive design)", "Activity suggestion 2 (with emotional elements)", "Activity suggestion 3", "Activity suggestion 4"],
-  "decorations": ["Decoration suggestion 1 (with specific budget)", "Decoration suggestion 2", "Decoration suggestion 3", "Decoration suggestion 4"],
-  "catering": ["Catering suggestion 1 (with price reference)", "Catering suggestion 2", "Catering suggestion 3", "Catering suggestion 4"],
-  "music": ["Music suggestion 1 (with time arrangement)", "Music suggestion 2", "Music suggestion 3", "Music suggestion 4"],
-  "schedule": ["Time arrangement 1 (with key annotations)", "Time arrangement 2 (with precautions)", "Time arrangement 3", "Time arrangement 4", "Time arrangement 5"]
-}`;
+  "venue": [
+    "Venue suggestion 1: Specific venue setup plan with detailed budget breakdown $30-75, including layout design and decoration techniques",
+    "Venue suggestion 2: Alternative venue choice with specific layout design and functional area division",
+    "Venue suggestion 3: Third venue option with decoration tips and budget-friendly setup ideas",
+    "Venue suggestion 4: Fourth venue recommendation with practical arrangement points and cost-effective solutions"
+  ],
+  "activities": [
+    "Activity suggestion 1: Design an interactive game that can mobilize full participation enthusiasm, including specific gameplay rules, required props list, and execution steps",
+    "Activity suggestion 2: Arrange a warm and touching emotional exchange session with detailed execution methods and timing guidance",
+    "Activity suggestion 3: Third activity plan specifically suitable for ${getPartyTypeTextEn(partyType)}, with participant engagement strategies",
+    "Activity suggestion 4: Fourth activity recommendation with time scheduling and diverse participation methods for different personality types"
+  ],
+  "decorations": [
+    "Decoration suggestion 1: ${theme} theme color coordination plan with budget $45-120, including specific item shopping list and DIY instructions",
+    "Decoration suggestion 2: Creative decoration scheme with DIY production methods, materials list, and cost-saving tips",
+    "Decoration suggestion 3: Atmosphere creation plan including lighting arrangement, background setup, and visual impact techniques",
+    "Decoration suggestion 4: Detail decoration recommendations including table settings, space decoration elements, and finishing touches"
+  ],
+  "catering": [
+    "Catering suggestion 1: Main course plan suitable for ${getGuestCountTextEn(guestCount)} with budget $60-180, including procurement advice and preparation methods",
+    "Catering suggestion 2: Exquisite desserts and birthday cake options with flavor choices, presentation methods, and dietary considerations",
+    "Catering suggestion 3: Beverage pairing plan including alcoholic and non-alcoholic options, quantity calculations, and serving suggestions",
+    "Catering suggestion 4: Snacks and appetizer recommendations balancing health and taste, with portion planning and presentation ideas"
+  ],
+  "music": [
+    "Music suggestion 1: Opening music arrangement (first 30 minutes) with playlist recommendations, sound equipment advice, and volume control tips",
+    "Music suggestion 2: Activity peak music (middle 1 hour) including interactive music selections and background music for different activities",
+    "Music suggestion 3: Dining period music (30-45 minutes) with relaxing and pleasant background music that enhances conversation",
+    "Music suggestion 4: Closing music arrangement (final 15 minutes) including warm farewell music and transition timing"
+  ],
+  "schedule": [
+    "Time arrangement 1: Welcome opening (first 30 minutes) - Guest arrival, check-in, opening music, simple ice-breaking activities",
+    "Time arrangement 2: Main activities (1-1.5 hours) - Birthday celebration ceremony, interactive games, photo sessions, highlight moments",
+    "Time arrangement 3: Dining time (45 minutes-1 hour) - Enjoy food, relaxed conversation, background music, social mingling",
+    "Time arrangement 4: Free activities (30 minutes) - Free interaction, mini games, preparation for farewell, memory sharing",
+    "Time arrangement 5: Closing session (15 minutes) - Thank you speech, group photos, farewell ceremony, guest departure"
+  ]
+}
+
+**Professional Planning Requirements:**
+1. Each suggestion must include specific budget references and actionable execution guidance
+2. Design 2-3 exciting interactive sessions with detailed participation strategies
+3. Incorporate warm emotional elements with clear implementation methods
+4. Consider venue layout and crowd flow with practical arrangement tips
+5. Provide comprehensive shopping lists and DIY instructions where applicable
+6. Music arrangements must be segmented by time with equipment recommendations
+7. All suggestions should be tailored to ${getAtmosphereTextEn(atmosphere)} atmosphere requirements
+
+**Quality Standards:**
+- Every suggestion must be specific, practical, and immediately actionable
+- Include detailed budget breakdowns and cost-saving alternatives
+- Provide step-by-step execution methods for complex elements
+- Consider different guest preferences and participation levels
+- Ensure seamless flow between different party segments
+
+The goal is to create an unforgettable experience for the birthday person and every guest, while maintaining reasonable budget, simple execution, and excellent results. Please ensure each recommendation is detailed, practical, and includes comprehensive planning guidance.`;
 }
 
 function getChinesePrompt(partyType: string, guestCount: string, venue: string, budget: string, theme: string, atmosphere: string) {
