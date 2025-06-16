@@ -98,7 +98,7 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
     const { partyType, guestCount, venue, budget, theme, atmosphere } = state.formData;
     if (!partyType || !guestCount || !venue || !budget || !theme || !atmosphere) {
       // 获取当前语言设置来显示正确的错误消息
-      const currentLanguage = localStorage.getItem('language') || 'zh';
+      const currentLanguage = localStorage.getItem('language') || 'en';
       
       // 加载翻译文件
       const translations = currentLanguage === 'zh' 
@@ -132,7 +132,7 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
 
     try {
       // 获取当前语言设置
-      const currentLanguage = localStorage.getItem('language') || 'zh';
+      const currentLanguage = localStorage.getItem('language') || 'en';
       
       const response = await fetch('/api/generate-party-plan', {
         method: 'POST',
@@ -171,7 +171,7 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       devLogger.error('party.plan.generation.failed', error);
       // 获取当前语言设置来显示正确的错误消息
-      const currentLanguage = localStorage.getItem('language') || 'zh';
+      const currentLanguage = localStorage.getItem('language') || 'en';
       
       // 加载翻译文件
       const translations = currentLanguage === 'zh' 

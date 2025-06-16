@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     console.log('📦 请求体内容:', JSON.stringify(body, null, 2));
     
-    const { partyType, guestCount, venue, budget, theme, atmosphere, language = 'zh' } = body;
+    const { partyType, guestCount, venue, budget, theme, atmosphere, language = 'en' } = body;
 
     console.log('🚀 收到请求参数:', { partyType, guestCount, venue, budget, theme, atmosphere, language });
     
@@ -202,7 +202,7 @@ export async function POST(request: NextRequest) {
 }
 
 // 辅助函数：将文本响应转换为结构化数据
-function parseResponseToStructure(text: string, language: string = 'zh') {
+function parseResponseToStructure(text: string, language: string = 'en') {
   console.log('🔄 开始备用解析，原始文本长度:', text.length);
   
   const sections = {
@@ -328,7 +328,7 @@ function parseResponseToStructure(text: string, language: string = 'zh') {
 }
 
 // 新增：提供实用的默认建议而不是占位符
-function getDefaultSuggestions(category: string, language: string = 'zh'): string[] {
+function getDefaultSuggestions(category: string, language: string = 'en'): string[] {
   if (language === 'en') {
     const defaultsEn: Record<string, string[]> = {
       venue: [
