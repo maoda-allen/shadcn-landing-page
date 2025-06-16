@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { PartyFormData, PartyPlan } from '../types/party';
 import { devLogger } from '../utils/dev-logger';
+import { analytics } from '../utils/analytics';
 
 interface PartyState {
   formData: PartyFormData;
@@ -90,6 +91,18 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(partyReducer, initialState);
 
   const updateFormData = (data: Partial<PartyFormData>) => {
+    // 追踪表单字段变更
+    Object.entries(data).forEach(([key, value]) => {
+      if (value) {
+        analytics.formFieldChanged(key, String(value));
+        
+        // 特别追踪主题选择
+        if (key === 'theme') {
+          analytics.themeSelected(String(value), state.formData.partyType || 'unknown');
+        }
+      }
+    });
+    
     dispatch({ type: 'UPDATE_FORM_DATA', payload: data });
   };
 
@@ -154,6 +167,12 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
       if (data.success && data.plan) {
         dispatch({ type: 'SET_RESULT', payload: data.plan });
         
+        // 追踪成功生成派对方案
+        analytics.partyPlanGenerated(
+          state.formData.partyType || 'unknown',
+          state.formData.theme || 'unknown'
+        );
+        
         // Save to localStorage
         try {
           const saveData = {
@@ -170,6 +189,11 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
       }
     } catch (error) {
       devLogger.error('party.plan.generation.failed', error);
+      
+      // 追踪错误
+      const apiErrorMessage = error instanceof Error ? error.message : 'Unknown error';
+      analytics.errorOccurred('party_generation_failed', apiErrorMessage);
+      
       // 获取当前语言设置来显示正确的错误消息
       const currentLanguage = localStorage.getItem('language') || 'en';
       

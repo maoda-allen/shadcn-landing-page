@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Translations, TranslationPath } from '../types/translations';
 import { devLogger } from '../utils/dev-logger';
+import { analytics } from '../utils/analytics';
 
 // 支持的语言类型
 export type Language = 'zh' | 'en';
@@ -102,6 +103,11 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   // 设置语言并保存到localStorage
   const setLanguage = async (lang: Language) => {
+    // 追踪语言切换事件
+    if (lang !== language) {
+      analytics.languageChanged(lang);
+    }
+    
     setIsLoading(true);
     try {
       setLanguageState(lang);

@@ -7,8 +7,12 @@ import { Navbar } from "@/components/layout/navbar";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { LanguageProvider, useLanguage } from "@/lib/contexts/language-context";
 import { Loader2 } from "lucide-react";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
+
+// Google Analytics ID
+const GA_MEASUREMENT_ID = 'G-TYW6BEQR0Z';
 
 // 内部包装组件，用于检查加载状态
 function AppContent({ children }: { children: React.ReactNode }) {
@@ -50,6 +54,20 @@ export default function RootLayout({
         <meta name="description" content="Professional birthday party planning tool to help you easily plan the perfect birthday celebration." />
       </head>
       <body className={cn("min-h-screen bg-background", inter.className)}>
+        {/* Google Analytics */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
+
         <LanguageProvider>
           <ThemeProvider
             attribute="class"

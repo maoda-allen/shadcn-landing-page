@@ -11,6 +11,7 @@ import { icons } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/lib/contexts/language-context';
 import { Loader2, Sparkles } from 'lucide-react';
+import { flushSync } from 'react-dom';
 
 export function PartyPlannerForm() {
   const { state, updateFormData, generatePartyPlan } = useParty();
@@ -18,9 +19,19 @@ export function PartyPlannerForm() {
   const { formData, result, isLoading, error } = state;
   const [customTheme, setCustomTheme] = useState('');
   const [showCustomTheme, setShowCustomTheme] = useState(false);
+  
+  // 本地loading状态作为备用，确保UI响应
+  const [localLoading, setLocalLoading] = useState(false);
 
-  // 使用Context中的loading状态
-  const isCurrentlyLoading = isLoading;
+  // 使用Context中的loading状态或本地状态
+  const isCurrentlyLoading = isLoading || localLoading;
+
+  // 监听Context loading状态变化，同步本地状态
+  useEffect(() => {
+    if (isLoading !== localLoading) {
+      setLocalLoading(isLoading);
+    }
+  }, [isLoading, localLoading]);
 
   // 定义主题选项
   const themeOptions = [
@@ -77,6 +88,8 @@ export function PartyPlannerForm() {
 
   // 生成按钮点击处理
   const handleGenerateClick = async () => {
+    console.log('🎯 handleGenerateClick called');
+    
     // 如果已有结果，需要用户确认重新生成
     if (result) {
       const confirmed = window.confirm(t('planner.form.confirmRegenerate'));
@@ -86,8 +99,25 @@ export function PartyPlannerForm() {
       }
     }
     
-    // 执行生成
-    await generatePartyPlan();
+    // 立即设置本地loading状态，确保UI立即响应
+    console.log('🎯 Setting local loading to true');
+    flushSync(() => {
+      setLocalLoading(true);
+    });
+    
+    // 短暂延迟确保UI更新完成
+    await new Promise(resolve => setTimeout(resolve, 50));
+    
+    try {
+      console.log('🎯 Calling generatePartyPlan');
+      // 执行生成
+      await generatePartyPlan();
+    } catch (error) {
+      console.error('🎯 Error in generatePartyPlan:', error);
+    } finally {
+      console.log('🎯 Setting local loading to false');
+      setLocalLoading(false);
+    }
   };
 
   const renderGenerateButton = () => {
@@ -122,6 +152,11 @@ export function PartyPlannerForm() {
 
   return (
     <div className="space-y-4 md:space-y-6">
+      {/* 调试信息 - 临时显示当前状态 */}
+      <div className="fixed top-4 right-4 bg-yellow-100 p-2 rounded text-xs z-[10001] border">
+        Context Loading: {isLoading ? 'YES' : 'NO'} | Local Loading: {localLoading ? 'YES' : 'NO'} | Currently Loading: {isCurrentlyLoading ? 'YES' : 'NO'}
+      </div>
+      
       {/* 全局加载遮罩 - 优化层级到最高 */}
       {isCurrentlyLoading && (
         <div 
@@ -130,6 +165,7 @@ export function PartyPlannerForm() {
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
+            console.log('🎯 Loading overlay clicked, states:', { isLoading, localLoading, isCurrentlyLoading });
           }}
         >
           <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-2xl max-w-sm mx-4 border">
@@ -141,6 +177,9 @@ export function PartyPlannerForm() {
                 </p>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                   {t('planner.form.generatingDesc')}
+                </p>
+                <p className="text-xs text-gray-500 mt-2">
+                  Debug: Context({isLoading ? '✓' : '✗'}) Local({localLoading ? '✓' : '✗'})
                 </p>
               </div>
             </div>
