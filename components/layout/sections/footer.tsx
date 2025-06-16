@@ -67,19 +67,19 @@ export const FooterSection = () => {
             <h3 className="font-bold text-lg">{t('footer.social.title')}</h3>
             <div>
               <span className="opacity-60 cursor-not-allowed" title={t('footer.social.comingSoon')}>
-                {t('footer.social.wechatPublic')}
+                {t('footer.social.facebook')}
               </span>
             </div>
 
             <div>
               <span className="opacity-60 cursor-not-allowed" title={t('footer.social.comingSoon')}>
-                {t('footer.social.douyin')}
+                {t('footer.social.tiktok')}
               </span>
             </div>
 
             <div>
               <span className="opacity-60 cursor-not-allowed" title={t('footer.social.comingSoon')}>
-                {t('footer.social.xiaohongshu')}
+                {t('footer.social.instagram')}
               </span>
             </div>
           </div>

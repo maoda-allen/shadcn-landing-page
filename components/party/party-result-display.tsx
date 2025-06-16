@@ -178,7 +178,7 @@ export function PartyResultDisplay() {
           <div style="font-size: 13px; color: #374151; line-height: 1.5;">
             <div style="margin-bottom: 5px;">• ${t('planner.result.tips.budgetReminder')}</div>
             <div style="margin-bottom: 5px;">• ${t('planner.result.tips.preparationAdvice')}</div>
-            <div>• 天气变化请准备备用方案，室内外场地都要考虑</div>
+            <div>• ${t('planner.result.tips.weatherAdvice')}</div>
           </div>
         </div>
 
@@ -237,7 +237,7 @@ export function PartyResultDisplay() {
         </div>
         
         <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 2px solid #fed7aa;">
-          <p style="color: #9ca3af; font-size: 12px; margin: 0;">${t('planner.result.exportDetails.generatedTime')}${new Date().toLocaleString('zh-CN')} | ${t('planner.result.exportDetails.planNumber')}${Date.now().toString().slice(-6)}</p>
+          <p style="color: #9ca3af; font-size: 12px; margin: 0;">${t('planner.result.exportDetails.generatedTime')}${new Date().toLocaleString(language === 'zh' ? 'zh-CN' : 'en-US')} | ${t('planner.result.exportDetails.planNumber')}${Date.now().toString().slice(-6)}</p>
           <p style="color: #f97316; font-size: 14px; font-weight: bold; margin: 5px 0 0 0;">${t('planner.result.exportDetails.brandFooter')}</p>
           <p style="color: #9ca3af; font-size: 11px; margin: 5px 0 0 0;">${t('planner.result.exportDetails.tagline')}</p>
         </div>

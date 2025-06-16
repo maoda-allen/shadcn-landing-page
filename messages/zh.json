@@ -262,8 +262,9 @@
         "touchMoment": "触达时刻"
       },
       "tips": {
-        "budgetReminder": "方案中已包含预算参考，可根据实际情况调整",
-        "preparationAdvice": "建议提前2-3周开始准备，确保效果最佳"
+        "budgetReminder": "预算参考已包含在方案中，可根据实际情况调整",
+        "preparationAdvice": "建议提前2-3周开始准备，效果最佳",
+        "weatherAdvice": "天气变化请准备备用方案，室内外场地都要考虑"
       },
       "executionDetails": {
         "oneWeekBefore": "提前1周：",
@@ -496,9 +497,9 @@
     },
     "social": {
       "title": "社交媒体",
-      "wechatPublic": "微信公众号",
-      "douyin": "抖音号",
-      "xiaohongshu": "小红书",
+      "facebook": "Facebook",
+      "tiktok": "TikTok", 
+      "instagram": "Instagram",
       "comingSoon": "即将开通"
     },
     "copyright": "© 2024 生日派对策划平台. 专业设计与开发",

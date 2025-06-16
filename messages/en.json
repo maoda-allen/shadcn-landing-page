@@ -12,7 +12,7 @@
     "badge": "Birthday Party Planning Tool is Live!",
     "title": "Birthday Party Planning",
     "titleHighlight": "Make Every Birthday",
-    "titleEnd": "Unique & Memorable",
+    "titleEnd": "Extraordinary and Unforgettable",
     "description": "Professional birthday party creative tool to help you easily plan the perfect birthday celebration. From theme selection to activity arrangement, make every birthday an unforgettable memory.",
     "startPlanning": "Start Planning Party",
     "learnMore": "Learn More Features",
@@ -263,7 +263,8 @@
       },
       "tips": {
         "budgetReminder": "Budget references included in the plan, adjustable based on actual situation",
-        "preparationAdvice": "Recommend starting preparation 2-3 weeks in advance for best results"
+        "preparationAdvice": "Recommend starting preparation 2-3 weeks in advance for best results",
+        "weatherAdvice": "Weather changes require backup plans, consider both indoor and outdoor venues"
       },
       "executionDetails": {
         "oneWeekBefore": "1 Week Before:",
@@ -496,9 +497,9 @@
     },
     "social": {
       "title": "Social Media",
-      "wechatPublic": "WeChat Official",
-      "douyin": "TikTok",
-      "xiaohongshu": "Xiaohongshu",
+      "facebook": "Facebook",
+      "tiktok": "TikTok",
+      "instagram": "Instagram",
       "comingSoon": "Coming Soon"
     },
     "copyright": "© 2024 Birthday Party Planning Platform. Professional Design & Development",
