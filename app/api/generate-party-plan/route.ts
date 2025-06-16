@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
         max_tokens: 2000,
       }, {
         headers: {
-          "HTTP-Referer": "http://localhost:3010",
+          "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL || "https://www.partyplanner.life",
           "X-Title": "Birthday Party Planner",
         }
       });
