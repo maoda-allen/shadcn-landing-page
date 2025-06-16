@@ -22,23 +22,26 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 // 翻译数据缓存
 let translationsCache: { [key in Language]?: Translations } = {};
 
-// 加载翻译文件的异步函数
-const loadTranslations = async (language: Language): Promise<Translations> => {
+// 加载翻译文件的异步函数（客户端专用）
+const loadClientTranslations = async (language: Language): Promise<Translations> => {
   if (translationsCache[language]) {
     return translationsCache[language]!;
   }
 
   try {
-    const translations = language === 'zh' 
-      ? require('../../messages/zh.json')
-      : require('../../messages/en.json');
+    // 使用动态 import() 而不是 require()
+    const module = language === 'zh' 
+      ? await import('../../messages/zh.json')
+      : await import('../../messages/en.json');
     
+    const translations = module.default as any; // 暂时绕过类型检查
     translationsCache[language] = translations;
     return translations;
   } catch (error) {
     devLogger.error('language.load.failed', language, error);
-    // 返回默认的中文翻译作为fallback
-    const fallback = require('../../messages/zh.json');
+    // 动态 import() 失败的 fallback
+    const fallbackModule = await import('../../messages/zh.json');
+    const fallback = fallbackModule.default as any; // 暂时绕过类型检查
     translationsCache[language] = fallback;
     return fallback;
   }
@@ -69,52 +72,43 @@ function getNestedValue(obj: any, path: string): string {
   return String(result);
 }
 
+interface LanguageProviderProps {
+  children: React.ReactNode;
+  initialLanguage: Language;
+  initialTranslations: Translations;
+}
+
 // 语言提供者组件
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>('en');
-  const [isLoading, setIsLoading] = useState(true);
-  const [translations, setTranslations] = useState<Translations | null>(null);
+export function LanguageProvider({ 
+  children, 
+  initialLanguage, 
+  initialTranslations 
+}: LanguageProviderProps) {
+  const [language, setLanguageState] = useState<Language>(initialLanguage);
+  const [isLoading, setIsLoading] = useState(false);
+  const [translations, setTranslations] = useState<Translations>(initialTranslations);
 
-  // 从localStorage加载语言设置
+  // 组件加载时，用服务器提供的数据填充缓存
   useEffect(() => {
-    const initializeLanguage = async () => {
-      try {
-        const savedLanguage = localStorage.getItem('language') as Language;
-        const targetLanguage = (savedLanguage && (savedLanguage === 'zh' || savedLanguage === 'en')) 
-          ? savedLanguage 
-          : 'en';
-        
-        setLanguageState(targetLanguage);
-        const loadedTranslations = await loadTranslations(targetLanguage);
-        setTranslations(loadedTranslations);
-      } catch (error) {
-        devLogger.error('language.init.failed', error);
-        // 使用默认英文
-        const fallbackTranslations = await loadTranslations('en');
-        setTranslations(fallbackTranslations);
-        setLanguageState('en');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    initializeLanguage();
-  }, []);
-
-  // 设置语言并保存到localStorage
-  const setLanguage = async (lang: Language) => {
-    // 追踪语言切换事件
-    if (lang !== language) {
-      analytics.languageChanged(lang);
+    if (!translationsCache[initialLanguage]) {
+      translationsCache[initialLanguage] = initialTranslations;
     }
+  }, [initialLanguage, initialTranslations]);
+
+
+  // 设置语言并保存到localStorage（客户端操作）
+  const setLanguage = async (lang: Language) => {
+    if (lang === language) return;
+    
+    // 追踪语言切换事件
+    analytics.languageChanged(lang);
     
     setIsLoading(true);
     try {
+      const loadedTranslations = await loadClientTranslations(lang);
+      setTranslations(loadedTranslations);
       setLanguageState(lang);
       localStorage.setItem('language', lang);
-      
-      const loadedTranslations = await loadTranslations(lang);
-      setTranslations(loadedTranslations);
     } catch (error) {
       devLogger.error('language.set.failed', lang, error);
     } finally {
