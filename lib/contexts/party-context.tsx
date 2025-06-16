@@ -107,7 +107,12 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
   };
 
   const generatePartyPlan = async () => {
-    // Check if form is complete
+    // 防止重复调用
+    if (state.isLoading) {
+      return;
+    }
+
+    // Check if form is complete BEFORE setting loading
     const { partyType, guestCount, venue, budget, theme, atmosphere } = state.formData;
     if (!partyType || !guestCount || !venue || !budget || !theme || !atmosphere) {
       // 获取当前语言设置来显示正确的错误消息
@@ -120,15 +125,11 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
       
       const errorMessage = translations.planner.form.errors.incompleteForm;
       dispatch({ type: 'SET_ERROR', payload: errorMessage });
+      // 注意：这里不设置loading状态，因为验证失败不应该显示loading
       return;
     }
 
-    // 防止重复调用
-    if (state.isLoading) {
-      return;
-    }
-
-    // 立即设置loading状态
+    // 验证通过，开始设置loading状态
     dispatch({ type: 'SET_LOADING', payload: true });
     dispatch({ type: 'SET_ERROR', payload: null });
 
