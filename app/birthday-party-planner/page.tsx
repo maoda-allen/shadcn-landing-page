@@ -53,14 +53,14 @@ export default function BirthdayPartyPlannerPage() {
         {/* Main Content */}
         <section className="container pb-16 md:pb-24">
           <div className="grid lg:grid-cols-8 gap-6 lg:gap-8">
-            {/* Form Section - 进一步缩小 */}
+            {/* Form Section - reduced size */}
             <div className="lg:col-span-3 order-2 lg:order-1">
               <div className="lg:sticky lg:top-8">
                 <PartyPlannerForm />
               </div>
             </div>
             
-            {/* Result Section - 进一步放大 */}
+            {/* Result Section - expanded size */}
             <div className="lg:col-span-5 order-1 lg:order-2">
               <PartyResultDisplay />
             </div>

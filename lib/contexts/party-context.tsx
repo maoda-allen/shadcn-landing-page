@@ -169,7 +169,7 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
         throw new Error('API returned invalid data format');
       }
     } catch (error) {
-      devLogger.error('生成派对方案失败:', error);
+      devLogger.error('party.plan.generation.failed', error);
       // 获取当前语言设置来显示正确的错误消息
       const currentLanguage = localStorage.getItem('language') || 'zh';
       

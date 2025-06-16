@@ -70,7 +70,7 @@ function getNestedValue(obj: any, path: string): string {
 
 // 语言提供者组件
 export function LanguageProvider({ children }: { children: React.ReactNode }) {
-  const [language, setLanguageState] = useState<Language>('zh');
+  const [language, setLanguageState] = useState<Language>('en');
   const [isLoading, setIsLoading] = useState(true);
   const [translations, setTranslations] = useState<Translations | null>(null);
 
@@ -81,16 +81,17 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
         const savedLanguage = localStorage.getItem('language') as Language;
         const targetLanguage = (savedLanguage && (savedLanguage === 'zh' || savedLanguage === 'en')) 
           ? savedLanguage 
-          : 'zh';
+          : 'en';
         
         setLanguageState(targetLanguage);
         const loadedTranslations = await loadTranslations(targetLanguage);
         setTranslations(loadedTranslations);
       } catch (error) {
         devLogger.error('language.init.failed', error);
-        // 使用默认中文
-        const fallbackTranslations = await loadTranslations('zh');
+        // 使用默认英文
+        const fallbackTranslations = await loadTranslations('en');
         setTranslations(fallbackTranslations);
+        setLanguageState('en');
       } finally {
         setIsLoading(false);
       }

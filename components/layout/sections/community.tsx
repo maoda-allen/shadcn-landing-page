@@ -15,7 +15,11 @@ export const CommunitySection = () => {
   const { t } = useLanguage();
 
   const handleJoinCommunity = () => {
-    toast.info(t('community.comingSoon'), { duration: 5000 });
+    toast.show({
+      type: 'info',
+      title: t('community.comingSoon'),
+      duration: 5000
+    });
   };
 
   return (

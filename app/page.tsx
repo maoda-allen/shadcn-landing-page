@@ -11,26 +11,26 @@ import { TeamSection } from "@/components/layout/sections/team";
 import { TestimonialSection } from "@/components/layout/sections/testimonial";
 
 export const metadata = {
-  title: "Birthday Party Planner | 生日派对策划 - Professional Party Planning Tool",
-  description: "Professional birthday party creative tool to help you easily plan the perfect birthday celebration. 专业的生日派对创意策划平台，提供儿童生日、成人生日、长辈生日等个性化派对方案。",
-  keywords: "birthday party ideas,生日派对创意,生日派对策划,儿童生日派对,成人生日聚会,派对主题,生日庆祝活动,party planning,birthday celebration",
+  title: "Birthday Party Planner - Professional Party Planning Tool",
+  description: "Professional birthday party creative tool to help you easily plan the perfect birthday celebration. From theme selection to activity arrangement, make every birthday an unforgettable memory.",
+  keywords: "birthday party ideas, birthday party planning, children birthday party, adult birthday party, party themes, birthday celebration activities, party planning, birthday celebration",
   openGraph: {
     type: "website",
-    title: "Birthday Party Planner | 生日派对策划 - Make Every Birthday Unique",
-    description: "Professional birthday party creative tool to help you easily plan the perfect birthday celebration. 专业的生日派对创意工具，帮您轻松策划完美的生日庆典。",
+    title: "Birthday Party Planner - Make Every Birthday Unique",
+    description: "Professional birthday party creative tool to help you easily plan the perfect birthday celebration. From theme selection to activity arrangement, make every birthday an unforgettable memory.",
     images: [
       {
         url: "https://res.cloudinary.com/dbzv9xfjp/image/upload/v1723499276/og-images/shadcn-vue.jpg",
         width: 1200,
         height: 630,
-        alt: "Birthday Party Planning Tool | 生日派对策划工具",
+        alt: "Birthday Party Planning Tool - Professional Party Planner",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Birthday Party Planner | 生日派对策划",
-    description: "Professional birthday party creative tool to help you easily plan the perfect birthday celebration. 专业的生日派对创意工具，帮您轻松策划完美的生日庆典。",
+    title: "Birthday Party Planner - Professional Planning Tool",
+    description: "Professional birthday party creative tool to help you easily plan the perfect birthday celebration. Make every birthday truly unforgettable.",
     images: [
       "https://res.cloudinary.com/dbzv9xfjp/image/upload/v1723499276/og-images/shadcn-vue.jpg",
     ],

@@ -268,7 +268,10 @@ export function PartyResultDisplay() {
     } catch (error) {
       devLogger.error('export.failed', error);
       const errorMessage = t('planner.result.error.title');
-      toast.error(errorMessage);
+      toast.show({
+        type: 'error',
+        title: errorMessage
+      });
     }
   };
 

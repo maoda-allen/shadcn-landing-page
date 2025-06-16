@@ -9,7 +9,7 @@ import { useLanguage } from "@/lib/contexts/language-context";
 
 export const HeroSection = () => {
   const { theme } = useTheme();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <section className="container w-full">
@@ -24,12 +24,30 @@ export const HeroSection = () => {
 
           <div className="max-w-screen-md mx-auto text-center text-4xl md:text-6xl font-bold">
             <h1>
-              {t('hero.title')}
-              <span className="text-transparent px-2 bg-gradient-to-r from-[#E879F9] to-primary bg-clip-text">
-                {t('hero.titleHighlight')}
-              </span>
-              <br />
-              {t('hero.titleEnd')}
+              {language === 'zh' ? (
+                <>
+                  {t('hero.title')}
+                  <span className="text-transparent px-2 bg-gradient-to-r from-[#E879F9] to-primary bg-clip-text">
+                    {t('hero.titleHighlight')}
+                  </span>
+                  <br />
+                  {t('hero.titleEnd')}
+                </>
+              ) : (
+                <div className="space-y-2">
+                  <div className="leading-tight">
+                    {t('hero.title')}
+                  </div>
+                  <div className="leading-tight">
+                    <span className="text-transparent bg-gradient-to-r from-[#E879F9] to-primary bg-clip-text">
+                      {t('hero.titleHighlight')}
+                    </span>
+                  </div>
+                  <div className="text-3xl md:text-5xl leading-tight mt-2">
+                    {t('hero.titleEnd')}
+                  </div>
+                </div>
+              )}
             </h1>
           </div>
 
@@ -37,7 +55,7 @@ export const HeroSection = () => {
             {t('hero.description')}
           </p>
 
-          <div className="space-y-4 md:space-y-0 md:space-x-4">
+          <div className="space-y-4 md:space-y-0 md:space-x-4 md:flex md:justify-center">
             <Button asChild className="w-5/6 md:w-1/4 font-bold group/arrow">
               <Link href="/birthday-party-planner">
                 {t('hero.startPlanning')}
@@ -60,7 +78,7 @@ export const HeroSection = () => {
         <div className="relative group mt-14">
           <div className="absolute top-2 lg:-top-8 left-1/2 transform -translate-x-1/2 w-[90%] mx-auto h-24 lg:h-80 bg-primary/50 rounded-full blur-3xl"></div>
           
-          <div className="relative">
+          <div className="w-full">
             <Image
               width={1200}
               height={800}
