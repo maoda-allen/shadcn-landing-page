@@ -14,7 +14,7 @@ import { toast } from '@/lib/utils/toast';
 import { devLogger } from '@/lib/utils/dev-logger';
 
 // 动态评估函数 - 随机打分但保证93分以上
-const calculateProfessionalScore = (formData: any, result: any) => {
+const calculateProfessionalScore = (formData: any, result: any, language: string = 'en') => {
   // 生成随机分数，确保总分在93-100之间
   const generateRandomScore = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -61,9 +61,17 @@ const calculateProfessionalScore = (formData: any, result: any) => {
 
   const total = Object.values(scores).reduce((sum, score) => sum + score, 0);
   
-  const level = total >= 98 ? '卓越级别' : 
-               total >= 95 ? '优秀级别' : 
-               total >= 93 ? '良好级别' : '合格级别';
+  // 使用语言参数获取对应的评分等级
+  let level: string;
+  if (language === 'zh') {
+    level = total >= 98 ? '卓越级别' : 
+            total >= 95 ? '优秀级别' : 
+            total >= 93 ? '良好级别' : '合格级别';
+  } else {
+    level = total >= 98 ? 'Excellent Level' : 
+            total >= 95 ? 'Outstanding Level' : 
+            total >= 93 ? 'Good Level' : 'Qualified Level';
+  }
 
   return { scores, total, level };
 };
@@ -139,7 +147,7 @@ export function PartyResultDisplay() {
     if (!result) return;
 
     try {
-      const { scores, total, level } = calculateProfessionalScore(formData, result);
+      const { scores, total, level } = calculateProfessionalScore(formData, result, language);
       
       // 创建一个临时的导出容器
       const exportContainer = document.createElement('div');
@@ -410,7 +418,7 @@ export function PartyResultDisplay() {
 
   // 结果展示
   if (result) {
-    const { scores, total, level } = calculateProfessionalScore(formData, result);
+    const { scores, total, level } = calculateProfessionalScore(formData, result, language);
 
     return (
       <div className="sticky top-8 space-y-4" data-result-area>
