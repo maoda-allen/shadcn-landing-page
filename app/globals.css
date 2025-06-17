@@ -138,3 +138,55 @@ html {
     @apply bg-background text-foreground;
   }
 }
+
+/* 防止自定义主题输入时的页面跳转 */
+.party-planner-form {
+  /* 阻止父容器的滚动行为影响 */
+  contain: layout style;
+}
+
+.party-planner-form input:focus {
+  /* 输入框聚焦时禁用平滑滚动 */
+  scroll-behavior: auto !important;
+}
+
+.custom-theme-container {
+  /* 防止布局抖动 */
+  contain: layout;
+  will-change: contents;
+  /* 防止聚焦时的滚动 */
+  scroll-margin: 0;
+  scroll-snap-align: none;
+}
+
+.custom-theme-container input {
+  /* 防止输入时的视觉跳动 */
+  contain: layout;
+  /* 关键：防止输入框聚焦时触发滚动 */
+  scroll-margin: 0 !important;
+  scroll-snap-align: none !important;
+}
+
+/* 专门针对自定义主题输入框的防滚动样式 */
+.custom-theme-input {
+  scroll-behavior: auto !important;
+  overscroll-behavior: contain;
+  /* 防止聚焦时滚动到视图 */
+  scroll-margin-top: 0 !important;
+  scroll-margin-bottom: 0 !important;
+}
+
+.custom-theme-input:focus {
+  scroll-behavior: auto !important;
+  overscroll-behavior: contain;
+  outline-offset: 0;
+}
+
+/* 临时禁用平滑滚动的类 */
+.no-smooth-scroll {
+  scroll-behavior: auto !important;
+}
+
+.no-smooth-scroll * {
+  scroll-behavior: auto !important;
+}

@@ -6,10 +6,21 @@ import { PartyResultDisplay } from '@/components/party/party-result-display';
 import { Badge } from '@/components/ui/badge';
 import { Sparkles, Clock, Users } from 'lucide-react';
 import { useLanguage } from '@/lib/contexts/language-context';
+import { useState, useEffect } from 'react';
 
 export default function BirthdayPartyPlannerPage() {
   const { t } = useLanguage();
+  const [isMounted, setIsMounted] = useState(false);
   
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  // 防止SSR/Client不匹配
+  if (!isMounted) {
+    return <div className="min-h-screen bg-background" />;
+  }
+
   return (
     <PartyProvider>
       <div className="min-h-screen bg-background">

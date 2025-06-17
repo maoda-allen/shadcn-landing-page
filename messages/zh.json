@@ -137,23 +137,19 @@
       "partyType": {
         "title": "选择派对类型",
         "subtitle": "为不同年龄段选择最适合的派对方案",
-        "adultBirthday": "成人生日",
-        "adultBirthdayDesc": "18-50岁",
         "kidsBirthday": "儿童生日",
-        "kidsBirthdayDesc": "3-12岁",
+        "kidsBirthdayDesc": "3-17岁",
+        "adultBirthday": "成人生日", 
+        "adultBirthdayDesc": "18-59岁",
         "seniorBirthday": "长辈生日",
-        "seniorBirthdayDesc": "50岁以上",
-        "teenBirthday": "青少年生日",
-        "teenBirthdayDesc": "13-18岁",
+        "seniorBirthdayDesc": "60岁以上",
         "badges": {
-          "mature": "成熟",
-          "personalized": "个性化",
           "interactive": "互动",
           "colorful": "多彩",
+          "mature": "成熟",
+          "personalized": "个性化",
           "warm": "温馨",
-          "meaningful": "有意义",
-          "trendy": "潮流",
-          "social": "社交"
+          "meaningful": "有意义"
         }
       },
       "guestCount": {
@@ -191,62 +187,72 @@
       "theme": {
         "title": "选择创意主题",
         "subtitle": "为派对增添独特的个性和趣味",
-        "garden": {
-          "title": "花园聚会",
-          "subtitle": "自然清新，鲜花装饰",
-          "badge1": "户外",
-          "badge2": "清新"
+        "vintage": {
+          "title": "复古怀旧",
+          "subtitle": "经典时光，温暖回忆",
+          "badge1": "怀旧",
+          "badge2": "经典"
         },
-        "superhero": {
-          "title": "超级英雄",
-          "subtitle": "漫威、DC英雄主题，动作游戏",
-          "badge1": "动感",
-          "badge2": "主题"
+        "luxury": {
+          "title": "奢华典雅",
+          "subtitle": "高端品味，精致体验",
+          "badge1": "奢华",
+          "badge2": "典雅"
         },
-        "princess": {
-          "title": "公主主题",
-          "subtitle": "梦幻城堡，粉色装饰",
-          "badge1": "梦幻",
-          "badge2": "优雅"
+        "modern": {
+          "title": "现代简约",
+          "subtitle": "时尚前卫，简洁大气",
+          "badge1": "现代",
+          "badge2": "简约"
         },
-        "ocean": {
-          "title": "海洋探险",
-          "subtitle": "海洋生物，蓝色主题",
-          "badge1": "探索",
-          "badge2": "清凉"
+        "cartoon": {
+          "title": "卡通动漫",
+          "subtitle": "童话世界，梦想起航",
+          "badge1": "童趣",
+          "badge2": "梦想"
+        },
+        "adventure": {
+          "title": "探险寻宝",
+          "subtitle": "神秘冒险，刺激有趣",
+          "badge1": "冒险",
+          "badge2": "刺激"
+        },
+        "traditional": {
+          "title": "传统文化",
+          "subtitle": "文化传承，寓意深远",
+          "badge1": "传统",
+          "badge2": "文化"
         },
         "customTheme": "自定义主题",
         "customThemeDesc": "输入您自己的创意主题",
         "customThemeLabel": "您的创意主题",
         "customThemePlaceholder": "例如：80年代复古、赛博朋克...",
-        "customThemeHelp": "AI将根据您的主题生成创意方案"
+        "customThemeHelp": "AI将根据您的主题生成创意方案",
+        "customThemeEditHint": "点击编辑您的自定义主题"
       },
       "atmosphere": {
         "title": "确定派对氛围",
         "subtitle": "选择您希望派对呈现的整体感觉",
-        "lively": "热闹欢快",
-        "livelyDesc": "音乐、游戏、互动",
-        "elegant": "优雅温馨",
-        "elegantDesc": "轻音乐、聊天、品茶",
-        "casual": "轻松随意",
-        "casualDesc": "自由活动、简单聚餐",
-        "formal": "正式庄重",
-        "formalDesc": "仪式感、致辞、合影",
-        "creative": "创意互动",
-        "creativeDesc": "DIY活动、主题游戏",
-        "intimate": "温馨私密",
-        "intimateDesc": "小范围、深度交流"
+        "quiet": "安静休闲",
+        "quietDesc": "轻松聊天，舒缓音乐",
+        "celebration": "庆祝狂嗨",
+        "celebrationDesc": "热烈庆祝，激情四射",
+        "intimate": "深度交流",
+        "intimateDesc": "小范围聚会，深入沟通",
+        "elegant": "优雅从容",
+        "elegantDesc": "品味生活，优雅体验",
+        "joyful": "欢快活跃",
+        "joyfulDesc": "欢声笑语，活力满满",
+        "warm": "温馨感人",
+        "warmDesc": "情感共鸣，温暖人心"
       },
       "generateButton": "生成派对方案",
       "regenerateButton": "生成新方案",
       "generating": "生成中...",
       "generatingDesc": "AI正在根据您的选择定制专属方案，请稍候...",
       "completeAllSteps": "请完成所有步骤后再生成方案",
-<<<<<<< HEAD
-=======
       "confirmRegenerate": "确定要重新生成新的派对方案吗？当前方案将被替换。",
       "readyToGenerate": "所有步骤已完成，可以生成方案了！",
->>>>>>> feb54ec7d25b0817b02206ce1cc00b25bba8ce19
       "errors": {
         "incompleteForm": "请完成所有选择后再生成方案",
         "unknownError": "生成方案时发生未知错误，请稍后重试"

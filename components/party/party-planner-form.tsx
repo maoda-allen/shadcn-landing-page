@@ -8,20 +8,77 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Icon } from '@/components/ui/icon';
 import { icons } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { useLanguage } from '@/lib/contexts/language-context';
-import { Loader2, Sparkles } from 'lucide-react';
+import { Loader2, Sparkles, CheckCircle2, ArrowRight, Users, Baby, Heart } from 'lucide-react';
 
 export function PartyPlannerForm() {
   const { state, updateFormData, generatePartyPlan } = useParty();
-  const { t, language } = useLanguage();
+  const { t, language, isLoading: languageLoading } = useLanguage();
+  
+  // 将customTheme状态完全本地化，不触发重新渲染
   const [customTheme, setCustomTheme] = useState('');
   const [showCustomTheme, setShowCustomTheme] = useState(false);
+  
+  // 添加自定义主题标识
+  const [isCustomThemeActive, setIsCustomThemeActive] = useState(false);
+  
+  // 添加输入框引用来保持焦点和位置
+  const customThemeInputRef = useRef<HTMLInputElement>(null);
+  const customThemeContainerRef = useRef<HTMLDivElement>(null);
 
-<<<<<<< HEAD
-=======
   // 本地状态来强制重新渲染
   const [localLoading, setLocalLoading] = useState(false);
+
+  // 使用ref来存储稳定的翻译内容，避免每次输入都重新计算
+  const stableTranslations = useRef<any>({});
+  const lastLanguage = useRef(language);
+
+  // 只在语言切换时更新翻译内容
+  useEffect(() => {
+    if (language !== lastLanguage.current || !stableTranslations.current.initialized) {
+      stableTranslations.current = {
+        initialized: true,
+        // 自定义主题相关 - 只储存这些，其他直接用t()
+        customTheme: {
+          label: t('planner.form.theme.customThemeLabel'),
+          placeholder: t('planner.form.theme.customThemePlaceholder'),
+          help: t('planner.form.theme.customThemeHelp'),
+          title: t('planner.form.theme.customTheme'),
+          desc: t('planner.form.theme.customThemeDesc'),
+          editHint: t('planner.form.theme.customThemeEditHint'),
+        },
+        // 按钮文本
+        confirmText: language === 'zh' ? '确认' : 'Confirm',
+        cancelText: language === 'zh' ? '取消' : 'Cancel',
+      };
+      lastLanguage.current = language;
+    }
+  }, [language, t]);
+
+  // 直接获取翻译文本的辅助函数，避免依赖stableTranslations
+  const getCustomThemeText = useCallback((key: string) => {
+    switch(key) {
+      case 'title':
+        return t('planner.form.theme.customTheme') || '自定义主题';
+      case 'desc':
+        return t('planner.form.theme.customThemeDesc') || '输入您自己的创意主题';
+      case 'editHint':
+        return t('planner.form.theme.customThemeEditHint') || '点击编辑您的自定义主题';
+      case 'label':
+        return t('planner.form.theme.customThemeLabel') || '您的创意主题';
+      case 'placeholder':
+        return t('planner.form.theme.customThemePlaceholder') || '例如：80年代复古、赛博朋克...';
+      case 'help':
+        return t('planner.form.theme.customThemeHelp') || 'AI将根据您的主题生成创意方案';
+      case 'confirmText':
+        return language === 'zh' ? '确认' : 'Confirm';
+      case 'cancelText':
+        return language === 'zh' ? '取消' : 'Cancel';
+      default:
+        return '';
+    }
+  }, [t, language]);
 
   // 监控加载状态变化
   useEffect(() => {
@@ -31,168 +88,18 @@ export function PartyPlannerForm() {
   // 使用组合状态
   const isCurrentlyLoading = state.isLoading || localLoading;
 
-  // 定义主题选项
-  const themeOptions = [
-    { id: 'modern', icon: 'Square', suitable: ['adult'] },
-    { id: 'retro', icon: 'Music', suitable: ['adult'] },
-    { id: 'garden', icon: 'Flower', suitable: ['adult', 'elderly'] },
-    { id: 'superhero', icon: 'Zap', suitable: ['child', 'teen'] },
-    { id: 'princess', icon: 'Crown', suitable: ['child'] },
-    { id: 'ocean', icon: 'Waves', suitable: ['child'] }
-  ];
-
-  // 定义氛围选项
-  const atmosphereOptions = [
-    'lively', 'elegant', 'casual', 'formal', 'creative', 'intimate'
-  ];
-
-  const handlePartyTypeSelect = (type: 'adult' | 'child' | 'elderly') => {
-    updateFormData({ partyType: type });
-  };
-
-  const handleGuestCountSelect = (count: 'small' | 'medium' | 'large') => {
-    updateFormData({ guestCount: count });
-  };
-
-  const handleVenueSelect = (venue: 'indoor' | 'outdoor') => {
-    updateFormData({ venue });
-  };
-
-  const handleBudgetSelect = (budget: 'low' | 'medium' | 'high') => {
-    updateFormData({ budget });
-  };
-
-  const handleThemeSelect = (themeId: string) => {
-    const themeName = t(`planner.form.theme.${themeId}`);
-    updateFormData({ theme: themeName });
-    setShowCustomTheme(false);
-  };
-
-  const handleCustomThemeSubmit = () => {
-    if (customTheme.trim()) {
-      updateFormData({ theme: customTheme.trim() });
-      setShowCustomTheme(false);
-    }
-  };
-
-  const handleAtmosphereSelect = (atmosphere: string) => {
-    updateFormData({ atmosphere: atmosphere as any });
-  };
-
+  // 检查表单是否完整
   const isFormComplete = () => {
     const { partyType, guestCount, venue, budget, theme, atmosphere } = state.formData;
     return partyType && guestCount && venue && budget && theme && atmosphere;
   };
 
->>>>>>> parent of f6e9e17 (修复生成页面体验效果)
   // 生成按钮点击处理
   const handleGenerateClick = async () => {
     if (!isFormComplete()) {
       return;
     }
     
-<<<<<<< HEAD
-    // 执行生成
-    await generatePartyPlan();
-  };
-
-  // 派对类型选项
-  const partyTypes = useMemo(() => [
-    { 
-      id: 'adultBirthday', 
-      icon: 'User', 
-      title: t('planner.form.partyType.adultBirthday'),
-      subtitle: t('planner.form.partyType.adultBirthdayDesc'),
-      badges: [t('planner.form.partyType.badges.mature'), t('planner.form.partyType.badges.personalized')]
-    },
-    { 
-      id: 'kidsBirthday', 
-      icon: 'Baby', 
-      title: t('planner.form.partyType.kidsBirthday'),
-      subtitle: t('planner.form.partyType.kidsBirthdayDesc'),
-      badges: [t('planner.form.partyType.badges.interactive'), t('planner.form.partyType.badges.colorful')]
-    },
-    { 
-      id: 'seniorBirthday', 
-      icon: 'Heart', 
-      title: t('planner.form.partyType.seniorBirthday'),
-      subtitle: t('planner.form.partyType.seniorBirthdayDesc'),
-      badges: [t('planner.form.partyType.badges.warm'), t('planner.form.partyType.badges.meaningful')]
-    },
-    { 
-      id: 'teenBirthday', 
-      icon: 'Zap', 
-      title: t('planner.form.partyType.teenBirthday'),
-      subtitle: t('planner.form.partyType.teenBirthdayDesc'),
-      badges: [t('planner.form.partyType.badges.trendy'), t('planner.form.partyType.badges.social')]
-    },
-  ], [language]);
-
-  // 聚会规模选项
-  const guestCounts = useMemo(() => [
-    { id: 'smallParty', label: t('planner.form.guestCount.smallParty'), desc: t('planner.form.guestCount.smallPartyDesc') },
-    { id: 'mediumParty', label: t('planner.form.guestCount.mediumParty'), desc: t('planner.form.guestCount.mediumPartyDesc') },
-    { id: 'largeParty', label: t('planner.form.guestCount.largeParty'), desc: t('planner.form.guestCount.largePartyDesc') },
-  ], [language]);
-
-  // 场地选项
-  const venues = useMemo(() => [
-    { id: 'home', label: t('planner.form.venue.home'), desc: t('planner.form.venue.homeDesc') },
-    { id: 'outdoor', label: t('planner.form.venue.outdoor'), desc: t('planner.form.venue.outdoorDesc') },
-    { id: 'restaurant', label: t('planner.form.venue.restaurant'), desc: t('planner.form.venue.restaurantDesc') },
-    { id: 'hall', label: t('planner.form.venue.hall'), desc: t('planner.form.venue.hallDesc') },
-  ], [language]);
-
-  // 预算选项
-  const budgets = useMemo(() => [
-    { id: 'budget', label: t('planner.form.budget.budget'), desc: t('planner.form.budget.budgetDesc') },
-    { id: 'standard', label: t('planner.form.budget.standard'), desc: t('planner.form.budget.standardDesc') },
-    { id: 'premium', label: t('planner.form.budget.premium'), desc: t('planner.form.budget.premiumDesc') },
-  ], [language]);
-
-  // 主题选项
-  const themes = useMemo(() => [
-    { 
-      id: 'garden', 
-      title: t('planner.form.theme.garden.title'), 
-      subtitle: t('planner.form.theme.garden.subtitle'),
-      badges: [t('planner.form.theme.garden.badge1'), t('planner.form.theme.garden.badge2')],
-      gradient: 'from-green-500 to-emerald-600'
-    },
-    { 
-      id: 'superhero', 
-      title: t('planner.form.theme.superhero.title'), 
-      subtitle: t('planner.form.theme.superhero.subtitle'),
-      badges: [t('planner.form.theme.superhero.badge1'), t('planner.form.theme.superhero.badge2')],
-      gradient: 'from-blue-500 to-purple-600'
-    },
-    { 
-      id: 'princess', 
-      title: t('planner.form.theme.princess.title'), 
-      subtitle: t('planner.form.theme.princess.subtitle'),
-      badges: [t('planner.form.theme.princess.badge1'), t('planner.form.theme.princess.badge2')],
-      gradient: 'from-pink-500 to-rose-600'
-    },
-    { 
-      id: 'ocean', 
-      title: t('planner.form.theme.ocean.title'), 
-      subtitle: t('planner.form.theme.ocean.subtitle'),
-      badges: [t('planner.form.theme.ocean.badge1'), t('planner.form.theme.ocean.badge2')],
-      gradient: 'from-cyan-500 to-blue-600'
-    },
-  ], [language]);
-
-  // 氛围选项
-  const atmospheres = useMemo(() => [
-    { id: 'lively', label: t('planner.form.atmosphere.lively'), desc: t('planner.form.atmosphere.livelyDesc') },
-    { id: 'elegant', label: t('planner.form.atmosphere.elegant'), desc: t('planner.form.atmosphere.elegantDesc') },
-    { id: 'casual', label: t('planner.form.atmosphere.casual'), desc: t('planner.form.atmosphere.casualDesc') },
-    { id: 'formal', label: t('planner.form.atmosphere.formal'), desc: t('planner.form.atmosphere.formalDesc') },
-    { id: 'creative', label: t('planner.form.atmosphere.creative'), desc: t('planner.form.atmosphere.creativeDesc') },
-    { id: 'intimate', label: t('planner.form.atmosphere.intimate'), desc: t('planner.form.atmosphere.intimateDesc') },
-<<<<<<< HEAD
-  ];
-=======
     if (isCurrentlyLoading) {
       return;
     }
@@ -207,532 +114,582 @@ export function PartyPlannerForm() {
       setLocalLoading(false);
     }
   };
->>>>>>> parent of f6e9e17 (修复生成页面体验效果)
-=======
-  ], [language]);
->>>>>>> feb54ec7d25b0817b02206ce1cc00b25bba8ce19
 
-  return (
-    <div className="space-y-4 md:space-y-6">
-      {/* 全局加载遮罩 */}
-<<<<<<< HEAD
-      {isLoading && (
-=======
-      {isCurrentlyLoading && (
->>>>>>> parent of f6e9e17 (修复生成页面体验效果)
-        <div 
-          className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center"
-          style={{ zIndex: 9999 }}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-          }}
-        >
-          <div className="bg-white rounded-lg p-6 shadow-2xl max-w-sm mx-4 border">
-            <div className="flex items-center space-x-3">
-              <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
-              <div>
-                <p className="font-medium text-gray-900">{t('planner.form.generating')}</p>
-                <p className="text-sm text-gray-600 mt-1">{t('planner.form.generatingDesc')}</p>
-              </div>
+  // 处理选择函数
+  const handlePartyTypeSelect = (type: 'adult' | 'child' | 'elderly') => {
+    updateFormData({ partyType: type });
+  };
+
+  const handleGuestCountSelect = (count: 'small' | 'medium' | 'large') => {
+    updateFormData({ guestCount: count });
+  };
+
+  const handleVenueSelect = (venue: 'home' | 'outdoor' | 'restaurant' | 'hall') => {
+    updateFormData({ venue });
+  };
+
+  const handleBudgetSelect = (budget: 'budget' | 'standard' | 'premium') => {
+    updateFormData({ budget });
+  };
+
+  const handleThemeSelect = (themeId: string) => {
+    const themeName = t(`planner.form.theme.${themeId}.title`);
+    updateFormData({ theme: themeName });
+    setShowCustomTheme(false);
+    setIsCustomThemeActive(false); // 选择固定主题时，取消自定义主题状态
+  };
+
+  // 完全重写自定义主题处理，使用纯本地状态避免重新渲染
+  const handleCustomThemeChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    // 阻止事件冒泡，防止触发页面滚动
+    e.stopPropagation();
+    
+    // 只更新本地状态，不触发任何外部状态更新
+    setCustomTheme(e.target.value);
+  }, []);
+
+  const handleCustomThemeSubmit = useCallback(() => {
+    if (customTheme.trim()) {
+      updateFormData({ theme: customTheme.trim() });
+      setShowCustomTheme(false);
+      setIsCustomThemeActive(true); // 设置自定义主题为激活状态
+      setCustomTheme('');
+    }
+  }, [customTheme, updateFormData]);
+
+  const handleCustomThemeCancel = useCallback(() => {
+    setShowCustomTheme(false);
+    setCustomTheme('');
+  }, []);
+
+  // 展开自定义主题输入时的处理
+  const handleShowCustomTheme = useCallback(() => {
+    setShowCustomTheme(true);
+    
+    // 延迟聚焦，使用更温和的方式防止滚动
+    setTimeout(() => {
+      if (customThemeInputRef.current) {
+        // 临时添加防滚动样式
+        document.body.style.overflow = 'hidden';
+        
+        // 聚焦但防止滚动
+        customThemeInputRef.current.focus({ preventScroll: true });
+        
+        // 快速恢复body的滚动
+        setTimeout(() => {
+          document.body.style.overflow = '';
+        }, 100);
+      }
+    }, 150);
+  }, []);
+
+  const handleAtmosphereSelect = (atmosphere: string) => {
+    updateFormData({ atmosphere: atmosphere as any });
+  };
+
+  // 派对类型选项 - 简化为3个，移除对t的直接依赖并稳定化
+  const partyTypes = useMemo(() => {
+    if (languageLoading) return [];
+    return [
+      { 
+        id: 'kidsBirthday', 
+        icon: Baby,
+        title: t('planner.form.partyType.kidsBirthday'),
+        subtitle: t('planner.form.partyType.kidsBirthdayDesc'),
+        badges: [t('planner.form.partyType.badges.interactive'), t('planner.form.partyType.badges.colorful')],
+        value: 'child' as const
+      },
+      { 
+        id: 'adultBirthday', 
+        icon: Users,
+        title: t('planner.form.partyType.adultBirthday'),
+        subtitle: t('planner.form.partyType.adultBirthdayDesc'),
+        badges: [t('planner.form.partyType.badges.mature'), t('planner.form.partyType.badges.personalized')],
+        value: 'adult' as const
+      },
+      { 
+        id: 'seniorBirthday', 
+        icon: Heart, 
+        title: t('planner.form.partyType.seniorBirthday'),
+        subtitle: t('planner.form.partyType.seniorBirthdayDesc'),
+        badges: [t('planner.form.partyType.badges.warm'), t('planner.form.partyType.badges.meaningful')],
+        value: 'elderly' as const
+      }
+    ];
+  }, [t, languageLoading]);
+
+  // 聚会规模选项，优化依赖
+  const guestCounts = useMemo(() => {
+    if (languageLoading) return [];
+    return [
+      { id: 'smallParty', label: t('planner.form.guestCount.smallParty'), desc: t('planner.form.guestCount.smallPartyDesc'), value: 'small' as const },
+      { id: 'mediumParty', label: t('planner.form.guestCount.mediumParty'), desc: t('planner.form.guestCount.mediumPartyDesc'), value: 'medium' as const },
+      { id: 'largeParty', label: t('planner.form.guestCount.largeParty'), desc: t('planner.form.guestCount.largePartyDesc'), value: 'large' as const },
+    ];
+  }, [t, languageLoading]);
+
+  // 场地选项，优化依赖
+  const venues = useMemo(() => {
+    if (languageLoading) return [];
+    return [
+      { id: 'home', label: t('planner.form.venue.home'), desc: t('planner.form.venue.homeDesc'), value: 'home' as const },
+      { id: 'outdoor', label: t('planner.form.venue.outdoor'), desc: t('planner.form.venue.outdoorDesc'), value: 'outdoor' as const },
+      { id: 'restaurant', label: t('planner.form.venue.restaurant'), desc: t('planner.form.venue.restaurantDesc'), value: 'restaurant' as const },
+      { id: 'hall', label: t('planner.form.venue.hall'), desc: t('planner.form.venue.hallDesc'), value: 'hall' as const },
+    ];
+  }, [t, languageLoading]);
+
+  // 预算选项，优化依赖
+  const budgets = useMemo(() => {
+    if (languageLoading) return [];
+    return [
+      { id: 'budget', label: t('planner.form.budget.budget'), desc: t('planner.form.budget.budgetDesc'), value: 'budget' as const },
+      { id: 'standard', label: t('planner.form.budget.standard'), desc: t('planner.form.budget.standardDesc'), value: 'standard' as const },
+      { id: 'premium', label: t('planner.form.budget.premium'), desc: t('planner.form.budget.premiumDesc'), value: 'premium' as const },
+    ];
+  }, [t, languageLoading]);
+
+  // 新的主题选项，优化依赖并使用稳定的键
+  const themes = useMemo(() => {
+    if (languageLoading) return [];
+    return [
+      { 
+        id: 'vintage', 
+        title: t('planner.form.theme.vintage.title'), 
+        subtitle: t('planner.form.theme.vintage.subtitle'),
+        badges: [t('planner.form.theme.vintage.badge1'), t('planner.form.theme.vintage.badge2')]
+      },
+      { 
+        id: 'luxury', 
+        title: t('planner.form.theme.luxury.title'), 
+        subtitle: t('planner.form.theme.luxury.subtitle'),
+        badges: [t('planner.form.theme.luxury.badge1'), t('planner.form.theme.luxury.badge2')]
+      },
+      { 
+        id: 'modern', 
+        title: t('planner.form.theme.modern.title'), 
+        subtitle: t('planner.form.theme.modern.subtitle'),
+        badges: [t('planner.form.theme.modern.badge1'), t('planner.form.theme.modern.badge2')]
+      },
+      { 
+        id: 'cartoon', 
+        title: t('planner.form.theme.cartoon.title'), 
+        subtitle: t('planner.form.theme.cartoon.subtitle'),
+        badges: [t('planner.form.theme.cartoon.badge1'), t('planner.form.theme.cartoon.badge2')]
+      },
+      { 
+        id: 'adventure', 
+        title: t('planner.form.theme.adventure.title'), 
+        subtitle: t('planner.form.theme.adventure.subtitle'),
+        badges: [t('planner.form.theme.adventure.badge1'), t('planner.form.theme.adventure.badge2')]
+      },
+      { 
+        id: 'traditional', 
+        title: t('planner.form.theme.traditional.title'), 
+        subtitle: t('planner.form.theme.traditional.subtitle'),
+        badges: [t('planner.form.theme.traditional.badge1'), t('planner.form.theme.traditional.badge2')]
+      }
+    ];
+  }, [t, languageLoading]);
+
+  // 新的氛围选项，优化依赖
+  const atmospheres = useMemo(() => {
+    if (languageLoading) return [];
+    return [
+      { id: 'quiet', label: t('planner.form.atmosphere.quiet'), desc: t('planner.form.atmosphere.quietDesc') },
+      { id: 'celebration', label: t('planner.form.atmosphere.celebration'), desc: t('planner.form.atmosphere.celebrationDesc') },
+      { id: 'intimate', label: t('planner.form.atmosphere.intimate'), desc: t('planner.form.atmosphere.intimateDesc') },
+      { id: 'elegant', label: t('planner.form.atmosphere.elegant'), desc: t('planner.form.atmosphere.elegantDesc') },
+      { id: 'joyful', label: t('planner.form.atmosphere.joyful'), desc: t('planner.form.atmosphere.joyfulDesc') },
+      { id: 'warm', label: t('planner.form.atmosphere.warm'), desc: t('planner.form.atmosphere.warmDesc') },
+    ];
+  }, [t, languageLoading]);
+
+  // 渲染选择步骤组件 - 统一颜色风格
+  const StepCard = ({ step, title, subtitle, children, className = "" }: {
+    step: number;
+    title: string;
+    subtitle: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => (
+    <Card className={`mb-3 bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 ${className}`}>
+      <CardHeader className="pb-2">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white text-sm font-semibold">
+              {step}
             </div>
+            <div className="absolute -top-1 -right-1 w-2 h-2 bg-orange-500 rounded-full"></div>
+          </div>
+          <div className="flex-1">
+            <CardTitle className="text-base font-semibold text-gray-900">{title}</CardTitle>
+            <p className="text-xs text-gray-600 mt-0.5">{subtitle}</p>
           </div>
         </div>
-      )}
-<<<<<<< HEAD
-=======
-      
-      {/* Step 1: Party Type */}
-      <Card className={isCurrentlyLoading ? 'opacity-60 pointer-events-none' : ''}>
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-base md:text-lg">
-            <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">1</span>
-            {t('planner.form.partyType.title')}
-          </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
-            {[
-              { value: 'child', label: t('planner.form.partyType.child'), desc: t('planner.form.partyType.descriptions.child'), icon: 'Baby' },
-              { value: 'adult', label: t('planner.form.partyType.adult'), desc: t('planner.form.partyType.descriptions.adult'), icon: 'User' },
-              { value: 'elderly', label: t('planner.form.partyType.elderly'), desc: t('planner.form.partyType.descriptions.elderly'), icon: 'Users' }
-            ].map((option) => (
-              <Button
-                key={option.value}
-                variant={state.formData.partyType === option.value ? "default" : "outline"}
-                className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
-                onClick={() => handlePartyTypeSelect(option.value as any)}
-                disabled={isCurrentlyLoading}
-              >
-                <Icon name={option.icon as keyof typeof icons} size={20} color="currentColor" />
-                <div className="space-y-1">
-                  <div className="font-semibold text-sm">{option.label}</div>
-                  <div className="text-xs text-muted-foreground">{option.desc}</div>
-                </div>
-              </Button>
-            ))}
-          </div>
+      <CardContent className="pt-0">
+        {children}
         </CardContent>
       </Card>
->>>>>>> parent of f6e9e17 (修复生成页面体验效果)
+  );
 
-      {/* 1. 派对类型选择 */}
-      <Card className="border-primary/20">
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <span className="text-primary font-bold">1</span>
+  return (
+    <div className="party-planner-form space-y-3">
+      {/* 页面标题 - 调整为与生成按钮一致的深色背景，文字改为白色 */}
+      <Card className="bg-primary border border-primary shadow-sm">
+        <CardHeader className="text-center py-4">
+          <div className="flex items-center justify-center mb-2">
+            <Sparkles className="w-5 h-5 text-white mr-2" />
+            <CardTitle className="text-lg font-bold text-white">{t('planner.form.title')}</CardTitle>
+            <Sparkles className="w-5 h-5 text-white ml-2" />
             </div>
-            <div>
-              <h2 className="text-lg">{t('planner.form.partyType.title')}</h2>
-              <p className="text-sm text-muted-foreground font-normal">{t('planner.form.partyType.subtitle')}</p>
-            </div>
-          </CardTitle>
+          <p className="text-white/90 text-sm">{t('planner.form.subtitle')}</p>
         </CardHeader>
-<<<<<<< HEAD
-        <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {partyTypes.map((type) => {
-            const IconComponent = icons[type.icon as keyof typeof icons];
+      </Card>
+
+      {/* 步骤1: 派对类型 - 调整字号和卡片尺寸与派对规模保持一致 */}
+      <StepCard
+        step={1}
+        title={t('planner.form.partyType.title')}
+        subtitle={t('planner.form.partyType.subtitle')}
+      >
+        <div className="grid grid-cols-3 gap-3">
+          {partyTypes.map((type: any) => {
+            const IconComponent = type.icon;
+            const isSelected = state.formData.partyType === type.value;
+            
             return (
-              <button
+              <div
                 key={type.id}
-                onClick={() => updateFormData({ partyType: type.id as any })}
-                className={`p-4 rounded-lg border-2 text-left transition-all hover:shadow-md ${
-                  formData.partyType === type.id
+                className={`group p-3 rounded-lg border cursor-pointer transition-all duration-200 ${
+                  isSelected 
                     ? 'border-primary bg-primary/5 shadow-sm'
-                    : 'border-border hover:border-primary/50'
+                    : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
                 }`}
+                onClick={() => handlePartyTypeSelect(type.value as any)}
               >
-                <div className="flex items-start gap-3">
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                    formData.partyType === type.id ? 'bg-primary/20' : 'bg-muted'
+                <div className="text-center space-y-2">
+                  <div className={`p-2 rounded-full mx-auto w-fit transition-colors ${
+                    isSelected ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'
                   }`}>
-                    <IconComponent className={`w-5 h-5 ${
-                      formData.partyType === type.id ? 'text-primary' : 'text-muted-foreground'
-                    }`} />
+                    <IconComponent className="w-5 h-5" />
                   </div>
-=======
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
-            {[
-              { value: 'small', label: t('planner.form.guestCount.small'), desc: t('planner.form.guestCount.descriptions.small'), icon: 'Users' },
-              { value: 'medium', label: t('planner.form.guestCount.medium'), desc: t('planner.form.guestCount.descriptions.medium'), icon: 'Users' },
-              { value: 'large', label: t('planner.form.guestCount.large'), desc: t('planner.form.guestCount.descriptions.large'), icon: 'Users' }
-            ].map((option) => (
-              <Button
-                key={option.value}
-                variant={state.formData.guestCount === option.value ? "default" : "outline"}
-                className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
-                onClick={() => handleGuestCountSelect(option.value as any)}
-                disabled={isCurrentlyLoading}
-              >
-                <Icon name={option.icon as keyof typeof icons} size={20} color="currentColor" />
-                <div className="space-y-1">
-                  <div className="font-semibold text-sm">{option.label}</div>
-                  <div className="text-xs text-muted-foreground">{option.desc}</div>
-                </div>
-              </Button>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Step 3: Venue */}
-      <Card className={isCurrentlyLoading ? 'opacity-60 pointer-events-none' : ''}>
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-base md:text-lg">
-            <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">3</span>
-            {t('planner.form.venue.title')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-            {[
-              { value: 'indoor', label: t('planner.form.venue.indoor'), desc: t('planner.form.venue.descriptions.indoor'), icon: 'Home' },
-              { value: 'outdoor', label: t('planner.form.venue.outdoor'), desc: t('planner.form.venue.descriptions.outdoor'), icon: 'Trees' }
-            ].map((option) => (
-              <Button
-                key={option.value}
-                variant={state.formData.venue === option.value ? "default" : "outline"}
-                className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
-                onClick={() => handleVenueSelect(option.value as any)}
-                disabled={isCurrentlyLoading}
-              >
-                <Icon name={option.icon as keyof typeof icons} size={20} color="currentColor" />
-                <div className="space-y-1">
-                  <div className="font-semibold text-sm">{option.label}</div>
-                  <div className="text-xs text-muted-foreground">{option.desc}</div>
-                </div>
-              </Button>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Step 4: Budget */}
-      <Card className={isCurrentlyLoading ? 'opacity-60 pointer-events-none' : ''}>
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-base md:text-lg">
-            <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">4</span>
-            {t('planner.form.budget.title')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
-            {[
-              { value: 'low', label: t('planner.form.budget.low'), desc: t('planner.form.budget.descriptions.low'), icon: 'DollarSign' },
-              { value: 'medium', label: t('planner.form.budget.medium'), desc: t('planner.form.budget.descriptions.medium'), icon: 'DollarSign' },
-              { value: 'high', label: t('planner.form.budget.high'), desc: t('planner.form.budget.descriptions.high'), icon: 'DollarSign' }
-            ].map((option) => (
-              <Button
-                key={option.value}
-                variant={state.formData.budget === option.value ? "default" : "outline"}
-                className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
-                onClick={() => handleBudgetSelect(option.value as any)}
-                disabled={isCurrentlyLoading}
-              >
-                <Icon name={option.icon as keyof typeof icons} size={20} color="currentColor" />
-                <div className="space-y-1">
-                  <div className="font-semibold text-sm">{option.label}</div>
-                  <div className="text-xs text-muted-foreground">{option.desc}</div>
-                </div>
-              </Button>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Step 5: Theme */}
-      <Card className={isCurrentlyLoading ? 'opacity-60 pointer-events-none' : ''}>
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-base md:text-lg">
-            <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">5</span>
-            {t('planner.form.theme.title')}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-              {themeOptions.map((theme) => (
-                <Button
-                  key={theme.id}
-                  variant={state.formData.theme === t(`planner.form.theme.${theme.id}`) ? "default" : "outline"}
-                  className="h-auto p-3 md:p-4 flex items-start gap-3 text-left justify-start"
-                  onClick={() => handleThemeSelect(theme.id)}
-                  disabled={isCurrentlyLoading}
-                >
-                  <Icon name={theme.icon as keyof typeof icons} size={18} color="currentColor" className="mt-0.5 flex-shrink-0" />
->>>>>>> parent of f6e9e17 (修复生成页面体验效果)
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-sm">{type.title}</h3>
-                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{type.subtitle}</p>
-                    <div className="flex flex-wrap gap-1 mt-2">
-                      {type.badges.map((badge, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
-                          {badge}
-                        </Badge>
-                      ))}
-                    </div>
+                  <div className="space-y-1">
+                    <h4 className="font-semibold text-sm text-gray-900">{type.title}</h4>
+                    <p className="text-xs text-gray-500 leading-relaxed">{type.subtitle}</p>
                   </div>
+                  {isSelected && (
+                    <CheckCircle2 className="w-4 h-4 text-primary mx-auto" />
+                  )}
                 </div>
-              </button>
+              </div>
             );
           })}
-        </CardContent>
-      </Card>
+        </div>
+      </StepCard>
 
-      {/* 2. 聚会规模选择 */}
-      <Card className="border-primary/20">
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <span className="text-primary font-bold">2</span>
-            </div>
-            <div>
-              <h2 className="text-lg">{t('planner.form.guestCount.title')}</h2>
-              <p className="text-sm text-muted-foreground font-normal">{t('planner.form.guestCount.subtitle')}</p>
-            </div>
-          </CardTitle>
-        </CardHeader>
-<<<<<<< HEAD
-        <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {guestCounts.map((option) => (
-            <button
-              key={option.id}
-              onClick={() => updateFormData({ guestCount: option.id as any })}
-              className={`p-4 rounded-lg border-2 text-center transition-all hover:shadow-md ${
-                formData.guestCount === option.id
+      {/* 步骤2: 聚会规模 - 优化文字排版 */}
+      <StepCard
+        step={2}
+        title={t('planner.form.guestCount.title')}
+        subtitle={t('planner.form.guestCount.subtitle')}
+      >
+        <div className="grid grid-cols-3 gap-3">
+          {guestCounts.map((count: any) => {
+            const isSelected = state.formData.guestCount === count.value;
+            
+            return (
+              <div
+                key={count.id}
+                className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 text-center ${
+                  isSelected 
                   ? 'border-primary bg-primary/5 shadow-sm'
-                  : 'border-border hover:border-primary/50'
-              }`}
-            >
-              <h3 className="font-semibold text-sm mb-1">{option.label}</h3>
-              <p className="text-xs text-muted-foreground">{option.desc}</p>
-            </button>
-          ))}
-        </CardContent>
-      </Card>
-
-      {/* 3. 场地选择 */}
-      <Card className="border-primary/20">
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <span className="text-primary font-bold">3</span>
-            </div>
-            <div>
-              <h2 className="text-lg">{t('planner.form.venue.title')}</h2>
-              <p className="text-sm text-muted-foreground font-normal">{t('planner.form.venue.subtitle')}</p>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {venues.map((venue) => (
-            <button
-              key={venue.id}
-              onClick={() => updateFormData({ venue: venue.id as any })}
-              className={`p-3 rounded-lg border-2 text-center transition-all hover:shadow-md ${
-                formData.venue === venue.id
-                  ? 'border-primary bg-primary/5 shadow-sm'
-                  : 'border-border hover:border-primary/50'
-              }`}
-            >
-              <h3 className="font-semibold text-sm mb-1">{venue.label}</h3>
-              <p className="text-xs text-muted-foreground">{venue.desc}</p>
-            </button>
-          ))}
-        </CardContent>
-      </Card>
-
-      {/* 4. 预算选择 */}
-      <Card className="border-primary/20">
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <span className="text-primary font-bold">4</span>
-            </div>
-            <div>
-              <h2 className="text-lg">{t('planner.form.budget.title')}</h2>
-              <p className="text-sm text-muted-foreground font-normal">{t('planner.form.budget.subtitle')}</p>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-3">
-          {budgets.map((budget) => (
-            <button
-              key={budget.id}
-              onClick={() => updateFormData({ budget: budget.id as any })}
-              className={`p-4 rounded-lg border-2 text-center transition-all hover:shadow-md ${
-                formData.budget === budget.id
-                  ? 'border-primary bg-primary/5 shadow-sm'
-                  : 'border-border hover:border-primary/50'
-              }`}
-            >
-              <h3 className="font-semibold text-sm mb-1">{budget.label}</h3>
-              <p className="text-xs text-muted-foreground">{budget.desc}</p>
-            </button>
-          ))}
-        </CardContent>
-      </Card>
-
-      {/* 5. 主题选择 */}
-      <Card className="border-primary/20">
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <span className="text-primary font-bold">5</span>
-            </div>
-            <div>
-              <h2 className="text-lg">{t('planner.form.theme.title')}</h2>
-              <p className="text-sm text-muted-foreground font-normal">{t('planner.form.theme.subtitle')}</p>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* 预设主题 */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {themes.map((theme) => (
-              <button
-                key={theme.id}
-                onClick={() => {
-                  updateFormData({ theme: theme.title });
-                  setShowCustomTheme(false);
-                }}
-                className={`relative p-4 rounded-lg border-2 text-left transition-all hover:shadow-md overflow-hidden ${
-                  formData.theme === theme.title
-                    ? 'border-primary shadow-sm'
-                    : 'border-border hover:border-primary/50'
+                    : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
                 }`}
-=======
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-            {atmosphereOptions.map((option) => (
-              <Button
-                key={option}
-                variant={state.formData.atmosphere === option ? "default" : "outline"}
-                className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
-                onClick={() => handleAtmosphereSelect(option)}
-                disabled={isCurrentlyLoading}
->>>>>>> parent of f6e9e17 (修复生成页面体验效果)
+                onClick={() => handleGuestCountSelect(count.value as any)}
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-10`}></div>
-                <div className="relative">
-                  <h3 className="font-semibold text-sm">{theme.title}</h3>
-                  <p className="text-xs text-muted-foreground mt-1">{theme.subtitle}</p>
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {theme.badges.map((badge, index) => (
-                      <Badge key={index} variant="secondary" className="text-xs">
+                <div className={`w-2 h-2 rounded-full mx-auto mb-2 transition-colors ${
+                  isSelected ? 'bg-primary' : 'bg-gray-300'
+                }`} />
+                <h4 className="font-semibold text-sm text-gray-900 mb-1">{count.label}</h4>
+                <p className="text-xs text-gray-500">{count.desc}</p>
+                {isSelected && (
+                  <CheckCircle2 className="w-4 h-4 text-primary mx-auto mt-2" />
+                )}
+            </div>
+            );
+          })}
+            </div>
+      </StepCard>
+
+      {/* 步骤3: 场地选择 - 2x2网格，优化文字排版 */}
+      <StepCard
+        step={3}
+        title={t('planner.form.venue.title')}
+        subtitle={t('planner.form.venue.subtitle')}
+      >
+        <div className="grid grid-cols-2 gap-3">
+          {venues.map((venue: any) => {
+            const isSelected = state.formData.venue === venue.value;
+            
+            return (
+              <div
+              key={venue.id}
+                className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 text-center ${
+                  isSelected 
+                  ? 'border-primary bg-primary/5 shadow-sm'
+                    : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
+                }`}
+                onClick={() => handleVenueSelect(venue.value as any)}
+              >
+                <div className={`w-2 h-2 rounded-full mx-auto mb-2 transition-colors ${
+                  isSelected ? 'bg-primary' : 'bg-gray-300'
+                }`} />
+                <h4 className="font-semibold text-sm text-gray-900 mb-1">{venue.label}</h4>
+                <p className="text-xs text-gray-500 leading-relaxed">{venue.desc}</p>
+                {isSelected && (
+                  <CheckCircle2 className="w-4 h-4 text-primary mx-auto mt-2" />
+                )}
+            </div>
+            );
+          })}
+            </div>
+      </StepCard>
+
+      {/* 步骤4: 预算设置 - 优化文字排版 */}
+      <StepCard
+        step={4}
+        title={t('planner.form.budget.title')}
+        subtitle={t('planner.form.budget.subtitle')}
+      >
+        <div className="grid grid-cols-3 gap-3">
+          {budgets.map((budget: any) => {
+            const isSelected = state.formData.budget === budget.value;
+            
+            return (
+              <div
+              key={budget.id}
+                className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 text-center ${
+                  isSelected 
+                  ? 'border-primary bg-primary/5 shadow-sm'
+                    : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
+                }`}
+                onClick={() => handleBudgetSelect(budget.value as any)}
+              >
+                <div className={`w-2 h-2 rounded-full mx-auto mb-2 transition-colors ${
+                  isSelected ? 'bg-primary' : 'bg-gray-300'
+                }`} />
+                <h4 className="font-semibold text-sm text-gray-900 mb-1">{budget.label}</h4>
+                <p className="text-xs text-gray-500">{budget.desc}</p>
+                {isSelected && (
+                  <CheckCircle2 className="w-4 h-4 text-primary mx-auto mt-2" />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </StepCard>
+
+      {/* 步骤5: 主题选择 - 2x3网格，优化文字排版和尺寸 */}
+      <StepCard
+        step={5}
+        title={t('planner.form.theme.title')}
+        subtitle={t('planner.form.theme.subtitle')}
+      >
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            {themes.map((theme: any) => {
+              // 修复选中逻辑：如果是自定义主题激活状态，固定选项都不选中
+              const isSelected = !isCustomThemeActive && state.formData.theme === theme.title;
+              
+              return (
+                <div
+                  key={theme.id}
+                  className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 ${
+                    isSelected 
+                      ? 'border-primary bg-primary/5 shadow-sm' 
+                      : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
+                  }`}
+                  onClick={() => handleThemeSelect(theme.id)}
+                >
+                  <div className="flex items-start gap-2">
+                    <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 transition-colors ${
+                      isSelected ? 'bg-primary' : 'bg-gray-300'
+                    }`} />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between mb-1">
+                        <h4 className="font-semibold text-sm text-gray-900 truncate">{theme.title}</h4>
+                        {isSelected && <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />}
+                      </div>
+                      <p className="text-xs text-gray-500 mb-2 leading-relaxed">{theme.subtitle}</p>
+                      <div className="flex gap-1 flex-wrap">
+                        {theme.badges.map((badge: any, idx: number) => (
+                          <Badge 
+                            key={idx} 
+                            variant="secondary" 
+                            className="text-xs px-1.5 py-0.5 h-auto bg-gray-100 text-gray-600"
+                          >
                         {badge}
                       </Badge>
                     ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </button>
-            ))}
+              );
+            })}
           </div>
 
-          {/* 自定义主题 */}
-          <div className="space-y-3">
-            <button
-              onClick={() => setShowCustomTheme(!showCustomTheme)}
-              className={`w-full p-4 rounded-lg border-2 text-center transition-all hover:shadow-md ${
-                showCustomTheme && !themes.some(t => t.title === formData.theme)
+          {/* 自定义主题选项 - 彻底优化防止页面跳转 */}
+          <div 
+            ref={customThemeContainerRef}
+            className={`custom-theme-container p-3 rounded-lg border border-dashed transition-all duration-200 ${
+              showCustomTheme 
+                ? 'border-primary bg-gradient-to-br from-primary/10 via-primary/5 to-primary/10' 
+                : isCustomThemeActive
                   ? 'border-primary bg-primary/5 shadow-sm'
-                  : 'border-border hover:border-primary/50'
-              }`}
-            >
-              <h3 className="font-semibold text-sm">{t('planner.form.theme.customTheme')}</h3>
-              <p className="text-xs text-muted-foreground mt-1">{t('planner.form.theme.customThemeDesc')}</p>
-            </button>
-
-            {showCustomTheme && (
-              <div className="space-y-2">
-                <Label htmlFor="customTheme" className="text-sm font-medium">
-                  {t('planner.form.theme.customThemeLabel')}
+                  : 'border-gray-300 hover:border-primary/50 bg-gradient-to-br from-gray-50 to-white hover:from-primary/5 hover:to-primary/10'
+            }`}
+            style={{
+              // 防止布局跳动
+              minHeight: showCustomTheme ? 'auto' : '80px',
+              contain: 'layout' // CSS containment 防止布局抖动
+            }}
+          >
+            {!showCustomTheme ? (
+              <div 
+                className="text-center cursor-pointer py-2"
+                onClick={handleShowCustomTheme}
+                style={{ height: '60px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+              >
+                <div className="flex items-center justify-center mb-2">
+                  <Sparkles className="w-5 h-5 text-gray-400" />
+                  {isCustomThemeActive && <CheckCircle2 className="w-4 h-4 text-primary ml-2" />}
+                </div>
+                <h4 className="font-semibold text-sm text-gray-700 mb-1">
+                  {isCustomThemeActive ? state.formData.theme : getCustomThemeText('title')}
+                </h4>
+                <p className="text-xs text-gray-500">
+                  {isCustomThemeActive ? getCustomThemeText('editHint') : getCustomThemeText('desc')}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3" style={{ minHeight: '120px' }}>
+                <Label htmlFor="customTheme" className="text-sm font-medium text-gray-700">
+                  {getCustomThemeText('label')}
                 </Label>
                 <Input
+                  ref={customThemeInputRef}
                   id="customTheme"
                   value={customTheme}
-                  onChange={(e) => {
-                    setCustomTheme(e.target.value);
-                    updateFormData({ theme: e.target.value });
+                  onChange={handleCustomThemeChange}
+                  placeholder={getCustomThemeText('placeholder')}
+                  className="custom-theme-input text-sm h-8 border-gray-300 focus:border-primary"
+                  autoComplete="off"
+                  onKeyDown={(e) => {
+                    // 只阻止特定按键的默认行为，不阻止输入
+                    if (e.key === 'Enter' && customTheme.trim()) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleCustomThemeSubmit();
+                    } else if (e.key === 'Escape') {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleCustomThemeCancel();
+                    }
+                    // 对于其他按键，不做任何阻止，让输入正常进行
                   }}
-                  placeholder={t('planner.form.theme.customThemePlaceholder')}
-                  className="text-sm"
                 />
-                <p className="text-xs text-muted-foreground">
-                  {t('planner.form.theme.customThemeHelp')}
-                </p>
+                <p className="text-xs text-gray-500">{getCustomThemeText('help')}</p>
+                <div className="flex gap-2">
+                  <Button 
+                    size="sm" 
+                    onClick={handleCustomThemeSubmit} 
+                    disabled={!customTheme.trim()}
+                    className="h-7 text-sm bg-primary hover:bg-primary/90"
+                  >
+                    {getCustomThemeText('confirmText')}
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    onClick={handleCustomThemeCancel}
+                    className="h-7 text-sm border-gray-300 text-gray-700 hover:bg-gray-50"
+                  >
+                    {getCustomThemeText('cancelText')}
+                  </Button>
+                </div>
               </div>
             )}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </StepCard>
 
-      {/* 6. 派对氛围选择 */}
-      <Card className="border-primary/20">
-        <CardHeader className="pb-4">
-          <CardTitle className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-              <span className="text-primary font-bold">6</span>
-            </div>
-            <div>
-              <h2 className="text-lg">{t('planner.form.atmosphere.title')}</h2>
-              <p className="text-sm text-muted-foreground font-normal">{t('planner.form.atmosphere.subtitle')}</p>
-            </div>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {atmospheres.map((atmosphere) => (
-            <button
+      {/* 步骤6: 氛围选择 - 2x3网格，优化文字排版 */}
+      <StepCard
+        step={6}
+        title={t('planner.form.atmosphere.title')}
+        subtitle={t('planner.form.atmosphere.subtitle')}
+      >
+        <div className="grid grid-cols-2 gap-3">
+          {atmospheres.map((atmosphere: any) => {
+            const isSelected = state.formData.atmosphere === atmosphere.id;
+            
+            return (
+              <div
               key={atmosphere.id}
-              onClick={() => updateFormData({ atmosphere: atmosphere.id as any })}
-              className={`p-3 rounded-lg border-2 text-center transition-all hover:shadow-md ${
-                formData.atmosphere === atmosphere.id
+                className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 text-center ${
+                  isSelected 
                   ? 'border-primary bg-primary/5 shadow-sm'
-                  : 'border-border hover:border-primary/50'
-              }`}
-            >
-              <h3 className="font-semibold text-sm mb-1">{atmosphere.label}</h3>
-              <p className="text-xs text-muted-foreground">{atmosphere.desc}</p>
-            </button>
-          ))}
-        </CardContent>
-      </Card>
+                    : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
+                }`}
+                onClick={() => handleAtmosphereSelect(atmosphere.id)}
+              >
+                <div className={`w-2 h-2 rounded-full mx-auto mb-2 transition-colors ${
+                  isSelected ? 'bg-primary' : 'bg-gray-300'
+                }`} />
+                <h4 className="font-semibold text-sm text-gray-900 mb-1">{atmosphere.label}</h4>
+                <p className="text-xs text-gray-500 leading-relaxed">{atmosphere.desc}</p>
+                {isSelected && (
+                  <CheckCircle2 className="w-4 h-4 text-primary mx-auto mt-2" />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </StepCard>
 
-      {/* 错误提示 */}
-      {error && (
-        <Card className="border-destructive/20 bg-destructive/5">
-          <CardContent className="py-4">
-            <p className="text-destructive text-sm text-center">{error}</p>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* 生成按钮 */}
-      <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
-<<<<<<< HEAD
-        <CardContent className="py-6">
-          <div className="text-center space-y-4">
-            <p className="text-sm text-muted-foreground">
-              {formData.partyType && formData.guestCount && formData.venue && formData.budget && formData.theme && formData.atmosphere
-                ? t('planner.form.readyToGenerate')
-                : t('planner.form.completeAllSteps')
-              }
-=======
-        <CardContent className="pt-4 pb-4">
+      {/* 生成按钮 - 简化设计 */}
+      <div className="pt-4">
           <Button
             onClick={handleGenerateClick}
             disabled={!isFormComplete() || isCurrentlyLoading}
-            className={`w-full h-11 md:h-12 text-base font-medium relative transition-all duration-200 ${
-              isCurrentlyLoading ? 'opacity-75 cursor-not-allowed' : ''
-            }`}
             size="lg"
+          className="w-full h-12 text-base font-semibold bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transition-all duration-200"
           >
             {isCurrentlyLoading ? (
               <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
                 {t('planner.form.generating')}
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4 mr-2" />
-                {t('planner.form.generateButton')}
+              <Sparkles className="w-5 h-5 mr-2" />
+              {state.result ? t('planner.form.regenerateButton') : t('planner.form.generateButton')}
+              <ArrowRight className="w-5 h-5 ml-2" />
               </>
             )}
           </Button>
           
-          {state.error && (
-            <p className="text-destructive text-sm mt-3 text-center">{state.error}</p>
-          )}
-          
-          {/* 表单完整性提示 */}
-          {!isFormComplete() && !isCurrentlyLoading && (
-            <p className="text-muted-foreground text-sm mt-3 text-center">
-              {t('planner.form.completeAllSteps')}
->>>>>>> parent of f6e9e17 (修复生成页面体验效果)
-            </p>
-            <Button 
-              onClick={handleGenerateClick}
-              disabled={isLoading || !formData.partyType || !formData.guestCount || !formData.venue || !formData.budget || !formData.theme || !formData.atmosphere}
-              size="lg"
-              className="w-full md:w-auto min-w-48"
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  {t('planner.form.generating')}
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  {result ? t('planner.form.regenerateButton') : t('planner.form.generateButton')}
-                </>
-              )}
-            </Button>
+        {isCurrentlyLoading && (
+          <div className="flex items-center justify-center gap-2 mt-2">
+            <div className="w-1 h-1 bg-primary rounded-full animate-pulse"></div>
+            <p className="text-xs text-gray-600">{t('planner.form.generatingDesc')}</p>
+            <div className="w-1 h-1 bg-primary rounded-full animate-pulse"></div>
           </div>
-        </CardContent>
-      </Card>
+        )}
+      </div>
     </div>
   );
 } 

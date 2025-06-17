@@ -1,18 +1,18 @@
 export interface PartyPlanRequest {
-  partyType: 'adult' | 'child' | 'elderly' | '';
+  partyType: 'adult' | 'child' | 'elderly' | 'teen' | '';
   guestCount: 'small' | 'medium' | 'large' | '';
-  venue: 'indoor' | 'outdoor' | '';
-  budget: 'low' | 'medium' | 'high' | '';
+  venue: 'home' | 'outdoor' | 'restaurant' | 'hall' | '';
+  budget: 'budget' | 'standard' | 'premium' | '';
   theme: string;
-  atmosphere: 'relaxed' | 'fun' | 'romantic' | 'elegant' | 'energetic' | 'peaceful' | '';
+  atmosphere: 'lively' | 'elegant' | 'casual' | 'formal' | 'creative' | 'intimate' | '';
 }
 
 // 新增：表单数据类型
 export interface PartyFormData {
-  partyType: 'adult' | 'child' | 'elderly';
+  partyType: 'adult' | 'child' | 'elderly' | 'teen';
   guestCount: 'small' | 'medium' | 'large';
-  venue: 'indoor' | 'outdoor';
-  budget: 'low' | 'medium' | 'high';
+  venue: 'home' | 'outdoor' | 'restaurant' | 'hall';
+  budget: 'budget' | 'standard' | 'premium';
   theme: string;
   atmosphere: string;
 }

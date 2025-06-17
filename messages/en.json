@@ -136,85 +136,115 @@
       "subtitle": "Tell us your needs, and we'll customize the perfect birthday party plan for you",
       "partyType": {
         "title": "Choose Party Type",
-        "adult": "Adult Birthday",
-        "child": "Kids Birthday",
-        "elderly": "Senior Birthday",
-        "teen": "Teen",
-        "descriptions": {
-          "child": "Ages 3-12",
-          "adult": "Ages 18-50",
-          "elderly": "Ages 50+"
+        "subtitle": "Select the most suitable party plan for different age groups",
+        "kidsBirthday": "Kids Birthday",
+        "kidsBirthdayDesc": "Ages 3-17",
+        "adultBirthday": "Adult Birthday",
+        "adultBirthdayDesc": "Ages 18-59", 
+        "seniorBirthday": "Senior Birthday",
+        "seniorBirthdayDesc": "Ages 60+",
+        "badges": {
+          "interactive": "Interactive",
+          "colorful": "Colorful",
+          "mature": "Mature",
+          "personalized": "Personal",
+          "warm": "Warm",
+          "meaningful": "Meaningful"
         }
       },
       "guestCount": {
-        "title": "Party Size",
-        "small": "Small Party",
-        "medium": "Medium Party",
-        "large": "Large Party",
-        "descriptions": {
-          "small": "Up to 10 people",
-          "medium": "10-30 people",
-          "large": "30+ people"
-        }
+        "title": "Determine Party Size",
+        "subtitle": "Choose the appropriate number of party guests",
+        "smallParty": "Small Party",
+        "smallPartyDesc": "Up to 10 people",
+        "mediumParty": "Medium Party", 
+        "mediumPartyDesc": "10-30 people",
+        "largeParty": "Large Party",
+        "largePartyDesc": "30+ people"
       },
       "venue": {
         "title": "Choose Venue",
-        "indoor": "Indoor",
+        "subtitle": "Select your ideal location based on party style",
+        "home": "Home",
+        "homeDesc": "Cozy & comfortable, high freedom",
         "outdoor": "Outdoor",
-        "descriptions": {
-          "indoor": "Home, restaurant, club",
-          "outdoor": "Park, garden, beach"
-        }
+        "outdoorDesc": "Park, garden or beach",
+        "restaurant": "Restaurant/Cafe",
+        "restaurantDesc": "Relaxed atmosphere, no prep needed",
+        "hall": "Event Hall/Space",
+        "hallDesc": "Spacious, perfect for large parties"
       },
       "budget": {
-        "title": "Set Budget",
-        "low": "Budget",
-        "medium": "Standard",
-        "high": "Premium",
-        "descriptions": {
-          "low": "$500-1500",
-          "medium": "$1500-5000",
-          "high": "$5000+"
-        }
+        "title": "Set Budget Range",
+        "subtitle": "Set a reasonable budget for your party",
+        "budget": "Budget",
+        "budgetDesc": "$70-210",
+        "standard": "Standard",
+        "standardDesc": "$210-700",
+        "premium": "Premium",
+        "premiumDesc": "$700+"
       },
       "theme": {
-        "title": "Choose Theme",
-        "placeholder": "Enter your theme...",
-        "modern": "Modern",
-        "retro": "Retro",
-        "garden": "Garden",
-        "superhero": "Superhero",
-        "princess": "Princess",
-        "ocean": "Ocean",
+        "title": "Choose Creative Theme",
+        "subtitle": "Add unique personality and fun to your party",
+        "vintage": {
+          "title": "Vintage Style",
+          "subtitle": "Classic times, warm memories",
+          "badge1": "Nostalgic",
+          "badge2": "Classic"
+        },
+        "luxury": {
+          "title": "Luxury Elegant",
+          "subtitle": "High-end taste, refined experience",
+          "badge1": "Luxury",
+          "badge2": "Elegant"
+        },
+        "modern": {
+          "title": "Modern Minimal",
+          "subtitle": "Trendy avant-garde, simple style",
+          "badge1": "Modern",
+          "badge2": "Minimal"
+        },
+        "cartoon": {
+          "title": "Cartoon Anime",
+          "subtitle": "Fantasy world, dreams take flight",
+          "badge1": "Playful",
+          "badge2": "Dreams"
+        },
+        "adventure": {
+          "title": "Adventure Quest",
+          "subtitle": "Mystery adventure, exciting fun",
+          "badge1": "Adventure",
+          "badge2": "Exciting"
+        },
+        "traditional": {
+          "title": "Cultural Heritage",
+          "subtitle": "Cultural tradition, meaningful",
+          "badge1": "Traditional",
+          "badge2": "Cultural"
+        },
         "customTheme": "Custom Theme",
-        "customThemeName": "Theme Name",
-        "confirm": "Confirm",
-        "cancel": "Cancel",
-        "descriptions": {
-          "modern": "Minimalist, elegant style",
-          "retro": "80s nostalgia, classic vibes",
-          "garden": "Natural, floral decorations",
-          "superhero": "Marvel/DC heroes, action fun",
-          "princess": "Fantasy castle, pink decor",
-          "ocean": "Marine life, blue theme"
-        }
+        "customThemeDesc": "Add unique personality and fun to your party",
+        "customThemeLabel": "Your Creative Theme",
+        "customThemePlaceholder": "e.g: 80s Retro, Cyberpunk...",
+        "customThemeHelp": "AI will generate creative plans based on your theme",
+        "customThemeEditHint": "Click to edit your custom theme"
       },
       "atmosphere": {
-        "title": "Party Atmosphere",
-        "lively": "Lively & Fun",
-        "elegant": "Elegant",
-        "casual": "Casual",
-        "formal": "Formal",
-        "creative": "Creative",
-        "intimate": "Intimate",
-        "descriptions": {
-          "lively": "Music, games, interaction",
-          "elegant": "Light music, conversation",
-          "casual": "Relaxed, simple dining",
-          "formal": "Ceremonial, speeches",
-          "creative": "DIY activities, games",
-          "intimate": "Small group, deep talks"
-        }
+        "title": "Set Party Atmosphere",
+        "subtitle": "Choose the overall feeling you want for your party",
+        "quiet": "Quiet Leisure",
+        "quietDesc": "Relaxed chat, soothing music",
+        "celebration": "Wild Celebration",
+        "celebrationDesc": "Festive celebration, passionate",
+        "intimate": "Deep Connection",
+        "intimateDesc": "Small gathering, in-depth talks",
+        "elegant": "Elegant Grace",
+        "elegantDesc": "Refined living, elegant experience",
+        "joyful": "Cheerful Active",
+        "joyfulDesc": "Laughter & joy, full of energy",
+        "warm": "Warm Touching",
+        "warmDesc": "Emotional resonance, heartwarming"
       },
       "generateButton": "Generate Party Plan",
       "regenerateButton": "Generate New Plan",

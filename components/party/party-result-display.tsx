@@ -154,11 +154,27 @@ export function PartyResultDisplay() {
 
   // 获取选项文本的辅助函数
   const getPartyTypeText = (type: string) => {
-    return t(`planner.form.partyType.${type}`);
+    // 映射正确的翻译键名
+    const typeMap: Record<string, string> = {
+      'child': 'kidsBirthday',
+      'adult': 'adultBirthday', 
+      'elderly': 'seniorBirthday'
+    };
+    
+    const translationKey = typeMap[type] || type;
+    return t(`planner.form.partyType.${translationKey}`);
   };
 
   const getGuestCountText = (count: string) => {
-    return t(`planner.form.guestCount.${count}`);
+    // 映射正确的翻译键名
+    const countMap: Record<string, string> = {
+      'small': 'smallParty',
+      'medium': 'mediumParty',
+      'large': 'largeParty'
+    };
+    
+    const translationKey = countMap[count] || count;
+    return t(`planner.form.guestCount.${translationKey}`);
   };
 
   const getVenueText = (venue: string) => {
@@ -392,25 +408,25 @@ export function PartyResultDisplay() {
   // 空状态展示
   const renderEmptyState = () => (
     <div className="h-full" data-result-area>
-      <Card className="h-full border-2 border-dashed border-muted-foreground/25 bg-muted/30">
+      <Card className="h-full border border-gray-200 bg-white shadow-sm">
         <CardContent className="flex flex-col items-center justify-center h-full py-12 px-6">
           <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
             <Sparkles className="w-8 h-8 text-primary" />
           </div>
-          <h3 className="text-xl font-semibold mb-3 text-center">{t('planner.result.emptyState.title')}</h3>
-          <p className="text-muted-foreground text-center mb-6 leading-relaxed">
+          <h3 className="text-xl font-semibold mb-3 text-center text-gray-900">{t('planner.result.emptyState.title')}</h3>
+          <p className="text-gray-600 text-center mb-6 leading-relaxed">
             {t('planner.result.emptyState.description')}
           </p>
           <div className="w-full max-w-sm space-y-3">
-            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+            <div className="flex items-center gap-3 text-sm text-gray-600">
               <div className="w-2 h-2 rounded-full bg-primary/60"></div>
               <span>{t('planner.result.emptyState.feature1')}</span>
             </div>
-            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+            <div className="flex items-center gap-3 text-sm text-gray-600">
               <div className="w-2 h-2 rounded-full bg-primary/60"></div>
               <span>{t('planner.result.emptyState.feature2')}</span>
             </div>
-            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+            <div className="flex items-center gap-3 text-sm text-gray-600">
               <div className="w-2 h-2 rounded-full bg-primary/60"></div>
               <span>{t('planner.result.emptyState.feature3')}</span>
             </div>
@@ -424,10 +440,10 @@ export function PartyResultDisplay() {
   if (isCurrentlyLoading) {
     return (
       <div className="sticky top-8" data-result-area>
-        <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-blue-100">
+        <Card className="border-blue-200 bg-white shadow-sm">
           <CardContent className="flex flex-col items-center justify-center py-16">
             <div className="relative mb-6">
-              <div className="w-16 h-16 rounded-full bg-blue-200 animate-pulse"></div>
+              <div className="w-16 h-16 rounded-full bg-blue-100 animate-pulse"></div>
               <Loader2 className="w-8 h-8 text-blue-600 animate-spin absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
             </div>
             <h3 className="text-xl font-semibold mb-2 text-blue-900">{t('planner.result.loading.title')}</h3>
@@ -449,13 +465,13 @@ export function PartyResultDisplay() {
   if (error) {
     return (
       <div className="sticky top-8" data-result-area>
-        <Card className="border-destructive/20 bg-destructive/5">
+        <Card className="border-red-200 bg-white shadow-sm">
           <CardContent className="py-12 text-center">
-            <div className="w-16 h-16 rounded-full bg-destructive/10 flex items-center justify-center mx-auto mb-4">
-              <FileText className="w-8 h-8 text-destructive" />
+            <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center mx-auto mb-4">
+              <FileText className="w-8 h-8 text-red-600" />
             </div>
-            <h3 className="text-lg font-semibold mb-2">{t('planner.result.error.title')}</h3>
-            <p className="text-destructive mb-6">{error}</p>
+            <h3 className="text-lg font-semibold mb-2 text-gray-900">{t('planner.result.error.title')}</h3>
+            <p className="text-red-600 mb-6">{error}</p>
             <Button onClick={() => window.location.reload()} variant="outline" size="sm">
               {t('planner.result.error.retry')}
             </Button>
@@ -471,15 +487,15 @@ export function PartyResultDisplay() {
 
     return (
       <div className="sticky top-8 space-y-4" data-result-area>
-        <Card className="border-primary/20 bg-gradient-to-br from-primary/5 to-primary/10">
+        <Card className="border-gray-200 bg-white shadow-sm">
           <CardHeader className="pb-4">
             <CardTitle className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
                 <Sparkles className="w-4 h-4 text-primary" />
               </div>
               <div>
-                <h2 className="text-lg">{t('planner.result.title')}</h2>
-                <p className="text-sm text-muted-foreground font-normal">{t('planner.result.subtitle')} • {t('planner.result.professionalScore')}：{level}</p>
+                <h2 className="text-lg text-gray-900">{t('planner.result.title')}</h2>
+                <p className="text-sm text-gray-600 font-normal">{t('planner.result.subtitle')} • {t('planner.result.professionalScore')}：{level}</p>
               </div>
             </CardTitle>
           </CardHeader>
@@ -504,12 +520,12 @@ export function PartyResultDisplay() {
                 <div className="w-6 h-6 rounded bg-primary/10 flex items-center justify-center">
                   <MapPin className="w-3 h-3 text-primary" />
                 </div>
-                <h3 className="font-semibold text-sm">{t('planner.result.venue')}</h3>
+                <h3 className="font-semibold text-sm text-gray-900">{t('planner.result.venue')}</h3>
                 <Badge variant="outline" className="text-xs">{t('planner.result.badges.budgetReference')}</Badge>
               </div>
               <div className="space-y-2 pl-8">
                 {result.venue.map((item, index) => (
-                  <div key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <div key={index} className="text-sm text-gray-600 flex items-start gap-2">
                     <span className="w-1 h-1 bg-primary rounded-full mt-2 flex-shrink-0"></span>
                     <span>{item}</span>
                   </div>
@@ -525,13 +541,13 @@ export function PartyResultDisplay() {
                 <div className="w-6 h-6 rounded bg-primary/10 flex items-center justify-center">
                   <Users className="w-3 h-3 text-primary" />
                 </div>
-                <h3 className="font-semibold text-sm">{t('planner.result.activities')}</h3>
+                <h3 className="font-semibold text-sm text-gray-900">{t('planner.result.activities')}</h3>
                 <Badge variant="outline" className="text-xs">{t('planner.result.badges.climaxMoment')}</Badge>
                 <Badge variant="outline" className="text-xs bg-pink-50 text-pink-700 border-pink-200">{t('planner.result.badges.emotionalTouch')}</Badge>
               </div>
               <div className="space-y-2 pl-8">
                 {result.activities.map((item, index) => (
-                  <div key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <div key={index} className="text-sm text-gray-600 flex items-start gap-2">
                     <span className="w-1 h-1 bg-primary rounded-full mt-2 flex-shrink-0"></span>
                     <span>{item}</span>
                   </div>
@@ -547,13 +563,13 @@ export function PartyResultDisplay() {
                 <div className="w-6 h-6 rounded bg-primary/10 flex items-center justify-center">
                   <Palette className="w-3 h-3 text-primary" />
                 </div>
-                <h3 className="font-semibold text-sm">{t('planner.result.decorations')}</h3>
+                <h3 className="font-semibold text-sm text-gray-900">{t('planner.result.decorations')}</h3>
                 <Badge variant="outline" className="text-xs">{t('planner.result.badges.shoppingList')}</Badge>
                 <Badge variant="outline" className="text-xs bg-purple-50 text-purple-700 border-purple-200">{t('planner.result.badges.immersiveExperience')}</Badge>
               </div>
               <div className="space-y-2 pl-8">
                 {result.decorations.map((item, index) => (
-                  <div key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <div key={index} className="text-sm text-gray-600 flex items-start gap-2">
                     <span className="w-1 h-1 bg-primary rounded-full mt-2 flex-shrink-0"></span>
                     <span>{item}</span>
                   </div>
@@ -569,13 +585,13 @@ export function PartyResultDisplay() {
                 <div className="w-6 h-6 rounded bg-primary/10 flex items-center justify-center">
                   <Utensils className="w-3 h-3 text-primary" />
                 </div>
-                <h3 className="font-semibold text-sm">{t('planner.result.catering')}</h3>
+                <h3 className="font-semibold text-sm text-gray-900">{t('planner.result.catering')}</h3>
                 <Badge variant="outline" className="text-xs">{t('planner.result.badges.priceReference')}</Badge>
                 <Badge variant="outline" className="text-xs bg-amber-50 text-amber-700 border-amber-200">{t('planner.result.badges.ceremonialSense')}</Badge>
               </div>
               <div className="space-y-2 pl-8">
                 {result.catering.map((item, index) => (
-                  <div key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <div key={index} className="text-sm text-gray-600 flex items-start gap-2">
                     <span className="w-1 h-1 bg-primary rounded-full mt-2 flex-shrink-0"></span>
                     <span>{item}</span>
                   </div>
@@ -591,13 +607,13 @@ export function PartyResultDisplay() {
                 <div className="w-6 h-6 rounded bg-primary/10 flex items-center justify-center">
                   <Music className="w-3 h-3 text-primary" />
                 </div>
-                <h3 className="font-semibold text-sm">{t('planner.result.music')}</h3>
+                <h3 className="font-semibold text-sm text-gray-900">{t('planner.result.music')}</h3>
                 <Badge variant="outline" className="text-xs">{t('planner.result.badges.timeSegmented')}</Badge>
                 <Badge variant="outline" className="text-xs bg-indigo-50 text-indigo-700 border-indigo-200">{t('planner.result.badges.emotionalRhythm')}</Badge>
               </div>
               <div className="space-y-2 pl-8">
                 {result.music.map((item, index) => (
-                  <div key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <div key={index} className="text-sm text-gray-600 flex items-start gap-2">
                     <span className="w-1 h-1 bg-primary rounded-full mt-2 flex-shrink-0"></span>
                     <span>{item}</span>
                   </div>
@@ -613,13 +629,13 @@ export function PartyResultDisplay() {
                 <div className="w-6 h-6 rounded bg-primary/10 flex items-center justify-center">
                   <Clock className="w-3 h-3 text-primary" />
                 </div>
-                <h3 className="font-semibold text-sm">{t('planner.result.schedule')}</h3>
+                <h3 className="font-semibold text-sm text-gray-900">{t('planner.result.schedule')}</h3>
                 <Badge variant="outline" className="text-xs">{t('planner.result.badges.climaxMarked')}</Badge>
                 <Badge variant="outline" className="text-xs bg-rose-50 text-rose-700 border-rose-200">{t('planner.result.badges.touchMoment')}</Badge>
               </div>
               <div className="space-y-2 pl-8">
                 {result.schedule.map((item, index) => (
-                  <div key={index} className="text-sm text-muted-foreground flex items-start gap-2">
+                  <div key={index} className="text-sm text-gray-600 flex items-start gap-2">
                     <span className="w-1 h-1 bg-primary rounded-full mt-2 flex-shrink-0"></span>
                     <span>{item}</span>
                   </div>
@@ -658,66 +674,66 @@ export function PartyResultDisplay() {
         </Card>
 
         {/* 专业评估卡片 - 缩小版本 */}
-        <Card className="border-green-200 bg-green-50">
+        <Card className="border-gray-200 bg-white shadow-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center">
                 <span className="text-green-600 text-xs">⭐</span>
               </div>
-              {t('planner.result.professionalEvaluation')}
+              <span className="text-gray-900">{t('planner.result.professionalEvaluation')}</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             <div className="space-y-1">
               <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">{t('planner.result.creativity')}</span>
+                <span className="text-gray-600">{t('planner.result.creativity')}</span>
                 <div className="flex items-center gap-1">
                   <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                     <div className={`h-full rounded-full ${scores.creativity >= 19 ? 'bg-green-500' : scores.creativity >= 18 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.creativity / 20) * 100}%`}}></div>
                   </div>
-                  <span className="text-xs font-medium w-8">{scores.creativity}/20</span>
+                  <span className="text-xs font-medium w-8 text-gray-900">{scores.creativity}/20</span>
                 </div>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">{t('planner.result.planning')}</span>
+                <span className="text-gray-600">{t('planner.result.planning')}</span>
                 <div className="flex items-center gap-1">
                   <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                     <div className={`h-full rounded-full ${scores.planning >= 19 ? 'bg-green-500' : scores.planning >= 18 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.planning / 20) * 100}%`}}></div>
                   </div>
-                  <span className="text-xs font-medium w-8">{scores.planning}/20</span>
+                  <span className="text-xs font-medium w-8 text-gray-900">{scores.planning}/20</span>
                 </div>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">{t('planner.result.budget')}</span>
+                <span className="text-gray-600">{t('planner.result.budget')}</span>
                 <div className="flex items-center gap-1">
                   <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                     <div className={`h-full rounded-full ${scores.budget >= 19 ? 'bg-green-500' : scores.budget >= 18 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.budget / 20) * 100}%`}}></div>
                   </div>
-                  <span className="text-xs font-medium w-8">{scores.budget}/20</span>
+                  <span className="text-xs font-medium w-8 text-gray-900">{scores.budget}/20</span>
                 </div>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">{t('planner.result.details')}</span>
+                <span className="text-gray-600">{t('planner.result.details')}</span>
                 <div className="flex items-center gap-1">
                   <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                     <div className={`h-full rounded-full ${scores.details >= 19 ? 'bg-green-500' : scores.details >= 18 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.details / 20) * 100}%`}}></div>
                   </div>
-                  <span className="text-xs font-medium w-8">{scores.details}/20</span>
+                  <span className="text-xs font-medium w-8 text-gray-900">{scores.details}/20</span>
                 </div>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">{t('planner.result.feasibility')}</span>
+                <span className="text-gray-600">{t('planner.result.feasibility')}</span>
                 <div className="flex items-center gap-1">
                   <div className="w-12 h-1.5 bg-gray-200 rounded-full overflow-hidden">
                     <div className={`h-full rounded-full ${scores.feasibility >= 19 ? 'bg-green-500' : scores.feasibility >= 18 ? 'bg-yellow-500' : 'bg-red-500'}`} style={{width: `${(scores.feasibility / 20) * 100}%`}}></div>
                   </div>
-                  <span className="text-xs font-medium w-8">{scores.feasibility}/20</span>
+                  <span className="text-xs font-medium w-8 text-gray-900">{scores.feasibility}/20</span>
                 </div>
               </div>
             </div>
             <Separator className="my-2" />
             <div className="flex items-center justify-between">
-              <span className="font-semibold text-green-900 text-xs">{t('planner.result.totalScore')}</span>
+              <span className="font-semibold text-gray-900 text-xs">{t('planner.result.totalScore')}</span>
               <div className="flex items-center gap-1">
                 <Badge variant="default" className={`text-xs ${total >= 95 ? 'bg-green-600' : total >= 90 ? 'bg-blue-600' : total >= 85 ? 'bg-yellow-600' : 'bg-red-600'}`}>
                   {total}/100 {level}
@@ -755,19 +771,19 @@ export function PartyResultDisplay() {
   if (currentSelections.length > 0) {
     return (
       <div className="sticky top-8" data-result-area>
-        <Card>
+        <Card className="border-gray-200 bg-white shadow-sm">
           <CardHeader className="pb-3">
             <CardTitle className="text-base flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-primary" />
-              {t('planner.result.currentSelection')}
+              <span className="text-gray-900">{t('planner.result.currentSelection')}</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {currentSelections.map((selection, index) => (
               <div key={index} className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
-                  <selection.icon className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">{selection.label}</span>
+                  <selection.icon className="w-4 h-4 text-gray-600" />
+                  <span className="text-gray-600">{selection.label}</span>
                 </div>
                 <Badge variant="secondary" className="text-xs">
                   {selection.value}
@@ -775,7 +791,7 @@ export function PartyResultDisplay() {
               </div>
             ))}
             <Separator className="my-4" />
-            <p className="text-xs text-muted-foreground text-center">
+            <p className="text-xs text-gray-600 text-center">
               {t('planner.form.completeAllSteps')}&ldquo;{t('planner.form.generateButton')}&rdquo;
             </p>
           </CardContent>

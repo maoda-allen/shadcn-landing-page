@@ -48,7 +48,16 @@ const loadClientTranslations = async (language: Language): Promise<Translations>
 
 // 获取嵌套对象的值
 function getNestedValue(obj: any, path: string): string {
-  const result = path.split('.').reduce((current, key) => current?.[key], obj);
+  if (!obj || typeof obj !== 'object') {
+    return path;
+  }
+  
+  const result = path.split('.').reduce((current, key) => {
+    if (current && typeof current === 'object' && key in current) {
+      return current[key];
+    }
+    return undefined;
+  }, obj);
   
   // 如果结果是字符串，直接返回
   if (typeof result === 'string') {
@@ -57,13 +66,13 @@ function getNestedValue(obj: any, path: string): string {
   
   // 如果结果是对象或其他类型，返回原始键名作为fallback
   if (result === undefined || result === null) {
-    devLogger.warn('translation.key.not.found', path);
+    console.warn(`Translation key not found: ${path}`);
     return path;
   }
   
   // 如果是对象，说明键路径不完整
   if (typeof result === 'object') {
-    devLogger.warn('translation.key.points.to.object', path, result);
+    console.warn(`Translation key points to object: ${path}`, result);
     return path;
   }
   
@@ -86,11 +95,33 @@ export function LanguageProvider({
   const [language, setLanguageState] = useState<Language>(initialLanguage);
   const [isLoading, setIsLoading] = useState(false);
   const [translations, setTranslations] = useState<Translations>(initialTranslations);
+  const [isHydrated, setIsHydrated] = useState(false);
 
-  // 组件加载时，用服务器提供的数据填充缓存
+  // 处理客户端水合
   useEffect(() => {
+    setIsHydrated(true);
+    
+    // 确保初始翻译数据在客户端可用
     if (!translationsCache[initialLanguage]) {
       translationsCache[initialLanguage] = initialTranslations;
+    }
+    
+    // 检查localStorage中是否有保存的语言设置
+    try {
+      const savedLanguage = localStorage.getItem('language') as Language;
+      if (savedLanguage && savedLanguage !== initialLanguage && (savedLanguage === 'zh' || savedLanguage === 'en')) {
+        // 如果有不同的语言设置，异步加载
+        loadClientTranslations(savedLanguage).then((loadedTranslations) => {
+          setTranslations(loadedTranslations);
+          setLanguageState(savedLanguage);
+        }).catch(() => {
+          // 如果加载失败，保持使用初始翻译
+          console.warn('Failed to load saved language, using initial language');
+        });
+      }
+    } catch (error) {
+      // localStorage访问失败，保持使用初始语言
+      console.warn('Failed to access localStorage, using initial language');
     }
   }, [initialLanguage, initialTranslations]);
 
@@ -111,12 +142,27 @@ export function LanguageProvider({
     }
   };
 
-  // 翻译函数
+  // 翻译函数 - 添加额外的安全检查
   const t = (key: string): string => {
-    if (!translations) {
-      return key;
+    // 先尝试从当前翻译获取
+    if (translations && isHydrated) {
+      const result = getNestedValue(translations, key);
+      if (result !== key) {
+        return result;
+      }
     }
-    return getNestedValue(translations, key);
+    
+    // 如果当前翻译失败，尝试从初始翻译获取
+    if (initialTranslations) {
+      const fallbackResult = getNestedValue(initialTranslations, key);
+      if (fallbackResult !== key) {
+        return fallbackResult;
+      }
+    }
+    
+    // 最后的fallback - 返回键名
+    console.warn(`Translation failed for key: ${key}, language: ${language}, isHydrated: ${isHydrated}`);
+    return key;
   };
 
   return (
