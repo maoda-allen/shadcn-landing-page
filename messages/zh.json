@@ -187,6 +187,8 @@
       "theme": {
         "title": "选择创意主题",
         "subtitle": "为派对增添独特的个性和趣味",
+        "moreThemes": "更多主题",
+        "lessThemes": "收起",
         "vintage": {
           "title": "复古怀旧",
           "subtitle": "经典时光，温暖回忆",
@@ -223,6 +225,42 @@
           "badge1": "传统",
           "badge2": "文化"
         },
+        "superhero": {
+          "title": "超级英雄",
+          "subtitle": "正义力量，英雄梦想",
+          "badge1": "英雄",
+          "badge2": "正义"
+        },
+        "princess": {
+          "title": "公主城堡",
+          "subtitle": "梦幻城堡，优雅公主",
+          "badge1": "梦幻",
+          "badge2": "优雅"
+        },
+        "space": {
+          "title": "宇宙星空",
+          "subtitle": "浩瀚宇宙，星际旅行",
+          "badge1": "科幻",
+          "badge2": "神秘"
+        },
+        "ocean": {
+          "title": "海洋世界",
+          "subtitle": "深海探索，海洋奇趣",
+          "badge1": "海洋",
+          "badge2": "奇趣"
+        },
+        "garden": {
+          "title": "花园田园",
+          "subtitle": "自然清新，田园风光",
+          "badge1": "自然",
+          "badge2": "清新"
+        },
+        "sports": {
+          "title": "运动竞技",
+          "subtitle": "活力运动，团队竞技",
+          "badge1": "活力",
+          "badge2": "竞技"
+        },
         "customTheme": "自定义主题",
         "customThemeDesc": "输入您自己的创意主题",
         "customThemeLabel": "您的创意主题",
@@ -252,6 +290,8 @@
       "generatingDesc": "AI正在根据您的选择定制专属方案，请稍候...",
       "completeAllSteps": "请完成所有步骤后再生成方案",
       "confirmRegenerate": "确定要重新生成新的派对方案吗？当前方案将被替换。",
+      "confirm": "确定",
+      "cancel": "取消",
       "readyToGenerate": "所有步骤已完成，可以生成方案了！",
       "errors": {
         "incompleteForm": "请完成所有选择后再生成方案",

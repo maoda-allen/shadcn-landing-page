@@ -178,15 +178,17 @@
         "title": "Set Budget Range",
         "subtitle": "Set a reasonable budget for your party",
         "budget": "Budget",
-        "budgetDesc": "$70-210",
+        "budgetDesc": "500-1500",
         "standard": "Standard",
-        "standardDesc": "$210-700",
+        "standardDesc": "1500-5000",
         "premium": "Premium",
-        "premiumDesc": "$700+"
+        "premiumDesc": "5000+"
       },
       "theme": {
         "title": "Choose Creative Theme",
         "subtitle": "Add unique personality and fun to your party",
+        "moreThemes": "More Themes",
+        "lessThemes": "Less",
         "vintage": {
           "title": "Vintage Style",
           "subtitle": "Classic times, warm memories",
@@ -223,6 +225,42 @@
           "badge1": "Traditional",
           "badge2": "Cultural"
         },
+        "superhero": {
+          "title": "Superhero Power",
+          "subtitle": "Justice force, heroic dreams",
+          "badge1": "Heroic",
+          "badge2": "Justice"
+        },
+        "princess": {
+          "title": "Princess Castle",
+          "subtitle": "Fantasy castle, elegant princess",
+          "badge1": "Fantasy",
+          "badge2": "Elegant"
+        },
+        "space": {
+          "title": "Cosmic Galaxy",
+          "subtitle": "Vast universe, interstellar journey",
+          "badge1": "Sci-Fi",
+          "badge2": "Mystery"
+        },
+        "ocean": {
+          "title": "Ocean World",
+          "subtitle": "Deep sea exploration, marine wonders",
+          "badge1": "Marine",
+          "badge2": "Wonder"
+        },
+        "garden": {
+          "title": "Garden Pastoral",
+          "subtitle": "Natural fresh, countryside scenery",
+          "badge1": "Natural",
+          "badge2": "Fresh"
+        },
+        "sports": {
+          "title": "Sports Arena",
+          "subtitle": "Dynamic sports, team competition",
+          "badge1": "Dynamic",
+          "badge2": "Competition"
+        },
         "customTheme": "Custom Theme",
         "customThemeDesc": "Add unique personality and fun to your party",
         "customThemeLabel": "Your Creative Theme",
@@ -251,6 +289,9 @@
       "generating": "Generating...",
       "generatingDesc": "AI is customizing your exclusive plan based on your selections, please wait...",
       "completeAllSteps": "Complete all steps to generate",
+      "confirmRegenerate": "Are you sure you want to generate a new party plan? The current plan will be replaced.",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
       "errors": {
         "incompleteForm": "Please complete all selections before generating a plan",
         "unknownError": "An unknown error occurred while generating the plan, please try again later"

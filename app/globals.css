@@ -6,73 +6,6 @@ html {
   scroll-behavior: smooth;
 }
 
-/* *=========== Default theme =========== */
-/* @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    --ring: 240 10% 3.9%;
-
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --ring: 240 4.9% 83.9%;
-  }
-} */
-
 /* *=========== Birthday Party Theme - Blue =========== */
 @layer base {
   :root {
@@ -139,47 +72,35 @@ html {
   }
 }
 
-/* 防止自定义主题输入时的页面跳转 */
+/* 防止自定义主题输入时的页面跳转 - 强化版本 */
 .party-planner-form {
-  /* 阻止父容器的滚动行为影响 */
-  contain: layout style;
+  /* 强化布局和样式隔离 */
+  contain: layout style paint;
 }
 
-.party-planner-form input:focus {
-  /* 输入框聚焦时禁用平滑滚动 */
-  scroll-behavior: auto !important;
-}
-
+/* 自定义主题输入区域的滚动隔离 */
 .custom-theme-container {
-  /* 防止布局抖动 */
-  contain: layout;
-  will-change: contents;
-  /* 防止聚焦时的滚动 */
-  scroll-margin: 0;
-  scroll-snap-align: none;
+  /* 完全隔离这个区域的滚动影响 */
+  contain: layout style paint;
+  /* 阻止内部滚动事件冒泡 */
+  overscroll-behavior: contain;
+  /* 确保不会触发父级滚动 */
+  scroll-behavior: auto;
 }
 
-.custom-theme-container input {
-  /* 防止输入时的视觉跳动 */
-  contain: layout;
-  /* 关键：防止输入框聚焦时触发滚动 */
+.custom-theme-textarea {
+  /* 输入框的滚动控制 */
+  overscroll-behavior: none;
+  scroll-behavior: auto !important;
+  /* 防止浏览器自动滚动到此元素 */
   scroll-margin: 0 !important;
-  scroll-snap-align: none !important;
+  scroll-padding: 0 !important;
 }
 
-/* 专门针对自定义主题输入框的防滚动样式 */
-.custom-theme-input {
+.custom-theme-textarea:focus {
+  /* 聚焦时完全禁用滚动行为 */
   scroll-behavior: auto !important;
-  overscroll-behavior: contain;
-  /* 防止聚焦时滚动到视图 */
-  scroll-margin-top: 0 !important;
-  scroll-margin-bottom: 0 !important;
-}
-
-.custom-theme-input:focus {
-  scroll-behavior: auto !important;
-  overscroll-behavior: contain;
-  outline-offset: 0;
+  overscroll-behavior: none !important;
 }
 
 /* 临时禁用平滑滚动的类 */
