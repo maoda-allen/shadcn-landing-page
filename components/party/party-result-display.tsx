@@ -8,7 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { Icon } from '@/components/ui/icon';
 import { Loader2, MapPin, Users, Calendar, Palette, Music, Utensils, Clock, Sparkles, FileText, Download, Share2, RefreshCw } from 'lucide-react';
 import html2canvas from 'html2canvas';
-import { useRef, useState, useEffect, useMemo } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import { useLanguage } from '@/lib/contexts/language-context';
 import { toast } from '@/lib/utils/toast';
 import { devLogger } from '@/lib/utils/dev-logger';
@@ -122,17 +122,6 @@ export function PartyResultDisplay() {
   const { t, language } = useLanguage();
   const { formData, result, isLoading, error } = state;
   const exportRef = useRef<HTMLDivElement>(null);
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-
-  // 处理重新生成确认
-  const handleReplan = async () => {
-    setShowConfirmDialog(false);
-    try {
-      await generatePartyPlan();
-    } catch (error) {
-      console.error('重新生成方案失败:', error);
-    }
-  };
 
   // 使用useMemo缓存评分结果，确保界面显示和导出使用相同数据
   const professionalScore = useMemo(() => {
@@ -762,7 +751,7 @@ export function PartyResultDisplay() {
 
         {/* 操作按钮 */}
         <div className="flex gap-2">
-          <Button onClick={() => setShowConfirmDialog(true)} variant="outline" size="sm" className="flex-1">
+          <Button onClick={resetForm} variant="outline" size="sm" className="flex-1">
             {t('planner.result.replan')}
           </Button>
           <Button 
@@ -774,32 +763,6 @@ export function PartyResultDisplay() {
             {t('planner.result.exportPlan')}
           </Button>
         </div>
-        
-        {/* 确认对话框 */}
-        {showConfirmDialog && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-sm w-full mx-4 shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
-              <h3 className="text-lg font-semibold mb-4 text-center text-gray-900 dark:text-gray-100 leading-relaxed">
-                {t('planner.form.confirmRegenerate')}
-              </h3>
-              <div className="flex flex-col sm:flex-row gap-3 mt-6">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setShowConfirmDialog(false)}
-                  className="flex-1 order-2 sm:order-1"
-                >
-                  {t('planner.form.cancel')}
-                </Button>
-                <Button 
-                  onClick={handleReplan}
-                  className="flex-1 order-1 sm:order-2"
-                >
-                  {t('planner.form.confirm')}
-                </Button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     );
   }

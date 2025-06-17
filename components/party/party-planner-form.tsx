@@ -21,9 +21,6 @@ export function PartyPlannerForm() {
   // 本地状态来强制重新渲染
   const [localLoading, setLocalLoading] = useState(false);
 
-  // 确认对话框状态
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
-
   // 监控加载状态变化
   useEffect(() => {
     setLocalLoading(state.isLoading);
@@ -38,7 +35,7 @@ export function PartyPlannerForm() {
     return partyType && guestCount && venue && budget && theme && atmosphere;
   };
 
-  // 生成按钮点击处理
+  // 生成按钮点击处理 - 简化版本
   const handleGenerateClick = async () => {
     if (!isFormComplete()) {
       return;
@@ -48,18 +45,7 @@ export function PartyPlannerForm() {
       return;
     }
 
-    // 如果已经有结果，显示确认对话框
-    if (state.result) {
-      setShowConfirmDialog(true);
-      return;
-    }
-    
-    // 直接生成
-    await performGeneration();
-  };
-
-  // 执行生成的具体逻辑
-  const performGeneration = async () => {
+    // 直接生成，不显示确认对话框
     setLocalLoading(true);
     
     try {
@@ -69,12 +55,6 @@ export function PartyPlannerForm() {
     } finally {
       setLocalLoading(false);
     }
-  };
-
-  // 确认重新生成
-  const handleConfirmRegenerate = async () => {
-    setShowConfirmDialog(false);
-    await performGeneration();
   };
 
   // 处理选择函数
@@ -650,32 +630,6 @@ export function PartyPlannerForm() {
           )}
         </div>
       </div>
-      
-      {/* 确认对话框 */}
-      {showConfirmDialog && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-sm w-full mx-4 shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
-            <h3 className="text-lg font-semibold mb-4 text-center text-gray-900 dark:text-gray-100 leading-relaxed">
-              {t('planner.form.confirmRegenerate')}
-            </h3>
-            <div className="flex flex-col sm:flex-row gap-3 mt-6">
-              <Button 
-                variant="outline" 
-                onClick={() => setShowConfirmDialog(false)}
-                className="flex-1 order-2 sm:order-1"
-              >
-                {t('planner.form.cancel')}
-              </Button>
-              <Button 
-                onClick={handleConfirmRegenerate}
-                className="flex-1 order-1 sm:order-2"
-              >
-                {t('planner.form.confirm')}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 } 
