@@ -21,6 +21,9 @@ export function PartyPlannerForm() {
   // 本地状态来强制重新渲染
   const [localLoading, setLocalLoading] = useState(false);
 
+  // 确认对话框状态
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+
   // 监控加载状态变化
   useEffect(() => {
     setLocalLoading(state.isLoading);
@@ -47,12 +50,16 @@ export function PartyPlannerForm() {
 
     // 如果已经有结果，显示确认对话框
     if (state.result) {
-      const confirmed = window.confirm(t('planner.form.confirmRegenerate'));
-      if (!confirmed) {
-        return;
-      }
+      setShowConfirmDialog(true);
+      return;
     }
     
+    // 直接生成
+    await performGeneration();
+  };
+
+  // 执行生成的具体逻辑
+  const performGeneration = async () => {
     setLocalLoading(true);
     
     try {
@@ -62,6 +69,12 @@ export function PartyPlannerForm() {
     } finally {
       setLocalLoading(false);
     }
+  };
+
+  // 确认重新生成
+  const handleConfirmRegenerate = async () => {
+    setShowConfirmDialog(false);
+    await performGeneration();
   };
 
   // 处理选择函数
@@ -292,216 +305,173 @@ export function PartyPlannerForm() {
   );
 
   return (
-    <div className="party-planner-form space-y-3">
-      {/* 页面标题 */}
-      <Card className="bg-primary border border-primary shadow-sm">
-        <CardHeader className="text-center py-4">
-          <div className="flex items-center justify-center mb-2">
-            <Sparkles className="w-5 h-5 text-white mr-2" />
-            <CardTitle className="text-lg font-bold text-white">{t('planner.form.title')}</CardTitle>
-            <Sparkles className="w-5 h-5 text-white ml-2" />
-          </div>
-          <p className="text-white/90 text-sm">{t('planner.form.subtitle')}</p>
-        </CardHeader>
-      </Card>
+    <>
+      <div className="party-planner-form space-y-3">
+        {/* 页面标题 */}
+        <Card className="bg-primary border border-primary shadow-sm">
+          <CardHeader className="text-center py-4">
+            <div className="flex items-center justify-center mb-2">
+              <Sparkles className="w-5 h-5 text-white mr-2" />
+              <CardTitle className="text-lg font-bold text-white">{t('planner.form.title')}</CardTitle>
+              <Sparkles className="w-5 h-5 text-white ml-2" />
+            </div>
+            <p className="text-white/90 text-sm">{t('planner.form.subtitle')}</p>
+          </CardHeader>
+        </Card>
 
-      {/* 步骤1: 派对类型 */}
-      <StepCard
-        step={1}
-        title={t('planner.form.partyType.title')}
-        subtitle={t('planner.form.partyType.subtitle')}
-      >
-        <div className="grid grid-cols-3 gap-3">
-          {partyTypes.map((type: any) => {
-            const IconComponent = type.icon;
-            const isSelected = state.formData.partyType === type.value;
-            
-            return (
-              <div
-                key={type.id}
-                className={`group p-3 rounded-lg border cursor-pointer transition-all duration-200 ${
-                  isSelected 
-                    ? 'border-primary bg-primary/5 shadow-sm'
-                    : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
-                }`}
-                onClick={() => handlePartyTypeSelect(type.value as any)}
-              >
-                <div className="text-center space-y-2">
-                  <div className={`p-2 rounded-full mx-auto w-fit transition-colors ${
-                    isSelected ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'
-                  }`}>
-                    <IconComponent className="w-5 h-5" />
-                  </div>
-                  <div className="space-y-1">
-                    <h4 className="font-semibold text-sm text-gray-900">{type.title}</h4>
-                    <p className="text-xs text-gray-500 leading-relaxed">{type.subtitle}</p>
-                  </div>
-                  {isSelected && (
-                    <CheckCircle2 className="w-4 h-4 text-primary mx-auto" />
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </StepCard>
-
-      {/* 步骤2: 聚会规模 */}
-      <StepCard
-        step={2}
-        title={t('planner.form.guestCount.title')}
-        subtitle={t('planner.form.guestCount.subtitle')}
-      >
-        <div className="grid grid-cols-3 gap-3">
-          {guestCounts.map((count: any) => {
-            const isSelected = state.formData.guestCount === count.value;
-            
-            return (
-              <div
-                key={count.id}
-                className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 text-center ${
-                  isSelected 
-                    ? 'border-primary bg-primary/5 shadow-sm'
-                    : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
-                }`}
-                onClick={() => handleGuestCountSelect(count.value as any)}
-              >
-                <div className={`w-2 h-2 rounded-full mx-auto mb-2 transition-colors ${
-                  isSelected ? 'bg-primary' : 'bg-gray-300'
-                }`} />
-                <h4 className="font-semibold text-sm text-gray-900 mb-1">{count.label}</h4>
-                <p className="text-xs text-gray-500">{count.desc}</p>
-                {isSelected && (
-                  <CheckCircle2 className="w-4 h-4 text-primary mx-auto mt-2" />
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </StepCard>
-
-      {/* 步骤3: 场地选择 */}
-      <StepCard
-        step={3}
-        title={t('planner.form.venue.title')}
-        subtitle={t('planner.form.venue.subtitle')}
-      >
-        <div className="grid grid-cols-2 gap-3">
-          {venues.map((venue: any) => {
-            const isSelected = state.formData.venue === venue.value;
-            
-            return (
-              <div
-                key={venue.id}
-                className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 text-center ${
-                  isSelected 
-                    ? 'border-primary bg-primary/5 shadow-sm'
-                    : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
-                }`}
-                onClick={() => handleVenueSelect(venue.value as any)}
-              >
-                <div className={`w-2 h-2 rounded-full mx-auto mb-2 transition-colors ${
-                  isSelected ? 'bg-primary' : 'bg-gray-300'
-                }`} />
-                <h4 className="font-semibold text-sm text-gray-900 mb-1">{venue.label}</h4>
-                <p className="text-xs text-gray-500 leading-relaxed">{venue.desc}</p>
-                {isSelected && (
-                  <CheckCircle2 className="w-4 h-4 text-primary mx-auto mt-2" />
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </StepCard>
-
-      {/* 步骤4: 预算设置 */}
-      <StepCard
-        step={4}
-        title={t('planner.form.budget.title')}
-        subtitle={t('planner.form.budget.subtitle')}
-      >
-        <div className="grid grid-cols-3 gap-3">
-          {budgets.map((budget: any) => {
-            const isSelected = state.formData.budget === budget.value;
-            
-            return (
-              <div
-                key={budget.id}
-                className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 text-center ${
-                  isSelected 
-                    ? 'border-primary bg-primary/5 shadow-sm'
-                    : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
-                }`}
-                onClick={() => handleBudgetSelect(budget.value as any)}
-              >
-                <div className={`w-2 h-2 rounded-full mx-auto mb-2 transition-colors ${
-                  isSelected ? 'bg-primary' : 'bg-gray-300'
-                }`} />
-                <h4 className="font-semibold text-sm text-gray-900 mb-1">{budget.label}</h4>
-                <p className="text-xs text-gray-500">{budget.desc}</p>
-                {isSelected && (
-                  <CheckCircle2 className="w-4 h-4 text-primary mx-auto mt-2" />
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </StepCard>
-
-      {/* 步骤5: 主题选择 */}
-      <StepCard
-        step={5}
-        title={t('planner.form.theme.title')}
-        subtitle={t('planner.form.theme.subtitle')}
-      >
-        <div className="space-y-3">
-          {/* 前6个主题 - 常显示 */}
-          <div className="grid grid-cols-2 gap-3">
-            {themes.map((theme: any) => {
-              const isSelected = state.formData.theme === theme.title;
+        {/* 步骤1: 派对类型 */}
+        <StepCard
+          step={1}
+          title={t('planner.form.partyType.title')}
+          subtitle={t('planner.form.partyType.subtitle')}
+        >
+          <div className="grid grid-cols-3 gap-3">
+            {partyTypes.map((type: any) => {
+              const IconComponent = type.icon;
+              const isSelected = state.formData.partyType === type.value;
               
               return (
                 <div
-                  key={theme.id}
-                  className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 ${
+                  key={type.id}
+                  className={`group p-3 rounded-lg border cursor-pointer transition-all duration-200 ${
                     isSelected 
-                      ? 'border-primary bg-primary/5 shadow-sm' 
+                      ? 'border-primary bg-primary/5 shadow-sm'
                       : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
                   }`}
-                  onClick={() => handleThemeSelect(theme.id)}
+                  onClick={() => handlePartyTypeSelect(type.value as any)}
                 >
-                  <div className="flex items-start gap-2">
-                    <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 transition-colors ${
-                      isSelected ? 'bg-primary' : 'bg-gray-300'
-                    }`} />
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between mb-1">
-                        <h4 className="font-semibold text-sm text-gray-900 truncate">{theme.title}</h4>
-                        {isSelected && <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />}
-                      </div>
-                      <p className="text-xs text-gray-500 mb-2 leading-relaxed">{theme.subtitle}</p>
-                      <div className="flex gap-1 flex-wrap">
-                        {theme.badges.map((badge: any, idx: number) => (
-                          <Badge 
-                            key={idx} 
-                            variant="secondary" 
-                            className="text-xs px-1.5 py-0.5 h-auto bg-gray-100 text-gray-600"
-                          >
-                            {badge}
-                          </Badge>
-                        ))}
-                      </div>
+                  <div className="text-center space-y-2">
+                    <div className={`p-2 rounded-full mx-auto w-fit transition-colors ${
+                      isSelected ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'
+                    }`}>
+                      <IconComponent className="w-5 h-5" />
                     </div>
+                    <div className="space-y-1">
+                      <h4 className="font-semibold text-sm text-gray-900">{type.title}</h4>
+                      <p className="text-xs text-gray-500 leading-relaxed">{type.subtitle}</p>
+                    </div>
+                    {isSelected && (
+                      <CheckCircle2 className="w-4 h-4 text-primary mx-auto" />
+                    )}
                   </div>
                 </div>
               );
             })}
           </div>
+        </StepCard>
 
-          {/* 更多主题展开区域 */}
-          {showMoreThemes && (
+        {/* 步骤2: 聚会规模 */}
+        <StepCard
+          step={2}
+          title={t('planner.form.guestCount.title')}
+          subtitle={t('planner.form.guestCount.subtitle')}
+        >
+          <div className="grid grid-cols-3 gap-3">
+            {guestCounts.map((count: any) => {
+              const isSelected = state.formData.guestCount === count.value;
+              
+              return (
+                <div
+                  key={count.id}
+                  className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 text-center ${
+                    isSelected 
+                      ? 'border-primary bg-primary/5 shadow-sm'
+                      : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
+                  }`}
+                  onClick={() => handleGuestCountSelect(count.value as any)}
+                >
+                  <div className={`w-2 h-2 rounded-full mx-auto mb-2 transition-colors ${
+                    isSelected ? 'bg-primary' : 'bg-gray-300'
+                  }`} />
+                  <h4 className="font-semibold text-sm text-gray-900 mb-1">{count.label}</h4>
+                  <p className="text-xs text-gray-500">{count.desc}</p>
+                  {isSelected && (
+                    <CheckCircle2 className="w-4 h-4 text-primary mx-auto mt-2" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </StepCard>
+
+        {/* 步骤3: 场地选择 */}
+        <StepCard
+          step={3}
+          title={t('planner.form.venue.title')}
+          subtitle={t('planner.form.venue.subtitle')}
+        >
+          <div className="grid grid-cols-2 gap-3">
+            {venues.map((venue: any) => {
+              const isSelected = state.formData.venue === venue.value;
+              
+              return (
+                <div
+                  key={venue.id}
+                  className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 text-center ${
+                    isSelected 
+                      ? 'border-primary bg-primary/5 shadow-sm'
+                      : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
+                  }`}
+                  onClick={() => handleVenueSelect(venue.value as any)}
+                >
+                  <div className={`w-2 h-2 rounded-full mx-auto mb-2 transition-colors ${
+                    isSelected ? 'bg-primary' : 'bg-gray-300'
+                  }`} />
+                  <h4 className="font-semibold text-sm text-gray-900 mb-1">{venue.label}</h4>
+                  <p className="text-xs text-gray-500 leading-relaxed">{venue.desc}</p>
+                  {isSelected && (
+                    <CheckCircle2 className="w-4 h-4 text-primary mx-auto mt-2" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </StepCard>
+
+        {/* 步骤4: 预算设置 */}
+        <StepCard
+          step={4}
+          title={t('planner.form.budget.title')}
+          subtitle={t('planner.form.budget.subtitle')}
+        >
+          <div className="grid grid-cols-3 gap-3">
+            {budgets.map((budget: any) => {
+              const isSelected = state.formData.budget === budget.value;
+              
+              return (
+                <div
+                  key={budget.id}
+                  className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 text-center ${
+                    isSelected 
+                      ? 'border-primary bg-primary/5 shadow-sm'
+                      : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
+                  }`}
+                  onClick={() => handleBudgetSelect(budget.value as any)}
+                >
+                  <div className={`w-2 h-2 rounded-full mx-auto mb-2 transition-colors ${
+                    isSelected ? 'bg-primary' : 'bg-gray-300'
+                  }`} />
+                  <h4 className="font-semibold text-sm text-gray-900 mb-1">{budget.label}</h4>
+                  <p className="text-xs text-gray-500">{budget.desc}</p>
+                  {isSelected && (
+                    <CheckCircle2 className="w-4 h-4 text-primary mx-auto mt-2" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </StepCard>
+
+        {/* 步骤5: 主题选择 */}
+        <StepCard
+          step={5}
+          title={t('planner.form.theme.title')}
+          subtitle={t('planner.form.theme.subtitle')}
+        >
+          <div className="space-y-3">
+            {/* 前6个主题 - 常显示 */}
             <div className="grid grid-cols-2 gap-3">
-              {moreThemes.map((theme: any) => {
+              {themes.map((theme: any) => {
                 const isSelected = state.formData.theme === theme.title;
                 
                 return (
@@ -541,100 +511,171 @@ export function PartyPlannerForm() {
                 );
               })}
             </div>
-          )}
 
-          {/* 更多主题按钮 */}
-          <div className="text-center">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowMoreThemes(!showMoreThemes)}
-              className="text-primary border-primary hover:bg-primary/5"
-            >
-              {showMoreThemes ? (
-                <>
-                  <span>{t('planner.form.theme.lessThemes')}</span>
-                  <svg className="w-4 h-4 ml-2 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </>
-              ) : (
-                <>
-                  <span>{t('planner.form.theme.moreThemes')}</span>
-                  <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </>
-              )}
-            </Button>
-          </div>
-        </div>
-      </StepCard>
-
-      {/* 步骤6: 氛围选择 */}
-      <StepCard
-        step={6}
-        title={t('planner.form.atmosphere.title')}
-        subtitle={t('planner.form.atmosphere.subtitle')}
-      >
-        <div className="grid grid-cols-2 gap-3">
-          {atmospheres.map((atmosphere: any) => {
-            const isSelected = state.formData.atmosphere === atmosphere.id;
-            
-            return (
-              <div
-                key={atmosphere.id}
-                className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 text-center ${
-                  isSelected 
-                    ? 'border-primary bg-primary/5 shadow-sm'
-                    : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
-                }`}
-                onClick={() => handleAtmosphereSelect(atmosphere.id)}
-              >
-                <div className={`w-2 h-2 rounded-full mx-auto mb-2 transition-colors ${
-                  isSelected ? 'bg-primary' : 'bg-gray-300'
-                }`} />
-                <h4 className="font-semibold text-sm text-gray-900 mb-1">{atmosphere.label}</h4>
-                <p className="text-xs text-gray-500 leading-relaxed">{atmosphere.desc}</p>
-                {isSelected && (
-                  <CheckCircle2 className="w-4 h-4 text-primary mx-auto mt-2" />
-                )}
+            {/* 更多主题展开区域 */}
+            {showMoreThemes && (
+              <div className="grid grid-cols-2 gap-3">
+                {moreThemes.map((theme: any) => {
+                  const isSelected = state.formData.theme === theme.title;
+                  
+                  return (
+                    <div
+                      key={theme.id}
+                      className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 ${
+                        isSelected 
+                          ? 'border-primary bg-primary/5 shadow-sm' 
+                          : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
+                      }`}
+                      onClick={() => handleThemeSelect(theme.id)}
+                    >
+                      <div className="flex items-start gap-2">
+                        <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 transition-colors ${
+                          isSelected ? 'bg-primary' : 'bg-gray-300'
+                        }`} />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center justify-between mb-1">
+                            <h4 className="font-semibold text-sm text-gray-900 truncate">{theme.title}</h4>
+                            {isSelected && <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />}
+                          </div>
+                          <p className="text-xs text-gray-500 mb-2 leading-relaxed">{theme.subtitle}</p>
+                          <div className="flex gap-1 flex-wrap">
+                            {theme.badges.map((badge: any, idx: number) => (
+                              <Badge 
+                                key={idx} 
+                                variant="secondary" 
+                                className="text-xs px-1.5 py-0.5 h-auto bg-gray-100 text-gray-600"
+                              >
+                                {badge}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            );
-          })}
-        </div>
-      </StepCard>
+            )}
 
-      {/* 生成按钮 */}
-      <div className="pt-4">
-        <Button
-          onClick={handleGenerateClick}
-          disabled={!isFormComplete() || isCurrentlyLoading}
-          size="lg"
-          className="w-full h-12 text-base font-semibold bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transition-all duration-200"
-        >
-          {isCurrentlyLoading ? (
-            <>
-              <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-              {t('planner.form.generating')}
-            </>
-          ) : (
-            <>
-              <Sparkles className="w-5 h-5 mr-2" />
-              {state.result ? t('planner.form.regenerateButton') : t('planner.form.generateButton')}
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </>
-          )}
-        </Button>
-        
-        {isCurrentlyLoading && (
-          <div className="flex items-center justify-center gap-2 mt-2">
-            <div className="w-1 h-1 bg-primary rounded-full animate-pulse"></div>
-            <p className="text-xs text-gray-600">{t('planner.form.generatingDesc')}</p>
-            <div className="w-1 h-1 bg-primary rounded-full animate-pulse"></div>
+            {/* 更多主题按钮 */}
+            <div className="text-center">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowMoreThemes(!showMoreThemes)}
+                className="text-primary border-primary hover:bg-primary/5"
+              >
+                {showMoreThemes ? (
+                  <>
+                    <span>{t('planner.form.theme.lessThemes')}</span>
+                    <svg className="w-4 h-4 ml-2 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </>
+                ) : (
+                  <>
+                    <span>{t('planner.form.theme.moreThemes')}</span>
+                    <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
-        )}
+        </StepCard>
+
+        {/* 步骤6: 氛围选择 */}
+        <StepCard
+          step={6}
+          title={t('planner.form.atmosphere.title')}
+          subtitle={t('planner.form.atmosphere.subtitle')}
+        >
+          <div className="grid grid-cols-2 gap-3">
+            {atmospheres.map((atmosphere: any) => {
+              const isSelected = state.formData.atmosphere === atmosphere.id;
+              
+              return (
+                <div
+                  key={atmosphere.id}
+                  className={`p-3 rounded-lg border cursor-pointer transition-all duration-200 text-center ${
+                    isSelected 
+                      ? 'border-primary bg-primary/5 shadow-sm'
+                      : 'border-gray-200 hover:border-primary/50 hover:bg-gray-50'
+                  }`}
+                  onClick={() => handleAtmosphereSelect(atmosphere.id)}
+                >
+                  <div className={`w-2 h-2 rounded-full mx-auto mb-2 transition-colors ${
+                    isSelected ? 'bg-primary' : 'bg-gray-300'
+                  }`} />
+                  <h4 className="font-semibold text-sm text-gray-900 mb-1">{atmosphere.label}</h4>
+                  <p className="text-xs text-gray-500 leading-relaxed">{atmosphere.desc}</p>
+                  {isSelected && (
+                    <CheckCircle2 className="w-4 h-4 text-primary mx-auto mt-2" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </StepCard>
+
+        {/* 生成按钮 */}
+        <div className="pt-4">
+          <Button
+            onClick={handleGenerateClick}
+            disabled={!isFormComplete() || isCurrentlyLoading}
+            size="lg"
+            className="w-full h-12 text-base font-semibold bg-primary hover:bg-primary/90 text-white shadow-lg hover:shadow-xl transition-all duration-200"
+          >
+            {isCurrentlyLoading ? (
+              <>
+                <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                {t('planner.form.generating')}
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-5 h-5 mr-2" />
+                {state.result ? t('planner.form.regenerateButton') : t('planner.form.generateButton')}
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </>
+            )}
+          </Button>
+          
+          {isCurrentlyLoading && (
+            <div className="flex items-center justify-center gap-2 mt-2">
+              <div className="w-1 h-1 bg-primary rounded-full animate-pulse"></div>
+              <p className="text-xs text-gray-600">{t('planner.form.generatingDesc')}</p>
+              <div className="w-1 h-1 bg-primary rounded-full animate-pulse"></div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      
+      {/* 确认对话框 */}
+      {showConfirmDialog && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-sm w-full mx-4 shadow-xl animate-in fade-in-0 zoom-in-95 duration-200">
+            <h3 className="text-lg font-semibold mb-4 text-center text-gray-900 dark:text-gray-100 leading-relaxed">
+              {t('planner.form.confirmRegenerate')}
+            </h3>
+            <div className="flex flex-col sm:flex-row gap-3 mt-6">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowConfirmDialog(false)}
+                className="flex-1 order-2 sm:order-1"
+              >
+                {t('planner.form.cancel')}
+              </Button>
+              <Button 
+                onClick={handleConfirmRegenerate}
+                className="flex-1 order-1 sm:order-2"
+              >
+                {t('planner.form.confirm')}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 } 

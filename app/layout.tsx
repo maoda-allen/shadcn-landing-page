@@ -22,10 +22,10 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   // --- 服务器端逻辑 ---
-  // 在服务器端决定初始语言。这里我们暂时硬编码为 'zh'
+  // 在服务器端决定初始语言。默认为英文，主要面向英美用户
   // 之后您可以根据需要从 headers, cookies, 或 URL 中动态获取
-  const initialLanguage: Language = 'zh';
-  const initialTranslations = initialLanguage === 'zh' ? zhTranslations : enTranslations;
+  const initialLanguage: Language = 'en';
+  const initialTranslations = initialLanguage === 'en' ? enTranslations : zhTranslations;
 
   return (
     <html lang={initialLanguage} suppressHydrationWarning>

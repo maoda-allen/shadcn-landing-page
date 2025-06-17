@@ -41,8 +41,8 @@ const logMessages: LogMessages = {
 
 class DevLogger {
   private getLanguage(): 'zh' | 'en' {
-    if (typeof window === 'undefined') return 'zh';
-    return (localStorage.getItem('language') as 'zh' | 'en') || 'zh';
+    if (typeof window === 'undefined') return 'en';
+    return (localStorage.getItem('language') as 'zh' | 'en') || 'en';
   }
 
   private getMessage(key: string, ...args: any[]): string {
