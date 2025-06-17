@@ -15,21 +15,83 @@ import { Loader2, Sparkles } from 'lucide-react';
 export function PartyPlannerForm() {
   const { state, updateFormData, generatePartyPlan } = useParty();
   const { t, language } = useLanguage();
-  const { formData, result, isLoading, error } = state;
   const [customTheme, setCustomTheme] = useState('');
   const [showCustomTheme, setShowCustomTheme] = useState(false);
 
+<<<<<<< HEAD
+=======
+  // 本地状态来强制重新渲染
+  const [localLoading, setLocalLoading] = useState(false);
+
+  // 监控加载状态变化
+  useEffect(() => {
+    setLocalLoading(state.isLoading);
+  }, [state.isLoading]);
+
+  // 使用组合状态
+  const isCurrentlyLoading = state.isLoading || localLoading;
+
+  // 定义主题选项
+  const themeOptions = [
+    { id: 'modern', icon: 'Square', suitable: ['adult'] },
+    { id: 'retro', icon: 'Music', suitable: ['adult'] },
+    { id: 'garden', icon: 'Flower', suitable: ['adult', 'elderly'] },
+    { id: 'superhero', icon: 'Zap', suitable: ['child', 'teen'] },
+    { id: 'princess', icon: 'Crown', suitable: ['child'] },
+    { id: 'ocean', icon: 'Waves', suitable: ['child'] }
+  ];
+
+  // 定义氛围选项
+  const atmosphereOptions = [
+    'lively', 'elegant', 'casual', 'formal', 'creative', 'intimate'
+  ];
+
+  const handlePartyTypeSelect = (type: 'adult' | 'child' | 'elderly') => {
+    updateFormData({ partyType: type });
+  };
+
+  const handleGuestCountSelect = (count: 'small' | 'medium' | 'large') => {
+    updateFormData({ guestCount: count });
+  };
+
+  const handleVenueSelect = (venue: 'indoor' | 'outdoor') => {
+    updateFormData({ venue });
+  };
+
+  const handleBudgetSelect = (budget: 'low' | 'medium' | 'high') => {
+    updateFormData({ budget });
+  };
+
+  const handleThemeSelect = (themeId: string) => {
+    const themeName = t(`planner.form.theme.${themeId}`);
+    updateFormData({ theme: themeName });
+    setShowCustomTheme(false);
+  };
+
+  const handleCustomThemeSubmit = () => {
+    if (customTheme.trim()) {
+      updateFormData({ theme: customTheme.trim() });
+      setShowCustomTheme(false);
+    }
+  };
+
+  const handleAtmosphereSelect = (atmosphere: string) => {
+    updateFormData({ atmosphere: atmosphere as any });
+  };
+
+  const isFormComplete = () => {
+    const { partyType, guestCount, venue, budget, theme, atmosphere } = state.formData;
+    return partyType && guestCount && venue && budget && theme && atmosphere;
+  };
+
+>>>>>>> parent of f6e9e17 (修复生成页面体验效果)
   // 生成按钮点击处理
   const handleGenerateClick = async () => {
-    // 如果已有结果，需要用户确认重新生成
-    if (result) {
-      const confirmed = window.confirm(t('planner.form.confirmRegenerate'));
-      
-      if (!confirmed) {
-        return; // 用户取消，不执行生成
-      }
+    if (!isFormComplete()) {
+      return;
     }
     
+<<<<<<< HEAD
     // 执行生成
     await generatePartyPlan();
   };
@@ -129,34 +191,86 @@ export function PartyPlannerForm() {
     { id: 'creative', label: t('planner.form.atmosphere.creative'), desc: t('planner.form.atmosphere.creativeDesc') },
     { id: 'intimate', label: t('planner.form.atmosphere.intimate'), desc: t('planner.form.atmosphere.intimateDesc') },
   ];
+=======
+    if (isCurrentlyLoading) {
+      return;
+    }
+    
+    setLocalLoading(true);
+    
+    try {
+      await generatePartyPlan();
+    } catch (error) {
+      console.error('生成派对方案失败:', error);
+    } finally {
+      setLocalLoading(false);
+    }
+  };
+>>>>>>> parent of f6e9e17 (修复生成页面体验效果)
 
   return (
     <div className="space-y-4 md:space-y-6">
       {/* 全局加载遮罩 */}
+<<<<<<< HEAD
       {isLoading && (
+=======
+      {isCurrentlyLoading && (
+>>>>>>> parent of f6e9e17 (修复生成页面体验效果)
         <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center"
-          style={{ zIndex: 10000 }}
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center"
+          style={{ zIndex: 9999 }}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
           }}
         >
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-2xl max-w-sm mx-4 border">
+          <div className="bg-white rounded-lg p-6 shadow-2xl max-w-sm mx-4 border">
             <div className="flex items-center space-x-3">
               <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
               <div>
-                <p className="font-medium text-gray-900 dark:text-gray-100">
-                  {t('planner.form.generating')}
-                </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  {t('planner.form.generatingDesc')}
-                </p>
+                <p className="font-medium text-gray-900">{t('planner.form.generating')}</p>
+                <p className="text-sm text-gray-600 mt-1">{t('planner.form.generatingDesc')}</p>
               </div>
             </div>
           </div>
         </div>
       )}
+<<<<<<< HEAD
+=======
+      
+      {/* Step 1: Party Type */}
+      <Card className={isCurrentlyLoading ? 'opacity-60 pointer-events-none' : ''}>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+            <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">1</span>
+            {t('planner.form.partyType.title')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+            {[
+              { value: 'child', label: t('planner.form.partyType.child'), desc: t('planner.form.partyType.descriptions.child'), icon: 'Baby' },
+              { value: 'adult', label: t('planner.form.partyType.adult'), desc: t('planner.form.partyType.descriptions.adult'), icon: 'User' },
+              { value: 'elderly', label: t('planner.form.partyType.elderly'), desc: t('planner.form.partyType.descriptions.elderly'), icon: 'Users' }
+            ].map((option) => (
+              <Button
+                key={option.value}
+                variant={state.formData.partyType === option.value ? "default" : "outline"}
+                className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
+                onClick={() => handlePartyTypeSelect(option.value as any)}
+                disabled={isCurrentlyLoading}
+              >
+                <Icon name={option.icon as keyof typeof icons} size={20} color="currentColor" />
+                <div className="space-y-1">
+                  <div className="font-semibold text-sm">{option.label}</div>
+                  <div className="text-xs text-muted-foreground">{option.desc}</div>
+                </div>
+              </Button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+>>>>>>> parent of f6e9e17 (修复生成页面体验效果)
 
       {/* 1. 派对类型选择 */}
       <Card className="border-primary/20">
@@ -171,6 +285,7 @@ export function PartyPlannerForm() {
             </div>
           </CardTitle>
         </CardHeader>
+<<<<<<< HEAD
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {partyTypes.map((type) => {
             const IconComponent = icons[type.icon as keyof typeof icons];
@@ -192,6 +307,118 @@ export function PartyPlannerForm() {
                       formData.partyType === type.id ? 'text-primary' : 'text-muted-foreground'
                     }`} />
                   </div>
+=======
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+            {[
+              { value: 'small', label: t('planner.form.guestCount.small'), desc: t('planner.form.guestCount.descriptions.small'), icon: 'Users' },
+              { value: 'medium', label: t('planner.form.guestCount.medium'), desc: t('planner.form.guestCount.descriptions.medium'), icon: 'Users' },
+              { value: 'large', label: t('planner.form.guestCount.large'), desc: t('planner.form.guestCount.descriptions.large'), icon: 'Users' }
+            ].map((option) => (
+              <Button
+                key={option.value}
+                variant={state.formData.guestCount === option.value ? "default" : "outline"}
+                className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
+                onClick={() => handleGuestCountSelect(option.value as any)}
+                disabled={isCurrentlyLoading}
+              >
+                <Icon name={option.icon as keyof typeof icons} size={20} color="currentColor" />
+                <div className="space-y-1">
+                  <div className="font-semibold text-sm">{option.label}</div>
+                  <div className="text-xs text-muted-foreground">{option.desc}</div>
+                </div>
+              </Button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Step 3: Venue */}
+      <Card className={isCurrentlyLoading ? 'opacity-60 pointer-events-none' : ''}>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+            <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">3</span>
+            {t('planner.form.venue.title')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+            {[
+              { value: 'indoor', label: t('planner.form.venue.indoor'), desc: t('planner.form.venue.descriptions.indoor'), icon: 'Home' },
+              { value: 'outdoor', label: t('planner.form.venue.outdoor'), desc: t('planner.form.venue.descriptions.outdoor'), icon: 'Trees' }
+            ].map((option) => (
+              <Button
+                key={option.value}
+                variant={state.formData.venue === option.value ? "default" : "outline"}
+                className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
+                onClick={() => handleVenueSelect(option.value as any)}
+                disabled={isCurrentlyLoading}
+              >
+                <Icon name={option.icon as keyof typeof icons} size={20} color="currentColor" />
+                <div className="space-y-1">
+                  <div className="font-semibold text-sm">{option.label}</div>
+                  <div className="text-xs text-muted-foreground">{option.desc}</div>
+                </div>
+              </Button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Step 4: Budget */}
+      <Card className={isCurrentlyLoading ? 'opacity-60 pointer-events-none' : ''}>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+            <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">4</span>
+            {t('planner.form.budget.title')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
+            {[
+              { value: 'low', label: t('planner.form.budget.low'), desc: t('planner.form.budget.descriptions.low'), icon: 'DollarSign' },
+              { value: 'medium', label: t('planner.form.budget.medium'), desc: t('planner.form.budget.descriptions.medium'), icon: 'DollarSign' },
+              { value: 'high', label: t('planner.form.budget.high'), desc: t('planner.form.budget.descriptions.high'), icon: 'DollarSign' }
+            ].map((option) => (
+              <Button
+                key={option.value}
+                variant={state.formData.budget === option.value ? "default" : "outline"}
+                className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
+                onClick={() => handleBudgetSelect(option.value as any)}
+                disabled={isCurrentlyLoading}
+              >
+                <Icon name={option.icon as keyof typeof icons} size={20} color="currentColor" />
+                <div className="space-y-1">
+                  <div className="font-semibold text-sm">{option.label}</div>
+                  <div className="text-xs text-muted-foreground">{option.desc}</div>
+                </div>
+              </Button>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Step 5: Theme */}
+      <Card className={isCurrentlyLoading ? 'opacity-60 pointer-events-none' : ''}>
+        <CardHeader className="pb-3">
+          <CardTitle className="flex items-center gap-2 text-base md:text-lg">
+            <span className="bg-primary text-primary-foreground rounded-full w-6 h-6 flex items-center justify-center text-sm font-medium">5</span>
+            {t('planner.form.theme.title')}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+              {themeOptions.map((theme) => (
+                <Button
+                  key={theme.id}
+                  variant={state.formData.theme === t(`planner.form.theme.${theme.id}`) ? "default" : "outline"}
+                  className="h-auto p-3 md:p-4 flex items-start gap-3 text-left justify-start"
+                  onClick={() => handleThemeSelect(theme.id)}
+                  disabled={isCurrentlyLoading}
+                >
+                  <Icon name={theme.icon as keyof typeof icons} size={18} color="currentColor" className="mt-0.5 flex-shrink-0" />
+>>>>>>> parent of f6e9e17 (修复生成页面体验效果)
                   <div className="flex-1 min-w-0">
                     <h3 className="font-semibold text-sm">{type.title}</h3>
                     <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{type.subtitle}</p>
@@ -223,6 +450,7 @@ export function PartyPlannerForm() {
             </div>
           </CardTitle>
         </CardHeader>
+<<<<<<< HEAD
         <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-3">
           {guestCounts.map((option) => (
             <button
@@ -331,6 +559,17 @@ export function PartyPlannerForm() {
                     ? 'border-primary shadow-sm'
                     : 'border-border hover:border-primary/50'
                 }`}
+=======
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
+            {atmosphereOptions.map((option) => (
+              <Button
+                key={option}
+                variant={state.formData.atmosphere === option ? "default" : "outline"}
+                className="h-auto p-3 md:p-4 flex flex-col items-center justify-center gap-2 text-center"
+                onClick={() => handleAtmosphereSelect(option)}
+                disabled={isCurrentlyLoading}
+>>>>>>> parent of f6e9e17 (修复生成页面体验效果)
               >
                 <div className={`absolute inset-0 bg-gradient-to-br ${theme.gradient} opacity-10`}></div>
                 <div className="relative">
@@ -428,6 +667,7 @@ export function PartyPlannerForm() {
 
       {/* 生成按钮 */}
       <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-primary/10">
+<<<<<<< HEAD
         <CardContent className="py-6">
           <div className="text-center space-y-4">
             <p className="text-sm text-muted-foreground">
@@ -435,6 +675,38 @@ export function PartyPlannerForm() {
                 ? t('planner.form.readyToGenerate')
                 : t('planner.form.completeAllSteps')
               }
+=======
+        <CardContent className="pt-4 pb-4">
+          <Button
+            onClick={handleGenerateClick}
+            disabled={!isFormComplete() || isCurrentlyLoading}
+            className={`w-full h-11 md:h-12 text-base font-medium relative transition-all duration-200 ${
+              isCurrentlyLoading ? 'opacity-75 cursor-not-allowed' : ''
+            }`}
+            size="lg"
+          >
+            {isCurrentlyLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                {t('planner.form.generating')}
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-4 h-4 mr-2" />
+                {t('planner.form.generateButton')}
+              </>
+            )}
+          </Button>
+          
+          {state.error && (
+            <p className="text-destructive text-sm mt-3 text-center">{state.error}</p>
+          )}
+          
+          {/* 表单完整性提示 */}
+          {!isFormComplete() && !isCurrentlyLoading && (
+            <p className="text-muted-foreground text-sm mt-3 text-center">
+              {t('planner.form.completeAllSteps')}
+>>>>>>> parent of f6e9e17 (修复生成页面体验效果)
             </p>
             <Button 
               onClick={handleGenerateClick}
