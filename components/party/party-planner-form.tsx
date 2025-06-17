@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Icon } from '@/components/ui/icon';
 import { icons } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useLanguage } from '@/lib/contexts/language-context';
 import { Loader2, Sparkles } from 'lucide-react';
 
@@ -97,7 +97,7 @@ export function PartyPlannerForm() {
   };
 
   // 派对类型选项
-  const partyTypes = [
+  const partyTypes = useMemo(() => [
     { 
       id: 'adultBirthday', 
       icon: 'User', 
@@ -126,32 +126,32 @@ export function PartyPlannerForm() {
       subtitle: t('planner.form.partyType.teenBirthdayDesc'),
       badges: [t('planner.form.partyType.badges.trendy'), t('planner.form.partyType.badges.social')]
     },
-  ];
+  ], [language]);
 
   // 聚会规模选项
-  const guestCounts = [
+  const guestCounts = useMemo(() => [
     { id: 'smallParty', label: t('planner.form.guestCount.smallParty'), desc: t('planner.form.guestCount.smallPartyDesc') },
     { id: 'mediumParty', label: t('planner.form.guestCount.mediumParty'), desc: t('planner.form.guestCount.mediumPartyDesc') },
     { id: 'largeParty', label: t('planner.form.guestCount.largeParty'), desc: t('planner.form.guestCount.largePartyDesc') },
-  ];
+  ], [language]);
 
   // 场地选项
-  const venues = [
+  const venues = useMemo(() => [
     { id: 'home', label: t('planner.form.venue.home'), desc: t('planner.form.venue.homeDesc') },
     { id: 'outdoor', label: t('planner.form.venue.outdoor'), desc: t('planner.form.venue.outdoorDesc') },
     { id: 'restaurant', label: t('planner.form.venue.restaurant'), desc: t('planner.form.venue.restaurantDesc') },
     { id: 'hall', label: t('planner.form.venue.hall'), desc: t('planner.form.venue.hallDesc') },
-  ];
+  ], [language]);
 
   // 预算选项
-  const budgets = [
+  const budgets = useMemo(() => [
     { id: 'budget', label: t('planner.form.budget.budget'), desc: t('planner.form.budget.budgetDesc') },
     { id: 'standard', label: t('planner.form.budget.standard'), desc: t('planner.form.budget.standardDesc') },
     { id: 'premium', label: t('planner.form.budget.premium'), desc: t('planner.form.budget.premiumDesc') },
-  ];
+  ], [language]);
 
   // 主题选项
-  const themes = [
+  const themes = useMemo(() => [
     { 
       id: 'garden', 
       title: t('planner.form.theme.garden.title'), 
@@ -180,16 +180,17 @@ export function PartyPlannerForm() {
       badges: [t('planner.form.theme.ocean.badge1'), t('planner.form.theme.ocean.badge2')],
       gradient: 'from-cyan-500 to-blue-600'
     },
-  ];
+  ], [language]);
 
   // 氛围选项
-  const atmospheres = [
+  const atmospheres = useMemo(() => [
     { id: 'lively', label: t('planner.form.atmosphere.lively'), desc: t('planner.form.atmosphere.livelyDesc') },
     { id: 'elegant', label: t('planner.form.atmosphere.elegant'), desc: t('planner.form.atmosphere.elegantDesc') },
     { id: 'casual', label: t('planner.form.atmosphere.casual'), desc: t('planner.form.atmosphere.casualDesc') },
     { id: 'formal', label: t('planner.form.atmosphere.formal'), desc: t('planner.form.atmosphere.formalDesc') },
     { id: 'creative', label: t('planner.form.atmosphere.creative'), desc: t('planner.form.atmosphere.creativeDesc') },
     { id: 'intimate', label: t('planner.form.atmosphere.intimate'), desc: t('planner.form.atmosphere.intimateDesc') },
+<<<<<<< HEAD
   ];
 =======
     if (isCurrentlyLoading) {
@@ -207,6 +208,9 @@ export function PartyPlannerForm() {
     }
   };
 >>>>>>> parent of f6e9e17 (修复生成页面体验效果)
+=======
+  ], [language]);
+>>>>>>> feb54ec7d25b0817b02206ce1cc00b25bba8ce19
 
   return (
     <div className="space-y-4 md:space-y-6">

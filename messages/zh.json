@@ -136,91 +136,117 @@
       "subtitle": "告诉我们您的需求，我们将为您定制完美的生日派对策划",
       "partyType": {
         "title": "选择派对类型",
-        "adult": "成人生日",
-        "child": "儿童生日",
-        "elderly": "长辈生日",
-        "teen": "青少年",
-        "descriptions": {
-          "child": "3-12岁",
-          "adult": "18-50岁",
-          "elderly": "50岁以上"
+        "subtitle": "为不同年龄段选择最适合的派对方案",
+        "adultBirthday": "成人生日",
+        "adultBirthdayDesc": "18-50岁",
+        "kidsBirthday": "儿童生日",
+        "kidsBirthdayDesc": "3-12岁",
+        "seniorBirthday": "长辈生日",
+        "seniorBirthdayDesc": "50岁以上",
+        "teenBirthday": "青少年生日",
+        "teenBirthdayDesc": "13-18岁",
+        "badges": {
+          "mature": "成熟",
+          "personalized": "个性化",
+          "interactive": "互动",
+          "colorful": "多彩",
+          "warm": "温馨",
+          "meaningful": "有意义",
+          "trendy": "潮流",
+          "social": "社交"
         }
       },
       "guestCount": {
         "title": "确定派对规模",
-        "small": "小型聚会",
-        "medium": "中型聚会",
-        "large": "大型聚会",
-        "descriptions": {
-          "small": "10人以内",
-          "medium": "10-30人",
-          "large": "30人以上"
-        }
+        "subtitle": "选择合适的派对人数范围",
+        "smallParty": "小型聚会",
+        "smallPartyDesc": "10人以内",
+        "mediumParty": "中型聚会",
+        "mediumPartyDesc": "10-30人",
+        "largeParty": "大型聚会",
+        "largePartyDesc": "30人以上"
       },
       "venue": {
         "title": "选择派对场地",
-        "indoor": "室内场地",
+        "subtitle": "根据您的派对风格选择理想的地点",
+        "home": "家中",
+        "homeDesc": "温馨舒适，自由度高",
         "outdoor": "户外场地",
-        "descriptions": {
-          "indoor": "家中、餐厅、会所等",
-          "outdoor": "公园、花园、海滩等"
-        }
+        "outdoorDesc": "公园、花园或海滩",
+        "restaurant": "餐厅/咖啡馆",
+        "restaurantDesc": "氛围轻松，无需自己准备",
+        "hall": "宴会厅/活动空间",
+        "hallDesc": "空间宽敞，适合大型派对"
       },
       "budget": {
         "title": "设置预算范围",
-        "low": "经济型",
-        "medium": "中档型",
-        "high": "豪华型",
-        "descriptions": {
-          "low": "500-1500元",
-          "medium": "1500-5000元",
-          "high": "5000元以上"
-        }
+        "subtitle": "为您的派对设定一个合理的预算",
+        "budget": "经济型",
+        "budgetDesc": "500-1500元",
+        "standard": "中档型",
+        "standardDesc": "1500-5000元",
+        "premium": "豪华型",
+        "premiumDesc": "5000元以上"
       },
       "theme": {
         "title": "选择创意主题",
-        "placeholder": "输入您的创意主题...",
-        "modern": "简约现代",
-        "retro": "复古派对",
-        "garden": "花园聚会",
-        "superhero": "超级英雄",
-        "princess": "公主主题",
-        "ocean": "海洋探险",
+        "subtitle": "为派对增添独特的个性和趣味",
+        "garden": {
+          "title": "花园聚会",
+          "subtitle": "自然清新，鲜花装饰",
+          "badge1": "户外",
+          "badge2": "清新"
+        },
+        "superhero": {
+          "title": "超级英雄",
+          "subtitle": "漫威、DC英雄主题，动作游戏",
+          "badge1": "动感",
+          "badge2": "主题"
+        },
+        "princess": {
+          "title": "公主主题",
+          "subtitle": "梦幻城堡，粉色装饰",
+          "badge1": "梦幻",
+          "badge2": "优雅"
+        },
+        "ocean": {
+          "title": "海洋探险",
+          "subtitle": "海洋生物，蓝色主题",
+          "badge1": "探索",
+          "badge2": "清凉"
+        },
         "customTheme": "自定义主题",
-        "customThemeName": "自定义主题名称",
-        "confirm": "确定",
-        "cancel": "取消",
-        "descriptions": {
-          "modern": "极简风格，高端大气",
-          "retro": "80年代怀旧风格，经典音乐和装饰",
-          "garden": "自然清新，鲜花装饰",
-          "superhero": "漫威、DC英雄主题，动作游戏",
-          "princess": "梦幻城堡，粉色装饰",
-          "ocean": "海洋生物，蓝色主题"
-        }
+        "customThemeDesc": "输入您自己的创意主题",
+        "customThemeLabel": "您的创意主题",
+        "customThemePlaceholder": "例如：80年代复古、赛博朋克...",
+        "customThemeHelp": "AI将根据您的主题生成创意方案"
       },
       "atmosphere": {
         "title": "确定派对氛围",
+        "subtitle": "选择您希望派对呈现的整体感觉",
         "lively": "热闹欢快",
+        "livelyDesc": "音乐、游戏、互动",
         "elegant": "优雅温馨",
+        "elegantDesc": "轻音乐、聊天、品茶",
         "casual": "轻松随意",
+        "casualDesc": "自由活动、简单聚餐",
         "formal": "正式庄重",
+        "formalDesc": "仪式感、致辞、合影",
         "creative": "创意互动",
+        "creativeDesc": "DIY活动、主题游戏",
         "intimate": "温馨私密",
-        "descriptions": {
-          "lively": "音乐、游戏、互动",
-          "elegant": "轻音乐、聊天、品茶",
-          "casual": "自由活动、简单聚餐",
-          "formal": "仪式感、致辞、合影",
-          "creative": "DIY活动、主题游戏",
-          "intimate": "小范围、深度交流"
-        }
+        "intimateDesc": "小范围、深度交流"
       },
       "generateButton": "生成派对方案",
       "regenerateButton": "生成新方案",
       "generating": "生成中...",
       "generatingDesc": "AI正在根据您的选择定制专属方案，请稍候...",
       "completeAllSteps": "请完成所有步骤后再生成方案",
+<<<<<<< HEAD
+=======
+      "confirmRegenerate": "确定要重新生成新的派对方案吗？当前方案将被替换。",
+      "readyToGenerate": "所有步骤已完成，可以生成方案了！",
+>>>>>>> feb54ec7d25b0817b02206ce1cc00b25bba8ce19
       "errors": {
         "incompleteForm": "请完成所有选择后再生成方案",
         "unknownError": "生成方案时发生未知错误，请稍后重试"
