@@ -22,6 +22,240 @@ const client = API_KEY ? new OpenAI({
   apiKey: API_KEY,
 }) : null;
 
+// 新增：动态标签映射 - 使用更详细的文化内涵描述
+const DYNAMIC_TAGS_MAP: Record<string, Record<string, { label: string; description: string; gender: string }>> = {
+  '0-3': {
+    'first-birthday': { 
+      label: 'First Birthday', 
+      description: 'Baby\'s first major birthday milestone, American parents often hold parties and take "Smash Cake" photos for commemoration', 
+      gender: 'all' 
+    },
+    'second-birthday': { 
+      label: 'Second Birthday', 
+      description: 'Baby enters language and social sensitive period, starts participating in simple game parties', 
+      gender: 'all' 
+    },
+    'third-birthday': { 
+      label: 'Third Birthday', 
+      description: 'Enhanced expression ability, many parents first hold themed parties (animated characters, color themes, etc.)', 
+      gender: 'all' 
+    }
+  },
+  '4-17': {
+    'starting-school': { 
+      label: 'Starting School', 
+      description: '5th birthday - growth milestone before entering elementary school, parents express encouragement and blessings', 
+      gender: 'all' 
+    },
+    'big-kid': { 
+      label: 'Big Kid', 
+      description: '7th birthday - "little adult" stage, children\'s self-awareness strengthens, a transition period parents love to celebrate', 
+      gender: 'all' 
+    },
+    'double-digits': { 
+      label: 'Double Digits', 
+      description: '10th birthday - age first enters "double digits", American kids particularly care about it, often seen as important turning point', 
+      gender: 'all' 
+    },
+    'teenager': { 
+      label: 'Teenager', 
+      description: '13th birthday - officially becoming a teenager, symbol of growth, very important to both American parents and children', 
+      gender: 'all' 
+    },
+    'quinceanera': { 
+      label: 'Quinceañera', 
+      description: '15th birthday - important coming-of-age ceremony for Latina girls, usually involves grand ball ceremony', 
+      gender: 'female' 
+    },
+    'sweet-sixteen': { 
+      label: 'Sweet Sixteen', 
+      description: '16th birthday - especially for girls, extremely formal youth celebration in American culture', 
+      gender: 'all' 
+    }
+  },
+  '18-59': {
+    'adult': { 
+      label: 'Adult', 
+      description: '18th birthday - legal adulthood, symbolizing independence, responsibility and social identity change', 
+      gender: 'all' 
+    },
+    'drinking-age': { 
+      label: 'Drinking Age', 
+      description: '21st birthday - legal drinking age, one of the most anticipated birthdays for American young people, friend gatherings extremely common', 
+      gender: 'all' 
+    },
+    'big-30': { 
+      label: 'Big 3-0', 
+      description: '30th birthday - farewell to "twenties", entering mature life stage, often celebrated with "Flirty Thirty" humor', 
+      gender: 'all' 
+    },
+    'over-the-hill': { 
+      label: 'Over the Hill', 
+      description: '40th birthday - "life beyond the hill" humorous saying, often featuring quirky or satirical style parties', 
+      gender: 'all' 
+    },
+    'golden-50': { 
+      label: 'Golden 50', 
+      description: '50th birthday - golden middle-age milestone, family and friends hold large celebrations summarizing life stages', 
+      gender: 'all' 
+    }
+  },
+  '60+': {
+    'senior-start': { 
+      label: 'Senior Start', 
+      description: '60th birthday - officially entering "senior stage", warm family celebrations are common', 
+      gender: 'all' 
+    },
+    'retirement': { 
+      label: 'Retirement', 
+      description: '65th birthday - retirement age for most people, milestone from work life to life living', 
+      gender: 'all' 
+    },
+    'celebrating-life': { 
+      label: 'Celebrating Life', 
+      description: '70th birthday - emphasizing health, family, memories, important milestone when elders willingly review their lives', 
+      gender: 'all' 
+    },
+    'big-80': { 
+      label: 'Big 8-0', 
+      description: '80th birthday - symbol of longevity, usually a birthday banquet celebration planned by the whole family', 
+      gender: 'all' 
+    },
+    'legacy-birthday': { 
+      label: 'Legacy Birthday', 
+      description: '90+ birthday - advanced age, celebrating elder\'s wisdom and family heritage, with extremely high emotional value', 
+      gender: 'all' 
+    }
+  }
+};
+
+// 中文动态标签映射 - 使用更详细的文化内涵描述
+const DYNAMIC_TAGS_MAP_ZH: Record<string, Record<string, { label: string; description: string; gender: string }>> = {
+  '0-3': {
+    'first-birthday': { 
+      label: '第一个生日', 
+      description: '宝宝人生第一个重要生日，美国家长常举办派对并拍"Smash Cake"照片纪念', 
+      gender: 'all' 
+    },
+    'second-birthday': { 
+      label: '第二个生日', 
+      description: '宝宝进入语言与社交敏感期，开始参与简单的游戏派对', 
+      gender: 'all' 
+    },
+    'third-birthday': { 
+      label: '第三个生日', 
+      description: '表达能力增强，很多父母会首次举办主题化派对（如动画角色、色彩主题等）', 
+      gender: 'all' 
+    }
+  },
+  '4-17': {
+    'starting-school': { 
+      label: '入学年龄', 
+      description: '进入小学前的成长节点，家长会借此表达鼓励与祝福', 
+      gender: 'all' 
+    },
+    'big-kid': { 
+      label: '大孩子', 
+      description: '"小大人"阶段，孩子自我意识增强，是家长喜欢庆祝的转变期', 
+      gender: 'all' 
+    },
+    'double-digits': { 
+      label: '双位数', 
+      description: '年龄首次进入"两位数"，美国孩子特别在意，常被视为重要转折点', 
+      gender: 'all' 
+    },
+    'teenager': { 
+      label: '青少年', 
+      description: '正式成为Teenager，是成长的象征，美国家长和孩子都非常重视', 
+      gender: 'all' 
+    },
+    'quinceanera': { 
+      label: '成人礼', 
+      description: '拉丁裔女孩的重要成人礼，通常会举行隆重的舞会仪式', 
+      gender: 'female' 
+    },
+    'sweet-sixteen': { 
+      label: '甜蜜十六岁', 
+      description: '尤其对女孩而言，是美国文化中极其具有仪式感的青春庆典', 
+      gender: 'all' 
+    }
+  },
+  '18-59': {
+    'adult': { 
+      label: '成年人', 
+      description: '法定成年，象征独立、责任与社会身份的变化', 
+      gender: 'all' 
+    },
+    'drinking-age': { 
+      label: '饮酒年龄', 
+      description: '合法饮酒年龄，美国年轻人最期待的生日之一，朋友聚会极为常见', 
+      gender: 'all' 
+    },
+    'big-30': { 
+      label: '三十而立', 
+      description: '告别"二十代"，进入成熟生活阶段，常用"Flirty Thirty"调侃庆祝', 
+      gender: 'all' 
+    },
+    'over-the-hill': { 
+      label: '不惑之年', 
+      description: '"山那边的人生"幽默说法，常举办搞怪或诙谐风格派对', 
+      gender: 'all' 
+    },
+    'golden-50': { 
+      label: '金色五十', 
+      description: '人生的黄金中年节点，家人朋友会举办大型庆祝总结人生阶段', 
+      gender: 'all' 
+    }
+  },
+  '60+': {
+    'senior-start': { 
+      label: '花甲之年', 
+      description: '正式跨入"敬老阶段"，家庭温馨庆祝常见', 
+      gender: 'all' 
+    },
+    'retirement': { 
+      label: '退休庆典', 
+      description: '多数人退休的年龄，是从工作人生转向生活人生的节点', 
+      gender: 'all' 
+    },
+    'celebrating-life': { 
+      label: '庆祝人生', 
+      description: '强调健康、家庭、回忆，是长辈愿意回顾人生的重要节点', 
+      gender: 'all' 
+    },
+    'big-80': { 
+      label: '八十大寿', 
+      description: '高寿的象征，通常为全家人共同策划的寿宴庆典', 
+      gender: 'all' 
+    },
+    'legacy-birthday': { 
+      label: '传承生日', 
+      description: '高龄高寿，庆祝长老的智慧与家族传承，具有极高情感价值', 
+      gender: 'all' 
+    }
+  }
+};
+
+// 动态标签描述函数 - 优化以突出文化意义
+function getDynamicTagsDescription(ageGroup: string, dynamicTags: string[], language: string = 'en'): string {
+  if (!dynamicTags || dynamicTags.length === 0) {
+    return language === 'en' ? 'No specific milestones selected' : '未选择特殊里程碑';
+  }
+
+  const tagMap = language === 'en' ? DYNAMIC_TAGS_MAP : DYNAMIC_TAGS_MAP_ZH;
+  const descriptions = dynamicTags.map(tagId => {
+    const tagInfo = tagMap[ageGroup]?.[tagId];
+    if (tagInfo) {
+      // 突出显示里程碑的文化意义
+      return `**${tagInfo.label}** (${tagInfo.description})`;
+    }
+    return tagId;
+  });
+
+  const prefix = language === 'en' ? 'Special Cultural Milestones: ' : '特殊文化里程碑：';
+  return prefix + descriptions.join(' | ');
+}
+
 export async function POST(request: NextRequest) {
   try {
     console.log('🚀 API路由开始处理请求...');
@@ -31,9 +265,31 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     console.log('📦 请求体内容:', JSON.stringify(body, null, 2));
     
-    const { partyType, guestCount, venue, budget, theme, atmosphere, language = 'en' } = body;
+    const { 
+      partyType, 
+      ageGroup, 
+      gender, 
+      dynamicTags, 
+      guestCount, 
+      venue, 
+      budget, 
+      theme, 
+      atmosphere, 
+      language = 'en' 
+    } = body;
 
-    console.log('🚀 收到请求参数:', { partyType, guestCount, venue, budget, theme, atmosphere, language });
+    console.log('🚀 收到请求参数:', { 
+      partyType, 
+      ageGroup, 
+      gender, 
+      dynamicTags, 
+      guestCount, 
+      venue, 
+      budget, 
+      theme, 
+      atmosphere, 
+      language 
+    });
     
     // 验证必需参数
     if (!partyType || !guestCount || !venue || !budget || !theme || !atmosphere) {
@@ -64,8 +320,10 @@ export async function POST(request: NextRequest) {
     console.log('🔑 使用环境变量中的API密钥');
     console.log('🌐 API基础URL:', BASE_URL);
 
-    // 根据语言生成不同的提示词
-    const prompt = language === 'en' ? getEnglishPrompt(partyType, guestCount, venue, budget, theme, atmosphere) : getChinesePrompt(partyType, guestCount, venue, budget, theme, atmosphere);
+    // 根据语言生成不同的提示词，现在包含所有详细信息
+    const prompt = language === 'en' 
+      ? getEnglishPrompt(partyType, ageGroup, gender, dynamicTags, guestCount, venue, budget, theme, atmosphere) 
+      : getChinesePrompt(partyType, ageGroup, gender, dynamicTags, guestCount, venue, budget, theme, atmosphere);
 
     console.log('开始调用OpenRouter AI...');
     console.log('请求URL:', 'https://openrouter.ai/api/v1/chat/completions');
@@ -477,65 +735,79 @@ function getAtmosphereText(atmosphere: string): string {
   return atmospheres[atmosphere as keyof typeof atmospheres] || atmosphere;
 }
 
-function getEnglishPrompt(partyType: string, guestCount: string, venue: string, budget: string, theme: string, atmosphere: string) {
-  return `Hello! I am a professional birthday party planning consultant with 15 years of event planning experience. I specialize in providing personalized birthday celebration planning services for families, businesses, and individuals, dedicated to creating unforgettable wonderful moments.
+function getEnglishPrompt(partyType: string, ageGroup: string, gender: string, dynamicTags: string[], guestCount: string, venue: string, budget: string, theme: string, atmosphere: string) {
+  const milestoneInfo = getDynamicTagsDescription(ageGroup, dynamicTags, 'en');
+  const hasMilestones = dynamicTags && dynamicTags.length > 0;
+  
+  return `Hello! I am a professional birthday party planning consultant with 15 years of event planning experience, specializing in culturally-sensitive celebrations that honor life's important milestones. I understand the deep emotional and cultural significance of each birthday celebration, especially those marking special life transitions.
 
 Based on the requirements you provided, I will create a detailed birthday party planning proposal for you:
 
-📋 **Requirements Analysis**
+📋 **Cultural Context & Requirements Analysis**
 - Party Type: ${getPartyTypeTextEn(partyType)}
+- Age Group: ${ageGroup}
+- Gender: ${gender}
+- **Cultural Milestone Context**: ${milestoneInfo}
 - Number of Guests: ${getGuestCountTextEn(guestCount)}
 - Venue Choice: ${getVenueTextEn(venue)}
 - Budget Range: ${getBudgetTextEn(budget)}
 - Theme Style: ${theme}
 - Desired Atmosphere: ${getAtmosphereTextEn(atmosphere)}
 
+${hasMilestones ? `**🎯 SPECIAL CULTURAL MILESTONE FOCUS**: 
+This celebration honors a significant life transition with deep cultural meaning. Every suggestion must reflect the emotional weight, traditions, and ceremonial importance of this milestone. Consider:
+- How family and community traditionally celebrate this transition
+- The symbolic meaning and what it represents for the individual's life journey
+- Cultural traditions and expectations associated with this milestone
+- Ways to create lasting memories that honor this life stage
+- Incorporating elements that acknowledge the significance of this moment**` : ''}
+
 **IMPORTANT REQUIREMENT: Please return STRICTLY in the following JSON format with NO additional text or explanations, return the JSON object directly:**
 
 {
   "venue": [
-    "Venue suggestion 1: Specific venue setup plan with detailed budget breakdown $30-75, including layout design and decoration techniques",
-    "Venue suggestion 2: Alternative venue choice with specific layout design and functional area division",
-    "Venue suggestion 3: Third venue option with decoration tips and budget-friendly setup ideas",
-    "Venue suggestion 4: Fourth venue recommendation with practical arrangement points and cost-effective solutions"
+    "Venue suggestion 1: ${hasMilestones ? 'Milestone-appropriate venue setup honoring the cultural significance, ' : ''}Specific venue setup plan with detailed budget breakdown $30-75, including layout design and decoration techniques",
+    "Venue suggestion 2: ${hasMilestones ? 'Space design that reflects the ceremonial importance, ' : ''}Alternative venue choice with specific layout design and functional area division",
+    "Venue suggestion 3: ${hasMilestones ? 'Venue arrangement emphasizing the life transition theme, ' : ''}Third venue option with decoration tips and budget-friendly setup ideas",
+    "Venue suggestion 4: ${hasMilestones ? 'Setting that honors family traditions and milestone meaning, ' : ''}Fourth venue recommendation with practical arrangement points and cost-effective solutions"
   ],
   "activities": [
-    "Activity suggestion 1: Design an interactive game that can mobilize full participation enthusiasm, including specific gameplay rules, required props list, and execution steps",
-    "Activity suggestion 2: Arrange a warm and touching emotional exchange session with detailed execution methods and timing guidance",
-    "Activity suggestion 3: Third activity plan specifically suitable for ${getPartyTypeTextEn(partyType)}, with participant engagement strategies",
-    "Activity suggestion 4: Fourth activity recommendation with time scheduling and diverse participation methods for different personality types"
+    "Activity suggestion 1: ${hasMilestones ? 'Milestone-honoring ceremony or ritual activity recognizing the life transition, ' : ''}Design an interactive game that can mobilize full participation enthusiasm, including specific gameplay rules, required props list, and execution steps",
+    "Activity suggestion 2: ${hasMilestones ? 'Memory-sharing session that celebrates the journey and looks forward to the future, ' : ''}Arrange a warm and touching emotional exchange session with detailed execution methods and timing guidance",
+    "Activity suggestion 3: ${hasMilestones ? 'Traditional or symbolic activity that acknowledges the cultural significance, ' : ''}Third activity plan specifically suitable for ${getPartyTypeTextEn(partyType)}, with participant engagement strategies",
+    "Activity suggestion 4: ${hasMilestones ? 'Community-building activity that involves family/friends in honoring this milestone, ' : ''}Fourth activity recommendation with time scheduling and diverse participation methods for different personality types"
   ],
   "decorations": [
-    "Decoration suggestion 1: ${theme} theme color coordination plan with budget $45-120, including specific item shopping list and DIY instructions",
-    "Decoration suggestion 2: Creative decoration scheme with DIY production methods, materials list, and cost-saving tips",
-    "Decoration suggestion 3: Atmosphere creation plan including lighting arrangement, background setup, and visual impact techniques",
-    "Decoration suggestion 4: Detail decoration recommendations including table settings, space decoration elements, and finishing touches"
+    "Decoration suggestion 1: ${theme} theme with ${hasMilestones ? 'milestone-symbolic elements and meaningful color schemes, ' : ''}color coordination plan with budget $45-120, including specific item shopping list and DIY instructions",
+    "Decoration suggestion 2: ${hasMilestones ? 'Decorative elements that tell the story of this life journey and transition, ' : ''}Creative decoration scheme with DIY production methods, materials list, and cost-saving tips",
+    "Decoration suggestion 3: ${hasMilestones ? 'Display areas showcasing memories and celebrating growth/achievements, ' : ''}Atmosphere creation plan including lighting arrangement, background setup, and visual impact techniques",
+    "Decoration suggestion 4: ${hasMilestones ? 'Cultural and traditional decorative touches that honor the milestone meaning, ' : ''}Detail decoration recommendations including table settings, space decoration elements, and finishing touches"
   ],
   "catering": [
-    "Catering suggestion 1: Main course plan suitable for ${getGuestCountTextEn(guestCount)} with budget $60-180, including procurement advice and preparation methods",
-    "Catering suggestion 2: Exquisite desserts and birthday cake options with flavor choices, presentation methods, and dietary considerations",
-    "Catering suggestion 3: Beverage pairing plan including alcoholic and non-alcoholic options, quantity calculations, and serving suggestions",
-    "Catering suggestion 4: Snacks and appetizer recommendations balancing health and taste, with portion planning and presentation ideas"
+    "Catering suggestion 1: ${hasMilestones ? 'Menu honoring cultural traditions and milestone preferences, ' : ''}Main course plan suitable for ${getGuestCountTextEn(guestCount)} with budget $60-180, including procurement advice and preparation methods",
+    "Catering suggestion 2: ${hasMilestones ? 'Ceremonial cake design that symbolizes the life transition and cultural meaning, ' : ''}Exquisite desserts and birthday cake options with flavor choices, presentation methods, and dietary considerations",
+    "Catering suggestion 3: ${hasMilestones ? 'Traditional beverages or special drinks that honor the milestone celebration, ' : ''}Beverage pairing plan including alcoholic and non-alcoholic options, quantity calculations, and serving suggestions",
+    "Catering suggestion 4: ${hasMilestones ? 'Meaningful food choices that reflect family traditions and cultural significance, ' : ''}Snacks and appetizer recommendations balancing health and taste, with portion planning and presentation ideas"
   ],
   "music": [
-    "Music suggestion 1: Opening music arrangement (first 30 minutes) with playlist recommendations, sound equipment advice, and volume control tips",
-    "Music suggestion 2: Activity peak music (middle 1 hour) including interactive music selections and background music for different activities",
-    "Music suggestion 3: Dining period music (30-45 minutes) with relaxing and pleasant background music that enhances conversation",
-    "Music suggestion 4: Closing music arrangement (final 15 minutes) including warm farewell music and transition timing"
+    "Music suggestion 1: ${hasMilestones ? 'Opening with culturally meaningful music that sets the ceremonial tone, ' : ''}Opening music arrangement (first 30 minutes) with playlist recommendations, sound equipment advice, and volume control tips",
+    "Music suggestion 2: ${hasMilestones ? 'Milestone celebration music that captures the emotional significance and joy, ' : ''}Activity peak music (middle 1 hour) including interactive music selections and background music for different activities",
+    "Music suggestion 3: ${hasMilestones ? 'Reflective music during intimate moments that honor the life journey, ' : ''}Dining period music (30-45 minutes) with relaxing and pleasant background music that enhances conversation",
+    "Music suggestion 4: ${hasMilestones ? 'Closing music that leaves guests with lasting memories of this special milestone, ' : ''}Closing music arrangement (final 15 minutes) including warm farewell music and transition timing"
   ],
   "schedule": [
-    "Time arrangement 1: Welcome opening (first 30 minutes) - Guest arrival, check-in, opening music, simple ice-breaking activities",
-    "Time arrangement 2: Main activities (1-1.5 hours) - Birthday celebration ceremony, interactive games, photo sessions, highlight moments",
-    "Time arrangement 3: Dining time (45 minutes-1 hour) - Enjoy food, relaxed conversation, background music, social mingling",
-    "Time arrangement 4: Free activities (30 minutes) - Free interaction, mini games, preparation for farewell, memory sharing",
-    "Time arrangement 5: Closing session (15 minutes) - Thank you speech, group photos, farewell ceremony, guest departure"
+    "Time arrangement 1: ${hasMilestones ? 'Ceremonial welcome honoring the milestone significance (30 min), ' : ''}Welcome opening (first 30 minutes) - Guest arrival, check-in, opening music, simple ice-breaking activities",
+    "Time arrangement 2: ${hasMilestones ? 'Main milestone ceremony celebrating the life transition (1-1.5 hours), ' : ''}Main activities (1-1.5 hours) - Birthday celebration ceremony, interactive games, photo sessions, highlight moments",
+    "Time arrangement 3: ${hasMilestones ? 'Celebratory feast honoring family traditions and cultural meaning (45-60 min), ' : ''}Dining time (45 minutes-1 hour) - Enjoy food, relaxed conversation, background music, social mingling",
+    "Time arrangement 4: ${hasMilestones ? 'Reflection and blessing time for milestone wishes and family bonds (30 min), ' : ''}Free activities (30 minutes) - Free interaction, mini games, preparation for farewell, memory sharing",
+    "Time arrangement 5: ${hasMilestones ? 'Meaningful farewell with milestone blessings and future hopes (15 min), ' : ''}Closing session (15 minutes) - Thank you speech, group photos, farewell ceremony, guest departure"
   ]
 }
 
-**Professional Planning Requirements:**
-1. Each suggestion must include specific budget references and actionable execution guidance
-2. Design 2-3 exciting interactive sessions with detailed participation strategies
-3. Incorporate warm emotional elements with clear implementation methods
+**Enhanced Cultural Planning Requirements:**
+1. ${hasMilestones ? 'Every suggestion must honor the deep cultural and personal significance of this life milestone' : 'Each suggestion must include specific budget references and actionable execution guidance'}
+2. ${hasMilestones ? 'Incorporate traditional elements and ceremonial aspects appropriate to this life transition' : 'Design 2-3 exciting interactive sessions with detailed participation strategies'}
+3. ${hasMilestones ? 'Create meaningful moments that will become treasured memories for this important life stage' : 'Incorporate warm emotional elements with clear implementation methods'}
 4. Consider venue layout and crowd flow with practical arrangement tips
 5. Provide comprehensive shopping lists and DIY instructions where applicable
 6. Music arrangements must be segmented by time with equipment recommendations
@@ -544,69 +816,99 @@ Based on the requirements you provided, I will create a detailed birthday party 
 **Quality Standards:**
 - Every suggestion must be specific, practical, and immediately actionable
 - Include detailed budget breakdowns and cost-saving alternatives
-- Provide step-by-step execution methods for complex elements
+- ${hasMilestones ? 'Reflect deep understanding of the cultural milestone\'s emotional and ceremonial importance' : 'Provide step-by-step execution methods for complex elements'}
 - Consider different guest preferences and participation levels
 - Ensure seamless flow between different party segments
 
-The goal is to create an unforgettable experience for the birthday person and every guest, while maintaining reasonable budget, simple execution, and excellent results. Please ensure each recommendation is detailed, practical, and includes comprehensive planning guidance.`;
+${hasMilestones ? 'The goal is to create a celebration that honors this significant life transition while creating an unforgettable experience that the birthday person and every guest will treasure as a meaningful milestone in their lives.' : 'The goal is to create an unforgettable experience for the birthday person and every guest, while maintaining reasonable budget, simple execution, and excellent results.'} Please ensure each recommendation is detailed, practical, and includes comprehensive planning guidance.`;
 }
 
-function getChinesePrompt(partyType: string, guestCount: string, venue: string, budget: string, theme: string, atmosphere: string) {
-  return `您好！我是一位专业的生日派对策划顾问，拥有15年的活动策划经验。我专门为家庭、企业和个人提供个性化的生日庆典策划服务，致力于创造难忘的美好时光。
+function getChinesePrompt(partyType: string, ageGroup: string, gender: string, dynamicTags: string[], guestCount: string, venue: string, budget: string, theme: string, atmosphere: string) {
+  const milestoneInfo = getDynamicTagsDescription(ageGroup, dynamicTags, 'zh');
+  const hasMilestones = dynamicTags && dynamicTags.length > 0;
+
+  return `您好！我是一位专业的生日派对策划顾问，拥有15年的活动策划经验，专门从事具有文化敏感性的庆典活动，深入理解人生重要里程碑的深层意义。我理解每一个生日庆典的深刻情感和文化意义，特别是那些标志着重要人生转折的特殊时刻。
 
 根据您提供的需求信息，我将为您制定一份详细的生日派对策划方案：
 
-📋 **需求分析**
+📋 **文化背景与需求分析**
 - 派对类型：${getPartyTypeText(partyType)}
+- 年龄段：${ageGroup}
+- 性别：${gender}
+- **文化里程碑背景**：${milestoneInfo}
 - 参与人数：${getGuestCountText(guestCount)}
 - 场地选择：${getVenueText(venue)}
 - 预算范围：${getBudgetText(budget)}
 - 主题风格：${theme}
 - 期望氛围：${getAtmosphereText(atmosphere)}
 
+${hasMilestones ? `**🎯 特殊文化里程碑重点关注**：
+此次庆典致敬一个具有深刻文化意义的重要人生转折。每个建议都必须体现这个里程碑的情感重量、传统内涵和仪式重要性。需要考虑：
+- 家庭和社区如何传统地庆祝这种转变
+- 象征意义以及它对个人人生旅程的代表
+- 与此里程碑相关的文化传统和期待
+- 创造持久回忆以致敬这个人生阶段的方式
+- 融入承认这一时刻重要性的元素**` : ''}
+
 **重要要求：请严格按照以下JSON格式返回，不要添加任何其他文字说明，直接返回JSON对象：**
 
 {
   "venue": [
-    "场地建议1：具体的场地布置方案，包含预算200-500元的详细说明",
-    "场地建议2：另一个场地选择方案，包含具体的布局设计",
-    "场地建议3：第三个场地方案，包含装饰技巧",
-    "场地建议4：第四个场地建议，包含实用的布置要点"
+    "场地建议1：${hasMilestones ? '符合里程碑意义的场地布置，体现文化重要性，' : ''}具体场地布置方案，预算200-500元，包含详细布局设计和装饰要点",
+    "场地建议2：${hasMilestones ? '反映仪式重要性的空间设计，' : ''}场地选择方案，包含功能区域划分和人员流动设计",
+    "场地建议3：${hasMilestones ? '强调人生转折主题的场地安排，' : ''}第三个场地方案，包含装饰技巧和成本控制建议",
+    "场地建议4：${hasMilestones ? '致敬家庭传统和里程碑意义的环境设置，' : ''}第四个场地建议，包含实用布置要点和氛围营造方法"
   ],
   "activities": [
-    "活动建议1：设计一个能调动全场参与热情的互动游戏，包含具体玩法和道具清单",
-    "活动建议2：安排一个温馨感人的情感交流环节，包含执行步骤",
-    "活动建议3：第三个活动方案，适合${getPartyTypeText(partyType)}的特色活动",
-    "活动建议4：第四个活动建议，包含时间安排和参与方式"
+    "活动建议1：${hasMilestones ? '致敬里程碑的仪式活动，承认人生转折，' : ''}互动游戏设计，包含具体玩法规则、所需道具清单和执行步骤",
+    "活动建议2：${hasMilestones ? '庆祝人生旅程并展望未来的回忆分享环节，' : ''}温馨情感交流环节，包含详细执行方法和时间引导",
+    "活动建议3：${hasMilestones ? '承认文化重要性的传统或象征性活动，' : ''}第三个活动方案，特别适合${getPartyTypeText(partyType)}，包含参与策略",
+    "活动建议4：${hasMilestones ? '涉及家人朋友共同致敬此里程碑的社区建设活动，' : ''}第四个活动建议，包含时间安排和多样化参与方式"
   ],
   "decorations": [
-    "装饰建议1：${theme}主题的色彩搭配方案，预算300-800元，包含具体物品清单",
-    "装饰建议2：创意装饰方案，包含DIY制作方法和材料清单",
-    "装饰建议3：氛围营造方案，包含灯光和背景布置",
-    "装饰建议4：细节装饰建议，包含桌面和空间装饰要点"
+    "装饰建议1：${theme}主题${hasMilestones ? '融合里程碑象征元素和意义深远的色彩方案，' : '色彩搭配方案，'}预算300-800元，包含具体物品采购清单和DIY制作指导",
+    "装饰建议2：${hasMilestones ? '讲述人生旅程故事和转折的装饰元素，' : ''}创意装饰方案，包含DIY制作方法、材料清单和节约成本技巧",
+    "装饰建议3：${hasMilestones ? '展示回忆和庆祝成长/成就的展示区域，' : ''}氛围营造方案，包含灯光布置、背景设计和视觉冲击技巧",
+    "装饰建议4：${hasMilestones ? '致敬里程碑意义的文化和传统装饰点缀，' : ''}细节装饰建议，包含桌面布置、空间装饰元素和收尾点缀"
   ],
   "catering": [
-    "餐饮建议1：适合${getGuestCountText(guestCount)}的主食方案，预算400-1200元，包含采购和制作建议",
-    "餐饮建议2：精美甜点和生日蛋糕方案，包含口味选择和呈现方式",
-    "餐饮建议3：饮品搭配方案，包含酒精和非酒精选择",
-    "餐饮建议4：小食和零食建议，包含健康和美味的平衡"
+    "餐饮建议1：${hasMilestones ? '致敬文化传统和里程碑偏好的菜单，' : ''}适合${getGuestCountText(guestCount)}的主食方案，预算400-1200元，包含采购建议和制作方法",
+    "餐饮建议2：${hasMilestones ? '象征人生转折和文化意义的仪式蛋糕设计，' : ''}精美甜点和生日蛋糕方案，包含口味选择、呈现方式和饮食考量",
+    "餐饮建议3：${hasMilestones ? '致敬里程碑庆典的传统饮品或特色饮料，' : ''}饮品搭配方案，包含酒精和非酒精选择、分量计算和服务建议",
+    "餐饮建议4：${hasMilestones ? '体现家庭传统和文化重要性的意义深远的食物选择，' : ''}小食和开胃菜建议，平衡健康与美味，包含分量规划和呈现创意"
   ],
   "music": [
-    "音乐建议1：开场音乐安排（前30分钟），包含歌单推荐和音响设备建议",
-    "音乐建议2：活动高潮音乐（中间1小时），包含互动音乐和背景音乐",
-    "音乐建议3：用餐时段音乐（30-45分钟），包含轻松愉快的背景音乐",
-    "音乐建议4：结束音乐安排（最后15分钟），包含温馨的告别音乐"
+    "音乐建议1：${hasMilestones ? '以具有文化意义的音乐开场，营造仪式氛围，' : ''}开场音乐安排（前30分钟），歌单推荐、音响设备建议和音量控制技巧",
+    "音乐建议2：${hasMilestones ? '捕捉情感意义和喜悦的里程碑庆祝音乐，' : ''}活动高潮音乐（中间1小时），互动音乐选择和不同活动的背景音乐",
+    "音乐建议3：${hasMilestones ? '致敬人生旅程的亲密时刻反思音乐，' : ''}用餐时段音乐（30-45分钟），轻松愉快背景音乐，促进交流对话",
+    "音乐建议4：${hasMilestones ? '让宾客留下这个特殊里程碑持久回忆的结束音乐，' : ''}结束音乐安排（最后15分钟），温馨告别音乐和过渡时机把控"
   ],
   "schedule": [
-    "时间安排1：开场欢迎（前30分钟）- 宾客到达、签到、开场音乐、简单互动",
-    "时间安排2：主要活动（1-1.5小时）- 生日庆祝仪式、互动游戏、拍照留念",
-    "时间安排3：用餐时间（45分钟-1小时）- 享用美食、轻松聊天、背景音乐",
-    "时间安排4：自由活动（30分钟）- 自由交流、小游戏、准备告别",
-    "时间安排5：结束环节（15分钟）- 感谢致辞、合影留念、告别送别"
+    "时间安排1：${hasMilestones ? '致敬里程碑意义的仪式性欢迎（30分钟），' : ''}开场欢迎（前30分钟）- 宾客到达、签到、开场音乐、简单破冰活动",
+    "时间安排2：${hasMilestones ? '庆祝人生转折的主要里程碑仪式（1-1.5小时），' : ''}主要活动（1-1.5小时）- 生日庆祝仪式、互动游戏、拍照留念、高光时刻",
+    "时间安排3：${hasMilestones ? '致敬家庭传统和文化意义的庆祝盛宴（45-60分钟），' : ''}用餐时间（45分钟-1小时）- 享用美食、轻松聊天、背景音乐、社交交流",
+    "时间安排4：${hasMilestones ? '里程碑祝愿和家庭纽带的反思祝福时间（30分钟），' : ''}自由活动（30分钟）- 自由互动、小游戏、准备告别、回忆分享",
+    "时间安排5：${hasMilestones ? '带着里程碑祝福和未来希望的意义深远告别（15分钟），' : ''}结束环节（15分钟）- 感谢致辞、集体合影、告别仪式、宾客离场"
   ]
 }
 
-请确保每个建议都具体实用，包含预算参考和执行指导，适合${getAtmosphereText(atmosphere)}的氛围要求。`;
+**增强文化策划要求：**
+1. ${hasMilestones ? '每个建议都必须致敬这个人生里程碑的深刻文化和个人重要性' : '每个建议必须包含具体预算参考和可执行的指导方案'}
+2. ${hasMilestones ? '融入适合这个人生转折的传统元素和仪式性方面' : '设计2-3个精彩互动环节，包含详细参与策略'}
+3. ${hasMilestones ? '创造将成为这个重要人生阶段珍贵回忆的意义深远时刻' : '融入温馨情感元素，提供清晰的实施方法和执行步骤'}
+4. 考虑场地布局和人员流动，提供实用的安排技巧
+5. 提供全面的采购清单和DIY制作指导（如适用）
+6. 音乐安排必须按时间段划分，包含设备建议和技术要点
+7. 所有建议都应符合${getAtmosphereText(atmosphere)}的氛围要求
+
+**质量标准：**
+- 每个建议都必须具体、实用、可立即执行
+- 包含详细的预算分解和节约成本的替代方案
+- ${hasMilestones ? '体现对文化里程碑情感和仪式重要性的深刻理解' : '为复杂元素提供分步执行方法和详细指导'}
+- 考虑不同宾客的喜好和参与程度差异
+- 确保派对各个环节之间的无缝衔接和流畅过渡
+
+${hasMilestones ? '目标是创造一个致敬这个重要人生转折的庆典，同时创造一个难忘的体验，让生日当事人和每位宾客都将珍视为他们生活中一个有意义的里程碑。' : '目标是为生日当事人和每位宾客创造难忘的体验，同时保持合理预算、简单执行、出色效果。'}请确保每个建议都详细、实用，包含全面的策划指导。`;
 }
 
 function getPartyTypeTextEn(type: string): string {

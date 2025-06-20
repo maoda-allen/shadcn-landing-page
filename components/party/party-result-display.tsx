@@ -6,12 +6,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Icon } from '@/components/ui/icon';
-import { Loader2, MapPin, Users, Calendar, Palette, Music, Utensils, Clock, Sparkles, FileText, Download, Share2, RefreshCw } from 'lucide-react';
+import { Loader2, MapPin, Users, Calendar, Palette, Music, Utensils, Clock, Sparkles, FileText, Download, Share2, RefreshCw, Baby, User, Heart, UserCheck } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { useRef, useEffect, useMemo } from 'react';
 import { useLanguage } from '@/lib/contexts/language-context';
 import { toast } from '@/lib/utils/toast';
 import { devLogger } from '@/lib/utils/dev-logger';
+import { DYNAMIC_TAGS } from '@/lib/types/party';
 
 // 生成稳定的随机种子函数
 const generateSeed = (formData: any, result: any) => {
@@ -352,11 +353,67 @@ export function PartyResultDisplay() {
   const renderCurrentSelection = () => {
     const selections = [];
     
-    if (formData.partyType) {
+    // 年龄段显示
+    if (formData.ageGroup) {
+      const ageGroupMap: Record<string, { label: string, icon: any }> = {
+        '0-3': { 
+          label: language === 'zh' ? '宝宝生日 (0-3岁)' : 'Baby Birthday (0-3 years)', 
+          icon: Baby 
+        },
+        '4-17': { 
+          label: language === 'zh' ? '青少年生日 (4-17岁)' : 'Teen Birthday (4-17 years)', 
+          icon: Users 
+        },
+        '18-59': { 
+          label: language === 'zh' ? '成人生日 (18-59岁)' : 'Adult Birthday (18-59 years)', 
+          icon: User 
+        },
+        '60+': { 
+          label: language === 'zh' ? '长辈生日 (60岁+)' : 'Senior Birthday (60+ years)', 
+          icon: Heart 
+        }
+      };
+      
+      const ageGroupInfo = ageGroupMap[formData.ageGroup];
+      if (ageGroupInfo) {
+        selections.push({ 
+          label: language === 'zh' ? '年龄段' : 'Age Group', 
+          value: ageGroupInfo.label,
+          icon: ageGroupInfo.icon
+        });
+      }
+    }
+    
+    // 性别显示
+    if (formData.gender) {
+      const genderMap: Record<string, string> = {
+        'male': language === 'zh' ? '男性' : 'Male',
+        'female': language === 'zh' ? '女性' : 'Female',
+        'other': language === 'zh' ? '其他' : 'Other'
+      };
+      
       selections.push({ 
-        label: t('planner.form.partyType.title'), 
-        value: getPartyTypeText(formData.partyType),
-        icon: Users
+        label: language === 'zh' ? '性别' : 'Gender', 
+        value: genderMap[formData.gender] || formData.gender,
+        icon: UserCheck
+      });
+    }
+    
+    // 动态标签显示
+    if (formData.dynamicTags && formData.dynamicTags.length > 0) {
+      const tagLabels = formData.dynamicTags.map(tagId => {
+        // 在所有年龄段中查找标签
+        for (const ageGroup of Object.keys(DYNAMIC_TAGS)) {
+          const tag = DYNAMIC_TAGS[ageGroup].find(t => t.id === tagId);
+          if (tag) return tag.label;
+        }
+        return tagId;
+      }).join(', ');
+      
+      selections.push({ 
+        label: language === 'zh' ? '特殊里程碑' : 'Special Milestones', 
+        value: tagLabels,
+        icon: Calendar
       });
     }
     

@@ -23,6 +23,9 @@ type PartyAction =
 const initialState: PartyState = {
   formData: {
     partyType: '' as any,
+    ageGroup: '' as any,
+    gender: '' as any,
+    dynamicTags: [],
     guestCount: '' as any,
     venue: '' as any,
     budget: '' as any,
@@ -100,8 +103,8 @@ export function PartyProvider({ children }: { children: React.ReactNode }) {
     }
 
     // Check if form is complete BEFORE setting loading
-    const { partyType, guestCount, venue, budget, theme, atmosphere } = state.formData;
-    if (!partyType || !guestCount || !venue || !budget || !theme || !atmosphere) {
+    const { ageGroup, gender, guestCount, venue, budget, theme, atmosphere } = state.formData;
+    if (!ageGroup || !gender || !guestCount || !venue || !budget || !theme || !atmosphere) {
       // 获取当前语言设置来显示正确的错误消息
       const currentLanguage = localStorage.getItem('language') || 'en';
       
